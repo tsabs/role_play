@@ -1,13 +1,22 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
 
-const Home = () => {
+import { FIREBASE_AUTH } from '../../../firebaseConfig';
+import { Button } from '@rneui/base';
+
+interface RouterProps {
+    navigation: NavigationProp<any, any>;
+}
+const Home = ({ navigation }: RouterProps) => {
     return (
         <View style={styles.container}>
-            <Text>Just some test for now</Text>
+            <Button onPress={() => navigation.navigate('OTHER SCREEN')} title="Open OTHER SCREEN" />
+            <Button onPress={() => FIREBASE_AUTH.signOut()} title="Logout" />
+            <Text>This is Home</Text>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -16,6 +25,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-})
+});
 
-export default Home
+export default Home;
