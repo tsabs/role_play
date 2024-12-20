@@ -1,20 +1,17 @@
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Home } from './src/views/home'
+import React from 'react';
+import RouteNavigation from './src/navigation/RouteNavigation';
+import { LOGIN_MODULE_KEY } from './src/store/constants';
+import { Provider } from 'react-redux';
+import { store } from './src/store';
 
-const Stack = createNativeStackNavigator()
+declare global {
+    interface AppState {}
+}
 
 export default function App() {
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="Home"
-                    component={Home}
-                    options={{ title: 'Welcome' }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
-    )
+        <Provider store={store}>
+            <RouteNavigation />
+        </Provider>
+    );
 }
