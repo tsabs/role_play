@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -8,17 +8,18 @@ import LoginScreen from '../views/login/Login';
 //
 // import { FIREBASE_AUTH } from '../../firebaseConfig';
 
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
 
-const InsideStack = createNativeStackNavigator();
-
-const InsideLayout = () => {
-    return (
-        <InsideStack.Navigator>
-            <InsideStack.Screen name={'Home'} component={HomeScreen} />
-        </InsideStack.Navigator>
-    );
+type RootStackParamList = {
+    Home: {};
+    Login: {};
 };
+
+declare global {
+    namespace ReactNavigation {
+        interface RootParamList extends RootStackParamList {}
+    }
+}
 
 export default function RouteNavigation() {
     // const [user, setUser] = useState<User | null>(null)
@@ -32,20 +33,20 @@ export default function RouteNavigation() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen
+            <RootStack.Navigator id={undefined} initialRouteName="Login">
+                <RootStack.Screen
                     name="Login"
                     component={LoginScreen}
                     options={{
                         headerShown: false,
                     }}
                 />
-                <Stack.Screen
+                <RootStack.Screen
                     name="Home"
                     component={HomeScreen}
                     options={{ title: 'Welcome', headerShown: false }}
                 />
-            </Stack.Navigator>
+            </RootStack.Navigator>
         </NavigationContainer>
     );
 }

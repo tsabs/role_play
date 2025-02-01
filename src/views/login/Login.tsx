@@ -5,7 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 interface SignInType {
     email: string;
     password: string;
-    navigation: NavigationProp<ReactNavigation.RootParamList>;
+    navigation: NavigationProp<any>;
     setLoading: (value: boolean) => void;
 }
 export const signIn = async ({
