@@ -4,6 +4,9 @@
     "jsx": "react-native",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "paths": {
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
+    },
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }

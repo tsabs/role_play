@@ -3,7 +3,7 @@ enum gameType {
     warHammer = 'Warhammer',
 }
 
-interface RoleGame {
+interface Game {
     id: number;
     title: string;
     nbPlayers?: number;
@@ -12,8 +12,8 @@ interface RoleGame {
     gameType: string;
 }
 
-interface RoleGamesState {
-    roleGamesState: RoleGame[];
+interface GamesState {
+    gamesState: Game[];
 }
 
-export { RoleGamesState, RoleGame, gameType };
+export { GamesState, Game, gameType };

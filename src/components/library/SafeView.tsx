@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { Button, IconButton, Text } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 
-import { theme } from '../../style/theme';
+import { theme } from '../../../style/theme';
 
 const headerHeight = 50;
 
