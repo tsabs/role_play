@@ -60,17 +60,15 @@ const Games = () => {
         <SafeView>
             <View style={styles.header}>
                 <View style={styles.title}>
-                    {parties.length > 0 ? (
+                    {parties.length > 0 && (
                         <Title>Liste des campagnes en cours</Title>
-                    ) : (
-                        <Title>Créez une campagne</Title>
                     )}
                 </View>
                 <Button
                     buttonColor={theme.colors.primary}
                     onPress={() => console.log('Create a new game')}
                 >
-                    <Text style={{ color: theme.colors.white }}>
+                    <Text style={styles.buttonText}>
                         Créer une nouvelle partie
                     </Text>
                 </Button>
@@ -88,6 +86,9 @@ const Games = () => {
 const styles = StyleSheet.create({
     header: {
         marginBottom: theme.space.md,
+    },
+    buttonText: {
+        color: theme.colors.white,
     },
     title: {
         marginTop: theme.space.xxxl,

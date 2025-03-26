@@ -6,12 +6,12 @@ const GameCard = ({ game }) => {
         <Card
             style={{
                 marginTop: theme.space.xl,
-                backgroundColor: theme.colors.secondary,
+                backgroundColor: theme.colors.light50,
             }}
             onPress={() => console.log('COOL')}
         >
             <Card.Cover
-                style={{ backgroundColor: theme.colors.secondary }}
+                style={{ backgroundColor: theme.colors.light25 }}
                 source={game.image}
             />
             <Card.Title title={game.title} subtitle={game.gameType} />

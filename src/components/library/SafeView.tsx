@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,27 +10,26 @@ const headerHeight = 50;
 
 interface SafeViewProps {
     children: ReactNode;
-    hasHeader?: boolean;
+    title?: string;
     styles?: StyleProp<ViewStyle>;
     parentStyles?: StyleProp<ViewStyle>;
 }
 
-const SafeView = ({
-    hasHeader,
-    parentStyles,
-    styles,
-    children,
-}: SafeViewProps) => {
+const SafeView = ({ title, parentStyles, styles, children }: SafeViewProps) => {
     const navigation = useNavigation();
     return (
         <View style={[SafeViewStyle.container, parentStyles]}>
             <StatusBar />
-            {hasHeader && (
-                <View style={{ width: theme.width, height: headerHeight }}>
+            {title && (
+                <View style={SafeViewStyle.header}>
                     <IconButton
-                        icon={'arrowBack'}
+                        size={30}
+                        icon={'keyboard-backspace'}
                         onPress={() => navigation.goBack()}
                     />
+                    <View style={SafeViewStyle.textContainer}>
+                        <Text variant={'titleLarge'}>{title}</Text>
+                    </View>
                 </View>
             )}
             <View style={[styles]}>{children}</View>
@@ -44,6 +43,18 @@ const SafeViewStyle = StyleSheet.create({
         padding: 16,
         marginTop: 40,
         backgroundColor: '#f0f0f0',
+    },
+    header: {
+        width: theme.width,
+        height: headerHeight,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+        marginRight: 75,
     },
 });
 
