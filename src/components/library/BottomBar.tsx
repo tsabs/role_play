@@ -1,10 +1,11 @@
+import { Fragment } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/AntDesign';
-import { theme } from '../../../style/theme';
+
 import Separator from './Separator';
 import Shadow from './Shadow';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Fragment } from 'react';
+import { theme } from '../../../style/theme';
 
 const iconSize = 24;
 
@@ -17,9 +18,9 @@ const BottomBar = ({ elements, props }: BottomBarProps) => {
     return (
         <Shadow>
             <View style={styles.container}>
-                {elements.map((element) => {
+                {elements.map((element, index) => {
                     return (
-                        <Fragment>
+                        <Fragment key={index}>
                             <TouchableOpacity
                                 style={styles.iconContainer}
                                 onPress={() =>

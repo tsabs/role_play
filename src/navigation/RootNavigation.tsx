@@ -10,9 +10,9 @@ import { AuthProps, AuthProvider, useAuth } from './hook/useAuth';
 import CharacterItem from '../components/character/CharacterItem';
 import { CharacterFormProvider } from '../components/character/form/CharacterFormProvider';
 import BottomBar from '../components/library/BottomBar';
-import CharacterOverview from '../views/singleCharacter/CharacterOverview';
-import CharacterNotes from '../views/singleCharacter/CharacterNotes';
 import { Fragment } from 'react';
+import { GenericCharacter } from '../store/character/slice';
+import BottomCharacterTabs from './screen/BottomCharacterTabs';
 
 const BottomNavigator = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,7 +26,10 @@ export type RootStackParamList = {
     CharacterFormProvider: {
         gameType: string;
     };
-    BottomCharacterTabs: {};
+    BottomCharacterTabs: {
+        character: GenericCharacter;
+    };
+    CharacterNotes: {};
 };
 
 declare global {
@@ -34,35 +37,6 @@ declare global {
         interface RootParamList extends RootStackParamList {}
     }
 }
-
-const BottomCharacterTabs = () => {
-    return (
-        <BottomNavigator.Navigator
-            id={undefined}
-            screenOptions={{ animation: 'shift' }}
-            tabBar={(props) =>
-                BottomBar({
-                    elements: [
-                        { icon: 'profile', screenName: 'CharacterOverview' },
-                        { icon: 'book', screenName: 'CharacterNotes' },
-                    ],
-                    props,
-                })
-            }
-        >
-            <BottomNavigator.Screen
-                name="CharacterOverview"
-                component={CharacterOverview}
-                options={{ headerShown: false }}
-            />
-            <BottomNavigator.Screen
-                name="CharacterNotes"
-                component={CharacterNotes}
-                options={{ headerShown: false }}
-            />
-        </BottomNavigator.Navigator>
-    );
-};
 
 const BottomTabs = () => {
     return (
@@ -99,7 +73,7 @@ const ProtectedScreen = () => {
             screenOptions={{
                 gestureEnabled: true,
                 animation: 'fade_from_bottom',
-                animationDuration: 500,
+                animationDuration: 1000,
             }}
             id={undefined}
         >
@@ -132,7 +106,7 @@ const MainStack = () => {
                 headerShown: false,
                 gestureEnabled: true,
                 animation: 'fade_from_bottom',
-                animationDuration: 500,
+                animationDuration: 1000,
             }}
         >
             {auth?.user ? (
@@ -145,13 +119,14 @@ const MainStack = () => {
                     <Stack.Screen
                         name={'BottomCharacterTabs'}
                         component={BottomCharacterTabs}
+                        options={{ animation: 'default' }}
                     />
                 </Fragment>
             ) : (
                 <Stack.Screen
                     name={'Login'}
                     component={LoginScreen}
-                    options={{ headerShown: false }}
+                    options={{ headerShown: false, animation: 'fade' }}
                 />
             )}
         </Stack.Navigator>

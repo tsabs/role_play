@@ -1,8 +1,10 @@
 import { Fragment } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { styles } from './characterFormStyles';
 import { Text } from 'react-native-paper';
 import Animated, { FadeInLeft } from 'react-native-reanimated';
+
 import {
     DndBackground,
     DndClass,
@@ -12,23 +14,34 @@ import {
 const spacer = 20;
 
 const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
+    name,
     values,
     setSelectedValue,
     selectedName,
 }: {
+    name: string;
     values: T[];
     setSelectedValue: (value: any) => void;
     selectedName?: string;
 }) => {
+    const { t } = useTranslation();
     return (
         <Fragment>
             <View style={styles(spacer).selectedValue}>
                 <Text variant={'titleMedium'} style={styles(spacer).subTitle}>
-                    Select Backgrounds:
+                    {t(`characterForm.listSelect${name}`)}
                 </Text>
 
                 {selectedName && (
-                    <Text style={styles(spacer).subText}>{selectedName}</Text>
+                    <Text style={styles(spacer).subText}>
+                        {name === 'Backgrounds'
+                            ? t(
+                                  `character.${name.toLowerCase()}.${selectedName}.name`
+                              )
+                            : t(
+                                  `character.${name.toLowerCase()}.${selectedName}`
+                              )}
+                    </Text>
                 )}
             </View>
             <FlatList
@@ -58,8 +71,26 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                                     : setSelectedValue(item.index)
                             }
                         >
-                            <Text style={styles(spacer).choiceText}>
-                                {item?.name ? item.name : item.index}
+                            <Text
+                                style={
+                                    styles(
+                                        spacer,
+                                        selectedName ===
+                                            (item?.slug
+                                                ? item.slug
+                                                : item.index)
+                                    ).choiceText
+                                }
+                            >
+                                {item?.slug
+                                    ? t(
+                                          `character.backgrounds.${item.slug}.name`
+                                      )
+                                    : t(
+                                          `character.${name.toLowerCase()}.${
+                                              item.index
+                                          }`
+                                      )}
                             </Text>
                         </TouchableOpacity>
                     </Animated.View>

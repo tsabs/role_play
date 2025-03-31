@@ -10,6 +10,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Text, TextInput } from 'react-native-paper';
 import Animated, { SlideInLeft } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -46,6 +47,7 @@ interface CharacterBackground {
 const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const { t } = useTranslation();
     const auth: AuthProps = useAuth();
     // const route = useRoute();
     // const { gameType } = route.params;
@@ -91,7 +93,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     }, [gameType]);
 
     const scrollViewStyle = useMemo<ViewStyle>(() => {
-        return Keyboard.isVisible()
+        return Keyboard.isVisible() || selectedBackground
             ? {
                   height: Dimensions.get('screen').height - 150,
               }
@@ -118,9 +120,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                 behavior={'padding'}
             >
                 <ScrollView style={scrollViewStyle}>
-                    {textDisplay.map(({ label, value, setValue }) => {
+                    {textDisplay.map(({ label, value, setValue }, index) => {
                         return (
-                            <Fragment>
+                            <Fragment key={`${label}-${index}`}>
                                 <TextInput
                                     mode="outlined"
                                     label={label}
@@ -136,30 +138,37 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     })}
 
                     <LabeledList
+                        name="Races"
                         values={races}
                         setSelectedValue={setSelectedRace}
                         selectedName={selectedRace}
                     />
 
                     <LabeledList
+                        name="Classes"
                         values={classes}
                         setSelectedValue={setSelectedClass}
                         selectedName={selectedClass}
                     />
 
                     <LabeledList
+                        name="Backgrounds"
                         values={backgrounds}
                         setSelectedValue={setSelectedBackground}
                         selectedName={selectedBackground?.name}
                     />
 
-                    {selectedBackground?.description && (
+                    {selectedBackground?.name && (
                         <Animated.View
                             key={selectedBackground.name}
                             style={{ padding: theme.space.md }}
                             entering={SlideInLeft.delay(100)}
                         >
-                            <Text>{selectedBackground.description}</Text>
+                            <Text>
+                                {t(
+                                    `character.backgrounds.${selectedBackground.name}.description`
+                                )}
+                            </Text>
                         </Animated.View>
                     )}
 

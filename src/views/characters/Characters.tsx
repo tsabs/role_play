@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, Title } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { Button, Title } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import SafeView from '../../components/library/SafeView';
 import { theme } from '../../../style/theme';
@@ -16,6 +17,7 @@ const margin = 10;
 
 const CharactersScreen = () => {
     const navigation = useNavigation();
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const auth = useAuth();
     const callCharacters = useCallback(async () => {
@@ -30,7 +32,7 @@ const CharactersScreen = () => {
     return (
         <SafeView>
             <View style={styles.title}>
-                <Title>Liste des personnages</Title>
+                <Title>{t('characters.title')}</Title>
             </View>
             <Button
                 style={styles.button}
@@ -42,7 +44,7 @@ const CharactersScreen = () => {
                     })
                 }
             >
-                Créer un personnage
+                {t('characters.titleButtonText')}
             </Button>
             <FlatList
                 data={characters}
@@ -50,12 +52,19 @@ const CharactersScreen = () => {
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 horizontal
-                // contentContainerStyle={{ alignItems: 'center' }}
-                ItemSeparatorComponent={() => (
-                    <Separator horizontal spacer={{ size: theme.space.md }} />
+                ItemSeparatorComponent={({ leadingItem }) => (
+                    <Separator
+                        key={leadingItem.id}
+                        horizontal
+                        spacer={{ size: theme.space.md }}
+                    />
                 )}
                 renderItem={({ item, index }) => (
-                    <CharacterItem character={item} index={index} />
+                    <CharacterItem
+                        key={item.id}
+                        character={item}
+                        index={index}
+                    />
                 )}
             />
         </SafeView>

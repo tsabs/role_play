@@ -1,12 +1,15 @@
+import { useCallback } from 'react';
+import { StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Card, Text } from 'react-native-paper';
-import { characterSlice, GenericCharacter } from '../../store/character/slice';
-import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Animated, { FadeInRight } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
+
+import { characterSlice, GenericCharacter } from '../../store/character/slice';
 import { theme } from '../../../style/theme';
 import { DND_CHARACTER_DEFAULT } from '../../../assets';
-import { useCallback } from 'react';
 import { useAppDispatch } from '../../store';
-import { useNavigation } from '@react-navigation/native';
+import Separator from '../library/Separator';
 
 interface CharacterItemProps {
     character: GenericCharacter;
@@ -19,9 +22,19 @@ const BOTTOM_NAV_HEIGHT = 50;
 const FLATLIST_HEIGHT = height - HEADER_HEIGHT - BOTTOM_NAV_HEIGHT - 120;
 const FLATLIST_WIDTH = width - 32 - 24;
 
+const LabeledElement = ({ label, val }: { label: string; val: string }) => {
+    return (
+        <View style={styles.contentElement}>
+            <Text style={styles.contentElementLabel}>{label}</Text>
+            <Text style={styles.contentElementText}>{val}</Text>
+        </View>
+    );
+};
+
 const CharacterItem = ({ character, index }: CharacterItemProps) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
+    const { t } = useTranslation();
 
     const removeCharacter = useCallback(async () => {
         try {
@@ -42,8 +55,9 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
                 delayPressIn={50}
                 onLongPress={removeCharacter}
                 onPress={() => {
-                    console.log('Touched character:', character.name);
-                    navigation.navigate('BottomCharacterTabs');
+                    navigation.navigate('BottomCharacterTabs', {
+                        character: character,
+                    });
                 }}
             >
                 <Card style={styles.card}>
@@ -53,15 +67,26 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
                         resizeMode="cover"
                     />
                     <Card.Content style={styles.content}>
-                        <Text style={styles.name}>{character.name}</Text>
-                        <Text style={styles.info}>
-                            {character.race} - {character.className}
-                        </Text>
+                        <View style={styles.contentHeader}>
+                            <Text style={styles.name}>{character.name}</Text>
+                            <Text style={styles.info}>
+                                {t(`character.races.${character.race}`)} -{' '}
+                                {t(`character.classes.${character.className}`)}
+                            </Text>
+                        </View>
+                        <LabeledElement
+                            label={'Historique: '}
+                            val={t(
+                                `character.backgrounds.${character.background}.name`
+                            )}
+                        />
+                        <LabeledElement
+                            label={'Game: '}
+                            val={character.gameType}
+                        />
+                        <Separator margin={theme.space.md} horizontal />
                         <Text style={styles.description}>
                             {character.description}
-                        </Text>
-                        <Text style={styles.gameInfo}>
-                            Game: {character.gameType}
                         </Text>
                     </Card.Content>
                 </Card>
@@ -84,35 +109,47 @@ const styles = StyleSheet.create({
     },
     image: {
         alignSelf: 'stretch', // Ensure image fills width
-        height: '60%', // Take up half of the card height
+        height: '65%', // Take up half of the card height
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     content: {
-        alignItems: 'flex-start',
-        paddingTop: theme.space.md,
+        marginTop: theme.space.l,
+    },
+    contentHeader: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+    },
+    contentElement: {
+        flexDirection: 'row',
+    },
+    contentElementLabel: {
+        fontSize: theme.fontSize.large,
+        color: theme.colors.textPrimary,
+    },
+    contentElementText: {
+        alignSelf: 'flex-end',
+        color: theme.colors.textSecondary,
+        fontSize: theme.fontSize.medium,
     },
     name: {
-        fontSize: 24,
+        fontSize: theme.fontSize.extraBig,
         fontWeight: 'bold',
+        marginRight: theme.space.md,
         color: theme.colors.textPrimary,
-        marginTop: theme.space.md,
     },
     info: {
-        fontSize: 18,
+        fontSize: theme.fontSize.extraLarge,
         color: theme.colors.textSecondary,
-        marginVertical: theme.space.sm,
     },
     description: {
-        fontSize: 16,
-        textAlign: 'center',
+        fontSize: theme.fontSize.large,
         color: theme.colors.textSecondary,
-        paddingHorizontal: theme.space.l,
     },
     gameInfo: {
-        fontSize: 14,
-        marginTop: theme.space.sm,
-        // color: theme.colors.textMuted,
+        fontSize: theme.fontSize.medium,
     },
 });
 

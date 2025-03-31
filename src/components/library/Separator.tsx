@@ -3,20 +3,30 @@ import { theme } from '../../../style/theme';
 
 const Separator = ({
     horizontal = false,
+    margin = 0,
     spacer,
 }: {
     horizontal?: boolean;
+    margin?: number;
     spacer?: { size: number };
 }) => {
-    return !spacer ? (
-        <View style={styles(horizontal).border} />
-    ) : (
-        <View style={styles(horizontal).spacer} />
+    return (
+        <View style={styles(horizontal, margin).container}>
+            {!spacer ? (
+                <View style={styles(horizontal).border} />
+            ) : (
+                <View style={styles(horizontal).spacer} />
+            )}
+        </View>
     );
 };
 
-const styles = (horizontal: boolean, spacer?: number) =>
+const styles = (horizontal: boolean, margin?: number, spacer?: number) =>
     StyleSheet.create({
+        container: {
+            paddingVertical: horizontal ? margin : 0,
+            paddingHorizontal: horizontal ? 0 : margin,
+        },
         border: {
             borderStyle: 'solid',
             borderBottomWidth: horizontal ? 1 : 0,

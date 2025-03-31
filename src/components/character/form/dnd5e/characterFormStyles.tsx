@@ -1,7 +1,11 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../../../../style/theme';
 
-export const styles = (spacer: number, isDisabled?: boolean) =>
+export const styles = (
+    spacer: number,
+    isSelected?: boolean,
+    isDisabled?: boolean
+) =>
     StyleSheet.create({
         container: { paddingHorizontal: spacer },
         subTitle: {
@@ -28,7 +32,10 @@ export const styles = (spacer: number, isDisabled?: boolean) =>
             alignSelf: 'flex-start',
             backgroundColor: theme.colors.primary,
         },
-        choiceText: { fontSize: 16 },
+        choiceText: {
+            fontSize: theme.fontSize.large,
+            color: isSelected ? theme.colors.white : theme.colors.textPrimary,
+        },
         saveButton: {
             backgroundColor: isDisabled
                 ? theme.colors.secondary25

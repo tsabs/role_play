@@ -1,6 +1,6 @@
 import React from 'react';
 import RootNavigation from './src/navigation/RootNavigation';
-import { LOGIN_MODULE_KEY } from './src/store/constants';
+import './src/locales/index';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 

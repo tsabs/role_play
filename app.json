@@ -36,7 +36,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "web": {
       "favicon": "./assets/favicon.png"

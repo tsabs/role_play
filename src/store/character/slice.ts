@@ -16,6 +16,7 @@ export interface GenericCharacter {
     race: string;
     className: string;
     gameType: string;
+    characterImg?: string;
     gameId?: string;
     additionalBackground?: string;
 }
@@ -73,7 +74,6 @@ export const loadCharactersFromFirebase = async (
 export const loadCharacters = async (clientEmail: string, dispatch: any) => {
     try {
         const data = await AsyncStorage.getItem(CHARACTER_MODULE_KEY);
-        console.log(data);
         if (data) {
             dispatch(characterSlice.actions.setCharacters(JSON.parse(data)));
         } else {
@@ -107,8 +107,6 @@ export const characterSlice = createSlice({
                 .catch((error) =>
                     console.error('Error adding character:', error)
                 );
-
-            // firestore().collection('characters').add();
         },
         removeCharacter: (state, action: PayloadAction<{ name: string }>) => {
             state.characters = state.characters.filter(
@@ -119,7 +117,6 @@ export const characterSlice = createSlice({
         },
         setCharacters: (state, action: PayloadAction<GenericCharacter[]>) => {
             state.characters = action.payload;
-            console.log('FROM set characters', state.characters);
         },
     },
 });
