@@ -1,22 +1,36 @@
-import { Text } from 'react-native-paper';
-import SafeView from '../../../library/SafeView';
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Dimensions,
-    FlatList,
+    Keyboard,
+    KeyboardAvoidingView,
     ScrollView,
     TouchableOpacity,
-    View,
+    ViewStyle,
 } from 'react-native';
-import Animated, { FadeInLeft, SlideInLeft } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+import { Text, TextInput } from 'react-native-paper';
+import Animated, { SlideInLeft } from 'react-native-reanimated';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
     getBackgrounds,
     getClasses,
     getRaces,
 } from '../../../../store/character/dnd5e/services';
+import SafeView from '../../../library/SafeView';
 import { styles } from './characterFormStyles';
 import { theme } from '../../../../../style/theme';
+import {
+    DndBackground,
+    DndClass,
+    DndRace,
+} from '../../../../types/games/d2d5e';
+import LabeledList from './LabeledList';
+import Separator from '../../../library/Separator';
+import { characterSlice } from '../../../../store/character/slice';
+import { useDispatch } from 'react-redux';
+import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -30,33 +44,44 @@ interface CharacterBackground {
 }
 
 const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const auth: AuthProps = useAuth();
     // const route = useRoute();
     // const { gameType } = route.params;
 
-    const [classes, setClasses] = useState([]);
-    const [races, setRaces] = useState([]);
-    const [backgrounds, setBackgrounds] = useState([]);
-    const [selectedClass, setSelectedClass] = useState(null);
-    const [selectedRace, setSelectedRace] = useState(null);
-    const [selectedBackgrounds, setSelectedBackgrounds] =
+    if (!auth.user) return <Fragment />;
+
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [history, setHistory] = useState('');
+    const [classes, setClasses] = useState<DndClass[] | []>([]);
+    const [races, setRaces] = useState<DndRace[] | []>([]);
+    const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
+    const [selectedClass, setSelectedClass] = useState<string>(null);
+    const [selectedRace, setSelectedRace] = useState<string>(null);
+    const [selectedBackground, setSelectedBackground] =
         useState<CharacterBackground>(null);
 
     const callGetBackgrounds = useCallback(async () => {
-        const backgrounds = await getBackgrounds().catch((err) =>
+        const backgrounds = (await getBackgrounds().catch((err) =>
             console.log(err)
-        );
+        )) as DndBackground[] | void;
         if (!backgrounds) return [];
         setBackgrounds(backgrounds);
     }, []);
     const callGetRaces = useCallback(async () => {
-        const races = await getRaces().catch((err) => console.log(err));
+        const races = (await getRaces().catch((err) => console.log(err))) as
+            | DndRace[]
+            | void;
         if (!races) return [];
         setRaces(races);
     }, []);
 
     const callGetClasses = useCallback(async () => {
-        const classes = await getClasses().catch((err) => console.log(err));
+        const classes = (await getClasses().catch((err) =>
+            console.log(err)
+        )) as DndClass[] | void;
         if (!classes) return [];
         setClasses(classes);
     }, []);
@@ -65,159 +90,110 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         Promise.all([callGetBackgrounds(), callGetClasses(), callGetRaces()]);
     }, [gameType]);
 
+    const scrollViewStyle = useMemo<ViewStyle>(() => {
+        return Keyboard.isVisible()
+            ? {
+                  height: Dimensions.get('screen').height - 150,
+              }
+            : {};
+    }, [selectedBackground]);
+
+    const textDisplay: Array<{
+        label: string;
+        value: string;
+        setValue: (value: string) => void;
+    }> = [
+        { label: 'Name', value: name, setValue: setName },
+        { label: 'Description', value: description, setValue: setDescription },
+        { label: 'History', value: history, setValue: setHistory },
+    ];
+
     return (
         <SafeView
             title={'Create Your Character'}
             styles={styles(spacer).container}
         >
-            <ScrollView
-                style={{ height: Dimensions.get('screen').height - 150 }}
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={125}
+                behavior={'padding'}
             >
-                <View style={styles(spacer).selectedValue}>
-                    <Text
-                        variant={'titleMedium'}
-                        style={styles(spacer).subTitle}
-                    >
-                        Select Race:
-                    </Text>
+                <ScrollView style={scrollViewStyle}>
+                    {textDisplay.map(({ label, value, setValue }) => {
+                        return (
+                            <Fragment>
+                                <TextInput
+                                    mode="outlined"
+                                    label={label}
+                                    value={value}
+                                    onChangeText={setValue}
+                                    activeOutlineColor={theme.colors.primary}
+                                    outlineColor={theme.colors.primary}
+                                    style={{ marginVertical: theme.space.l }}
+                                />
+                                <Separator horizontal />
+                            </Fragment>
+                        );
+                    })}
 
-                    {selectedRace && (
-                        <Text style={styles(spacer).subText}>
-                            {selectedRace}
-                        </Text>
-                    )}
-                </View>
-                <FlatList
-                    data={races}
-                    keyExtractor={(item) => item.index}
-                    horizontal
-                    renderItem={({ item, index }) => (
-                        <Animated.View entering={FadeInLeft.delay(index * 100)}>
-                            <TouchableOpacity
-                                style={[
-                                    styles(spacer).choiceButton,
-                                    selectedRace === item.index &&
-                                        styles(spacer).selected,
-                                ]}
-                                onPress={() => setSelectedRace(item.index)}
-                            >
-                                <Text style={styles(spacer).choiceText}>
-                                    {item.name}
-                                </Text>
-                            </TouchableOpacity>
-                        </Animated.View>
-                    )}
-                />
+                    <LabeledList
+                        values={races}
+                        setSelectedValue={setSelectedRace}
+                        selectedName={selectedRace}
+                    />
 
-                <View style={styles(spacer).selectedValue}>
-                    <Text
-                        variant={'titleMedium'}
-                        style={styles(spacer).subTitle}
-                    >
-                        Select Class:
-                    </Text>
+                    <LabeledList
+                        values={classes}
+                        setSelectedValue={setSelectedClass}
+                        selectedName={selectedClass}
+                    />
 
-                    {selectedClass && (
-                        <Text style={styles(spacer).subText}>
-                            {selectedClass}
-                        </Text>
-                    )}
-                </View>
+                    <LabeledList
+                        values={backgrounds}
+                        setSelectedValue={setSelectedBackground}
+                        selectedName={selectedBackground?.name}
+                    />
 
-                <FlatList
-                    data={classes}
-                    keyExtractor={(item) => item.index}
-                    horizontal
-                    renderItem={({ item, index }) => (
-                        <Animated.View entering={FadeInLeft.delay(index * 100)}>
-                            <TouchableOpacity
-                                style={[
-                                    styles(spacer).choiceButton,
-                                    selectedClass === item.index &&
-                                        styles(spacer).selected,
-                                ]}
-                                onPress={() => setSelectedClass(item.index)}
-                            >
-                                <Text style={styles(spacer).choiceText}>
-                                    {item.name}
-                                </Text>
-                            </TouchableOpacity>
-                        </Animated.View>
-                    )}
-                />
-
-                <View style={styles(spacer).selectedValue}>
-                    <Text
-                        variant={'titleMedium'}
-                        style={styles(spacer).subTitle}
-                    >
-                        Select Backgrounds:
-                    </Text>
-
-                    {selectedBackgrounds?.name && (
-                        <Text style={styles(spacer).subText}>
-                            {selectedBackgrounds.name}
-                        </Text>
-                    )}
-                </View>
-                <FlatList
-                    data={backgrounds}
-                    keyExtractor={(item) => item.slug}
-                    horizontal
-                    renderItem={({ item, index }) => (
+                    {selectedBackground?.description && (
                         <Animated.View
-                            style={{ flexDirection: 'column' }}
-                            entering={FadeInLeft.delay(index * 100)}
+                            key={selectedBackground.name}
+                            style={{ padding: theme.space.md }}
+                            entering={SlideInLeft.delay(100)}
                         >
-                            <TouchableOpacity
-                                style={[
-                                    styles(spacer).choiceButton,
-                                    selectedBackgrounds?.name === item.slug &&
-                                        styles(spacer).selected,
-                                ]}
-                                onPress={() =>
-                                    setSelectedBackgrounds({
-                                        name: item.slug,
-                                        description: item.desc,
-                                    })
-                                }
-                            >
-                                <Text style={styles(spacer).choiceText}>
-                                    {item.name}
-                                </Text>
-                            </TouchableOpacity>
+                            <Text>{selectedBackground.description}</Text>
                         </Animated.View>
                     )}
-                />
 
-                {selectedBackgrounds?.description && (
-                    <Animated.View
-                        key={selectedBackgrounds.name}
-                        style={{ padding: theme.space.md }}
-                        entering={SlideInLeft.delay(100)}
+                    <TouchableOpacity
+                        style={
+                            styles(spacer, !selectedClass || !selectedRace)
+                                .saveButton
+                        }
+                        onPress={() => {
+                            // navigation.navigate('SpellSelection', {
+                            //     gameType,
+                            //     selectedRace,
+                            //     selectedClass,
+                            // })
+                            dispatch(
+                                characterSlice.actions.setCharacter({
+                                    id: uuidv4(),
+                                    name,
+                                    description,
+                                    userEmail: auth.user.email,
+                                    additionalBackground: history,
+                                    race: selectedRace,
+                                    className: selectedClass,
+                                    background: selectedBackground.name,
+                                    gameType: 'd2d5e',
+                                })
+                            );
+                        }}
+                        disabled={!selectedClass || !selectedRace}
                     >
-                        <Text>{selectedBackgrounds.description}</Text>
-                    </Animated.View>
-                )}
-
-                <TouchableOpacity
-                    style={
-                        styles(spacer, !selectedClass || !selectedRace)
-                            .nextButton
-                    }
-                    onPress={() =>
-                        // navigation.navigate('SpellSelection', {
-                        //     gameType,
-                        //     selectedRace,
-                        //     selectedClass,
-                        // })
-                        console.log('spell selection')
-                    }
-                    disabled={!selectedClass || !selectedRace}
-                >
-                    <Text style={styles(spacer).nextButtonText}>Next</Text>
-                </TouchableOpacity>
-            </ScrollView>
+                        <Text style={styles(spacer).saveButtonText}>Next</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeView>
     );
 };

@@ -1,26 +1,36 @@
-import React from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, Card, Text, Title } from 'react-native-paper';
+import React, { useCallback, useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Button, Title } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import Animated, { FadeInRight } from 'react-native-reanimated';
+
 import SafeView from '../../components/library/SafeView';
 import { theme } from '../../../style/theme';
-
-const characters = [
-    { id: '1', name: 'Mario' },
-    { id: '2', name: 'Luigi' },
-    { id: '3', name: 'Zelda' },
-];
+import { loadCharacters } from '../../store/character/slice';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { useAuth } from '../../navigation/hook/useAuth';
+import { selectAllCharacters } from '../../store/character/selectors';
+import CharacterItem from '../../components/character/CharacterItem';
+import Separator from '../../components/library/Separator';
 
 const margin = 10;
 
 const CharactersScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useAppDispatch();
+    const auth = useAuth();
+    const callCharacters = useCallback(async () => {
+        await loadCharacters(auth.user.email, dispatch);
+    }, []);
+    const characters = useAppSelector(selectAllCharacters);
+
+    useEffect(() => {
+        callCharacters();
+    }, [callCharacters]);
 
     return (
         <SafeView>
             <View style={styles.title}>
-                {characters.length > 0 && <Title>Liste des personnages</Title>}
+                <Title>Liste des personnages</Title>
             </View>
             <Button
                 style={styles.button}
@@ -37,23 +47,15 @@ const CharactersScreen = () => {
             <FlatList
                 data={characters}
                 keyExtractor={(item) => item.id}
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                // contentContainerStyle={{ alignItems: 'center' }}
+                ItemSeparatorComponent={() => (
+                    <Separator horizontal spacer={{ size: theme.space.md }} />
+                )}
                 renderItem={({ item, index }) => (
-                    <TouchableOpacity
-                        onPress={() => {
-                            console.log('test');
-                            // navigation.navigate('Character', {
-                            //     character: item,
-                            // })
-                        }}
-                    >
-                        <Animated.View
-                            entering={FadeInRight.delay(index * 200)}
-                        >
-                            <Card style={styles.card}>
-                                <Text>{item.name}</Text>
-                            </Card>
-                        </Animated.View>
-                    </TouchableOpacity>
+                    <CharacterItem character={item} index={index} />
                 )}
             />
         </SafeView>
@@ -63,10 +65,6 @@ const CharactersScreen = () => {
 const styles = StyleSheet.create({
     button: {
         marginHorizontal: margin,
-    },
-    card: {
-        margin,
-        padding: 15,
     },
     title: {
         marginTop: theme.space.xxxl,

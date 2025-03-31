@@ -24,6 +24,9 @@ const space = {
 
 const colors = {
     primary: '#007bff',
+    primary75: 'rgba(0, 123, 255, 0.75)',
+    primary50: 'rgba(0, 123, 255, 0.50)',
+    primary25: 'rgba(0, 123, 255, 0.25)',
     secondary: '#6c757d',
     secondary75: 'rgba(108, 117, 125, 0.75)',
     secondary50: 'rgba(108, 117, 125, 0.5)',
@@ -39,6 +42,8 @@ const colors = {
     dark: '#343a40',
     white: '#ffffff',
     black: '#000000',
+    textPrimary: '#212529', // Deep Charcoal - Best readability
+    textSecondary: '#6c757d',
 };
 
 const fontSize = {

@@ -1,7 +1,6 @@
 interface SignUpUserType {
     email: string;
     password: string;
-    role: string;
 }
 interface UserState {
     userName: string;

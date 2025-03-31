@@ -1,7 +1,15 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { Context, createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../../../firebaseConfig';
+import firebase from 'firebase/compat';
+import User = firebase.User;
 
-export const AuthContext = createContext({});
+export interface AuthProps {
+    user?: User;
+    token?: string;
+    loading?: boolean;
+}
+
+export const AuthContext: Context<AuthProps> = createContext({});
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
@@ -45,6 +53,6 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthProps => {
     return useContext(AuthContext);
 };

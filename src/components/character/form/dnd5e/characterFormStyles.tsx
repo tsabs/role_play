@@ -29,14 +29,14 @@ export const styles = (spacer: number, isDisabled?: boolean) =>
             backgroundColor: theme.colors.primary,
         },
         choiceText: { fontSize: 16 },
-        nextButton: {
+        saveButton: {
             backgroundColor: isDisabled
                 ? theme.colors.secondary25
                 : theme.colors.primary,
             padding: theme.space.xxl,
             borderRadius: theme.radius.md,
-            marginTop: spacer,
+            marginTop: theme.space.xxxl,
             alignItems: 'center',
         },
-        nextButtonText: { color: 'white', fontSize: 18 },
+        saveButtonText: { color: 'white', fontSize: 18 },
     });

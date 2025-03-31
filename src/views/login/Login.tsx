@@ -4,24 +4,26 @@ import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { signUpUser, loginUser } from '../../store/user/service';
+import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
+    const auth: AuthProps = useAuth();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(auth?.loading);
 
     const signUp = useCallback(
         async () =>
-            await signUpUser({ email, password, role: 'player' })
-                .then(() => navigation.navigate('Home'))
+            await signUpUser({ email, password })
+                .then(() => navigation.navigate('ProtectedScreen'))
                 .finally(() => setIsLoading(false)),
         [email, password, navigation]
     );
 
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
-            .then(() => navigation.navigate('Home'))
+            .then(() => navigation.navigate('ProtectedScreen'))
             .finally(() => setIsLoading(false));
     }, [email, password, navigation]);
 

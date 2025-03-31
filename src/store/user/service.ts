@@ -7,7 +7,7 @@ import { doc, setDoc } from 'firebase/firestore';
 
 import { LoginUserType, SignUpUserType } from './types';
 
-export const signUpUser = async ({ email, password, role }: SignUpUserType) => {
+export const signUpUser = async ({ email, password }: SignUpUserType) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -17,10 +17,12 @@ export const signUpUser = async ({ email, password, role }: SignUpUserType) => {
         const user = userCredential.user;
 
         // Save user role in Firestore
-        await setDoc(doc(db, 'users', user.uid), {
+        await setDoc(doc(db, 'users', user.email), {
             email,
-            role, // "player" or "game_master"
-        });
+            uid: user.uid,
+        })
+            .then(() => console.log('User has been created'))
+            .catch((err) => console.log('Error during user creation', err));
 
         return user;
     } catch (error) {

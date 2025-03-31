@@ -40,7 +40,7 @@ const SafeView = ({ title, parentStyles, styles, children }: SafeViewProps) => {
 const SafeViewStyle = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        padding: theme.space.xxxl,
         marginTop: 40,
         backgroundColor: '#f0f0f0',
     },
