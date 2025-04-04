@@ -4,6 +4,8 @@
     "titleButtonText": "Créer un personnage"
   },
   "character": {
+    "removeCharacter": "Supprmier ce personnage: {{name}} ?",
+    "removeCharacterDescription": "Êtes-vous sûr de vouloir supprimer ce personnage ? Cette action est irréversible.",
     "races": {
       "dragonborn": "Drakéide",
       "dwarf": "Nain",
@@ -209,5 +211,9 @@
     "listSelectRaces": "Race choisie: ",
     "listSelectClasses": "Classe choisie: ",
     "listSelectBackgrounds": "Historique choisi: "
+  },
+  "modal": {
+    "confirmAction": "Oui",
+    "cancelAction": "Non"
   }
 }

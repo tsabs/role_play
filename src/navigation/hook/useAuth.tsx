@@ -35,12 +35,15 @@ export const AuthProvider = ({ children }) => {
                     },
                     30 * 60 * 1000
                 ); // Refresh every 30 minutes
-                return () => clearInterval(refreshTokenInterval); // Cleanup on unmount
+                return () => {
+                    setIsLoading(false);
+                    return clearInterval(refreshTokenInterval);
+                }; // Cleanup on unmount
             } else {
                 setUser(null);
                 setToken(null);
+                setIsLoading(false);
             }
-            setIsLoading(false);
         });
 
         return () => unsubscribe();

@@ -29,7 +29,7 @@ import {
 } from '../../../../types/games/d2d5e';
 import LabeledList from './LabeledList';
 import Separator from '../../../library/Separator';
-import { characterSlice } from '../../../../store/character/slice';
+import { callAddCharacter } from '../../../../store/character/slice';
 import { useDispatch } from 'react-redux';
 import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
 
@@ -125,6 +125,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                             <Fragment key={`${label}-${index}`}>
                                 <TextInput
                                     mode="outlined"
+                                    multiline={true}
+                                    numberOfLines={10}
                                     label={label}
                                     value={value}
                                     onChangeText={setValue}
@@ -178,13 +180,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                 .saveButton
                         }
                         onPress={() => {
-                            // navigation.navigate('SpellSelection', {
-                            //     gameType,
-                            //     selectedRace,
-                            //     selectedClass,
-                            // })
-                            dispatch(
-                                characterSlice.actions.setCharacter({
+                            callAddCharacter(
+                                {
                                     id: uuidv4(),
                                     name,
                                     description,
@@ -194,8 +191,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     className: selectedClass,
                                     background: selectedBackground.name,
                                     gameType: 'd2d5e',
-                                })
-                            );
+                                },
+                                dispatch
+                            ).then(() => navigation.goBack());
                         }}
                         disabled={!selectedClass || !selectedRace}
                     >

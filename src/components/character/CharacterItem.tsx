@@ -1,15 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 
-import { characterSlice, GenericCharacter } from '../../store/character/slice';
+import {
+    callRemoveCharacter,
+    GenericCharacter,
+} from '../../store/character/slice';
 import { theme } from '../../../style/theme';
 import { DND_CHARACTER_DEFAULT } from '../../../assets';
 import { useAppDispatch } from '../../store';
 import Separator from '../library/Separator';
+import CustomDialog from '../library/CustomDialog';
 
 interface CharacterItemProps {
     character: GenericCharacter;
@@ -36,14 +40,10 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const removeCharacter = useCallback(async () => {
-        try {
-            dispatch(
-                characterSlice.actions.removeCharacter({ name: character.name })
-            );
-        } catch (error) {
-            console.error('error when deleting character', error);
-        }
+    const [isVisible, setIsVisible] = useState(false);
+
+    const handleRemoveCharacter = useCallback(() => {
+        callRemoveCharacter(character.userEmail, character.id, dispatch);
     }, []);
 
     return (
@@ -53,13 +53,22 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
         >
             <TouchableOpacity
                 delayPressIn={50}
-                onLongPress={removeCharacter}
+                onLongPress={() => setIsVisible(true)}
                 onPress={() => {
                     navigation.navigate('BottomCharacterTabs', {
                         character: character,
                     });
                 }}
             >
+                <CustomDialog
+                    title={t('character.removeCharacter', {
+                        name: character.name,
+                    })}
+                    description={t('character.removeCharacterDescription')}
+                    isVisible={isVisible}
+                    triggerAction={handleRemoveCharacter}
+                    setIsVisible={setIsVisible}
+                />
                 <Card style={styles.card}>
                     <Card.Cover
                         source={DND_CHARACTER_DEFAULT}

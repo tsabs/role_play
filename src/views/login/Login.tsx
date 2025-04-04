@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { signUpUser, loginUser } from '../../store/user/service';
 import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
+import { CharacterFormProvider } from '../../components/character/form/CharacterFormProvider';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -16,14 +17,22 @@ const LoginScreen = () => {
     const signUp = useCallback(
         async () =>
             await signUpUser({ email, password })
-                .then(() => navigation.navigate('ProtectedScreen'))
+                .then(() =>
+                    navigation.navigate('ProtectedScreen', {
+                        screen: CharacterFormProvider,
+                    })
+                )
                 .finally(() => setIsLoading(false)),
         [email, password, navigation]
     );
 
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
-            .then(() => navigation.navigate('ProtectedScreen'))
+            .then(() =>
+                navigation.navigate('ProtectedScreen', {
+                    screen: CharacterFormProvider,
+                })
+            )
             .finally(() => setIsLoading(false));
     }, [email, password, navigation]);
 

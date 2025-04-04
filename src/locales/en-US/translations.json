@@ -4,6 +4,8 @@
     "titleButtonText": "Create character"
   },
   "character": {
+    "removeCharacter": "Remove this character: {{name}} ?",
+    "removeCharacterDescription": "Are you sure you want to remove this character? This action cannot be undone.",
     "races": {
       "dragonborn": "Dragonborn",
       "dwarf": "Dwarf",
@@ -208,6 +210,10 @@
     "listSelectRaces": "Select Races: ",
     "listSelectClasses": "Select Classes: ",
     "listSelectBackgrounds": "Select Backgrounds: "
+  },
+  "modal": {
+  "confirmAction": "Yes",
+  "cancelAction": "No"
   }
 }
 

@@ -3,6 +3,7 @@ import RootNavigation from './src/navigation/RootNavigation';
 import './src/locales/index';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
+import { PaperProvider } from 'react-native-paper';
 
 declare global {
     interface AppState {}
@@ -11,7 +12,9 @@ declare global {
 export default function App() {
     return (
         <Provider store={store}>
-            <RootNavigation />
+            <PaperProvider>
+                <RootNavigation />
+            </PaperProvider>
         </Provider>
     );
 }
