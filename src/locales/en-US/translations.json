@@ -204,6 +204,15 @@
         "name": "Urchin",
         "description": "You grew up on the streets. You know where to hide and when your puppy dog eyes will earn you a hot meal.\n\nWhy were you on the streets? Were you a runaway? An orphan? Or just an adventurous kid who stayed out late?"
       }
+    },
+    "overview": {
+      "accordion": {
+        "charcacterInformations": "Character Informations",
+        "equipments": "Equipements",
+        "characteristics": "Characteristics",
+        "skills": "Skills",
+        "spells": "Spells"
+      }
     }
   },
   "characterForm": {

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,12 @@ const LoginScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(auth?.loading);
+
+    useEffect(() => {
+        if (auth?.loading !== isLoading) {
+            setIsLoading(auth?.loading);
+        }
+    }, [auth.loading, isLoading]);
 
     const signUp = useCallback(
         async () =>

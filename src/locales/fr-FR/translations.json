@@ -204,7 +204,16 @@
         "name": "Gosse des rues",
         "description": "Vous avez grandi dans les rues. Vous savez où vous cacher et quand vos yeux de chien battu vous permettront de décrocher un bon repas.\n\nPourquoi étiez-vous dans les rues ? Étiez-vous un fugueur ? Un orphelin ? Ou juste un enfant aventurier qui traînait tard ?"
       }
-}
+},
+    "overview": {
+      "accordion": {
+        "charcacterInformations": "Information du personnage",
+        "equipments": "Equipements",
+        "characteristics": "Caractéristiques",
+        "skills": "Compétences",
+        "spells": "Sorts"
+      }
+    }
 
   },
   "characterForm": {

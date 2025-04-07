@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import { DND_CHARACTER_DEFAULT } from '../../../assets';
 import { useAppDispatch } from '../../store';
 import Separator from '../library/Separator';
 import CustomDialog from '../library/CustomDialog';
+import { BlurView } from 'expo-blur';
 
 interface CharacterItemProps {
     character: GenericCharacter;
@@ -97,8 +99,24 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
                         <Text style={styles.description}>
                             {character.description}
                         </Text>
+                        <Text style={styles.description}>
+                            {character.additionalBackground}
+                        </Text>
                     </Card.Content>
                 </Card>
+                <View style={styles.progressiveBlurContainer}>
+                    <BlurView
+                        intensity={4}
+                        tint="light"
+                        style={StyleSheet.absoluteFill}
+                    />
+                    <LinearGradient
+                        colors={[theme.colors.light0, theme.colors.light100]}
+                        start={{ x: 0.5, y: 0 }}
+                        end={{ x: 0.5, y: 1 }}
+                        style={StyleSheet.absoluteFill}
+                    />
+                </View>
             </TouchableOpacity>
         </Animated.View>
     );
@@ -106,23 +124,27 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
 
 const styles = StyleSheet.create({
     card: {
+        backgroundColor: theme.colors.light,
         width: FLATLIST_WIDTH,
         height: FLATLIST_HEIGHT,
         borderRadius: 20,
-        paddingBottom: theme.space.md, // Extra space to prevent clipping
+        paddingBottom: theme.space.md,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 6,
+        overflow: 'hidden',
     },
     image: {
-        alignSelf: 'stretch', // Ensure image fills width
-        height: '65%', // Take up half of the card height
+        backgroundColor: theme.colors.light,
+        alignSelf: 'stretch',
+        height: '60%',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     content: {
+        position: 'relative',
         marginTop: theme.space.l,
     },
     contentHeader: {
@@ -156,6 +178,16 @@ const styles = StyleSheet.create({
     description: {
         fontSize: theme.fontSize.large,
         color: theme.colors.textSecondary,
+    },
+    progressiveBlurContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 60, // or however much space you want to cover
+        overflow: 'hidden',
+        borderBottomLeftRadius: theme.radius.xl,
+        borderBottomRightRadius: theme.radius.xl,
     },
     gameInfo: {
         fontSize: theme.fontSize.medium,
