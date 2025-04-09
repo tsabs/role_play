@@ -6,7 +6,7 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import { List, Text } from 'react-native-paper';
+import { List } from 'react-native-paper';
 
 import SafeView from '../../components/library/SafeView';
 import { GenericCharacter } from '../../store/character/slice';
@@ -15,6 +15,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { theme } from '../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
+import CustomText from '../../components/atom/CustomText';
 
 interface CharacterOverviewProps {
     character: GenericCharacter;
@@ -33,10 +34,10 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
             content: (
                 <Fragment>
                     <View>
-                        <Text>{character.description}</Text>
+                        <CustomText text={character.description} />
                     </View>
                     <View>
-                        <Text>{character.additionalBackground}</Text>
+                        <CustomText text={character.additionalBackground} />
                     </View>
                 </Fragment>
             ),
@@ -44,22 +45,22 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         {
             id: 2,
             title: 'character.overview.accordion.equipments',
-            content: <Text>Will come soon</Text>,
+            content: <CustomText text="Will come soon" />,
         },
         {
             id: 3,
             title: 'character.overview.accordion.characteristics',
-            content: <Text>Will come soon</Text>,
+            content: <CustomText text="Will come soon" />,
         },
         {
             id: 4,
             title: 'character.overview.accordion.skills',
-            content: <Text>Will come soon</Text>,
+            content: <CustomText text="Will come soon" />,
         },
         {
             id: 5,
             title: 'character.overview.accordion.spells',
-            content: <Text>Will come soon</Text>,
+            content: <CustomText text="Will come soon" />,
         },
     ];
 

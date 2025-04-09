@@ -6,6 +6,7 @@ import {
     deleteDoc,
     getDocs,
     setDoc,
+    updateDoc,
 } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
@@ -190,22 +191,34 @@ export const callAddNote = async (
         console.log('character', character);
         console.log('currentCharacters', currentCharacters);
 
-        // Save to local storage
-        // await AsyncStorage.setItem(
-        //     `characters_${userEmail}`,
-        //     JSON.stringify(currentCharacters)
-        // );
-        //
-        // // Update Firebase
-        // await setDoc(
-        //     doc(db, 'characters', userEmail, 'character', characterId),
-        //     character
-        // );
+        const noteRef = doc(
+            db,
+            'characters',
+            userEmail,
+            'character',
+            characterId
+        );
 
-        dispatch(characterSlice.actions.setNote({ characterId, note }));
-        Toast.show({ type: 'success', text1: 'Note saved successfully!' });
+        await updateDoc(noteRef, { notes: character.notes })
+            .then(async () => {
+                // Save to local storage
+                await AsyncStorage.setItem(
+                    `characters_${userEmail}`,
+                    JSON.stringify(currentCharacters)
+                );
 
-        console.log('Note added successfully to character:', character.name);
+                dispatch(characterSlice.actions.setNote({ characterId, note }));
+                Toast.show({
+                    type: 'success',
+                    text1: 'Note saved successfully!',
+                });
+
+                console.log(
+                    'Note added successfully to character:',
+                    character.name
+                );
+            })
+            .catch((err) => console.log(err));
     }
 };
 

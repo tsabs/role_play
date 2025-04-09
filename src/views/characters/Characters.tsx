@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Title } from 'react-native-paper';
@@ -24,10 +24,19 @@ const CharactersScreen = () => {
         await loadCharacters(auth.user.email, dispatch);
     }, []);
     const characters = useAppSelector(selectAllCharacters);
+    const [mounted, setMounted] = useState(false);
+
+    // This seems to fix an Android bug where the bottom bar is hidden after mount
+    useEffect(() => {
+        const timeout = setTimeout(() => setMounted(true), 75);
+        return () => clearTimeout(timeout);
+    }, []);
 
     useEffect(() => {
         callCharacters();
     }, [callCharacters]);
+
+    if (!mounted) return null;
 
     return (
         <SafeView>
@@ -76,7 +85,6 @@ const styles = StyleSheet.create({
         marginHorizontal: margin,
     },
     title: {
-        marginTop: theme.space.xxxl,
         alignItems: 'center',
     },
 });

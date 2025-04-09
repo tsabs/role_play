@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
         color: theme.colors.white,
     },
     title: {
-        marginTop: theme.space.xxxl,
         alignItems: 'center',
     },
 });

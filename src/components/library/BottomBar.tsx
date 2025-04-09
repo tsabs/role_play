@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/AntDesign';
 
@@ -56,6 +56,8 @@ const BottomBar = ({ elements, props }: BottomBarProps) => {
 const styles = StyleSheet.create({
     container: {
         height: 50,
+        minHeight: 50,
+        marginBottom: Platform.OS === 'ios' ? 20 : 0,
         flexDirection: 'row',
     },
     iconContainer: {

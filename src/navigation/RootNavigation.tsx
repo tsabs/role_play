@@ -1,12 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from '../views/login/Login';
 
 import GamesScreen from '../views/games/Games';
 import CharactersScreen from '../views/characters/Characters';
-import { AuthProps, AuthProvider, useAuth } from './hook/useAuth';
+import { AuthProps, useAuth } from './hook/useAuth';
 import CharacterItem from '../components/character/CharacterItem';
 import { CharacterFormProvider } from '../components/character/form/CharacterFormProvider';
 import BottomBar from '../components/library/BottomBar';
@@ -137,11 +136,5 @@ const MainStack = () => {
 };
 
 export default function RouteNavigation() {
-    return (
-        <AuthProvider>
-            <NavigationContainer>
-                <MainStack />
-            </NavigationContainer>
-        </AuthProvider>
-    );
+    return <MainStack />;
 }

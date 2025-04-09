@@ -1,6 +1,12 @@
 import { Fragment } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import {
+    Animated,
+    StyleSheet,
+    TouchableOpacity,
+    useWindowDimensions,
+} from 'react-native';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
+
 import { Text } from 'react-native-paper';
 
 import SafeView from './SafeView';
@@ -11,57 +17,75 @@ interface TopBarProps {
     props: MaterialTopTabBarProps;
 }
 
-const borderRadius = theme.radius.md;
-
 const TopBar = ({ elements, props }: TopBarProps) => {
+    const { width } = useWindowDimensions();
+    const tabWidth = width / elements.length;
+
+    const translateX = Animated.multiply(
+        props.position,
+        new Animated.Value(tabWidth)
+    );
+
     return (
         <SafeView
+            title={'Prise de note'}
+            customBackNavigation={() =>
+                props.navigation.navigate('ProtectedScreen')
+            }
             parentStyles={{ padding: 0, margin: 0, flex: 0 }}
-            styles={styles().container}
+            styles={styles.container}
         >
             {elements.map((element, index) => {
-                const isSelected = index === props.state.index;
                 return (
                     <Fragment key={index}>
                         <TouchableOpacity
                             onPress={() => {
                                 props.navigation.navigate(element.screenName);
                             }}
-                            style={styles(isSelected, index).tabContainer}
+                            style={styles.tabContainer}
                         >
                             <Text>{element.text}</Text>
                         </TouchableOpacity>
                     </Fragment>
                 );
             })}
+            {/* Animated border */}
+            <Animated.View
+                style={[
+                    styles.animatedBorder,
+                    {
+                        width: tabWidth - 40,
+                        transform: [{ translateX }],
+                    },
+                ]}
+            />
         </SafeView>
     );
 };
 
-const styles = (isSelected = false, index: number = 0) =>
-    StyleSheet.create({
-        container: {
-            marginTop: theme.space.l,
-            marginHorizontal: 40,
-            height: 40,
-            flexDirection: 'row',
-        },
-        tabContainer: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderWidth: isSelected ? 1 : 0,
-            borderBottomLeftRadius:
-                isSelected && index === 0 ? borderRadius : 0,
-            borderTopLeftRadius: isSelected && index === 0 ? borderRadius : 0,
-            borderBottomRightRadius:
-                isSelected && index === 1 ? borderRadius : 0,
-            borderTopRightRadius: isSelected && index === 1 ? borderRadius : 0,
-            borderColor: theme.colors.primary,
-        },
-        // selectedTabContainer: {
-        //
-        // }
-    });
+const styles = StyleSheet.create({
+    container: {
+        marginTop: theme.space.l,
+        height: 40,
+        flexDirection: 'row',
+    },
+    tabContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    animatedBorder: {
+        position: 'absolute',
+        borderBottomWidth: 1,
+        flex: 1,
+        marginHorizontal: 20,
+        borderColor: theme.colors.primary,
+        borderRadius: theme.radius.md,
+        top: 0,
+        bottom: 0,
+        backgroundColor: 'transparent',
+    },
+});
 
 export default TopBar;

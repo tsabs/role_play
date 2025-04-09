@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { IconButton, Text } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
 
 import { theme } from '../../../style/theme';
 
@@ -12,10 +12,17 @@ interface SafeViewProps {
     children: ReactNode;
     title?: string;
     styles?: StyleProp<ViewStyle>;
+    customBackNavigation?: () => void;
     parentStyles?: StyleProp<ViewStyle>;
 }
 
-const SafeView = ({ title, parentStyles, styles, children }: SafeViewProps) => {
+const SafeView = ({
+    title,
+    parentStyles,
+    customBackNavigation,
+    styles,
+    children,
+}: SafeViewProps) => {
     const navigation = useNavigation();
     return (
         <View style={[SafeViewStyle.container, parentStyles]}>
@@ -25,7 +32,11 @@ const SafeView = ({ title, parentStyles, styles, children }: SafeViewProps) => {
                     <IconButton
                         size={30}
                         icon={'keyboard-backspace'}
-                        onPress={() => navigation.goBack()}
+                        onPress={() =>
+                            customBackNavigation
+                                ? customBackNavigation()
+                                : navigation.goBack()
+                        }
                     />
                     <View style={SafeViewStyle.textContainer}>
                         <Text variant={'titleLarge'}>{title}</Text>
@@ -41,8 +52,8 @@ const SafeViewStyle = StyleSheet.create({
     container: {
         flex: 1,
         padding: theme.space.xxxl,
-        marginTop: 45,
-        backgroundColor: '#f0f0f0',
+        marginTop: Platform.OS === 'ios' ? 40 : 10,
+        backgroundColor: theme.colors.light25,
     },
     header: {
         width: theme.width,
