@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     collection,
@@ -6,12 +7,19 @@ import {
     getDocs,
     setDoc,
 } from 'firebase/firestore';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
-import { Dispatch } from 'react';
+
+export interface Note {
+    id: string;
+    title: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+}
 
 export interface GenericCharacter {
     id: string;
@@ -26,6 +34,7 @@ export interface GenericCharacter {
     characterImg?: string;
     gameId?: string;
     additionalBackground?: string;
+    notes?: Note[];
 }
 
 interface CharactersState {
@@ -74,7 +83,7 @@ export const loadCharacters = async (userEmail: string, dispatch: any) => {
             `characters_${userEmail}`
         );
 
-        console.log(JSON.parse(storedCharacters));
+        // console.log(JSON.parse(storedCharacters));
 
         if (storedCharacters) {
             console.log('Using cached characters');
@@ -116,6 +125,11 @@ export const callAddCharacter = async (
             );
 
             dispatch(characterSlice.actions.setCharacter(character));
+            Toast.show({
+                type: 'success',
+                text1: 'Character added successfully!',
+            });
+
             console.log('Character added successfully:', character);
         })
         .catch((error) => console.error('Error adding character:', error));
@@ -147,6 +161,54 @@ export const callRemoveCharacter = async (
     });
 };
 
+export const callAddNote = async (
+    userEmail: string,
+    characterId: string,
+    note: Note,
+    dispatch: Dispatch<any>
+) => {
+    const storedCharacters = await AsyncStorage.getItem(
+        `characters_${userEmail}`
+    );
+    let currentCharacters: GenericCharacter[] = storedCharacters
+        ? JSON.parse(storedCharacters)
+        : [];
+
+    const characterIndex = currentCharacters.findIndex(
+        (char) => char.id === characterId
+    );
+
+    if (characterIndex !== -1) {
+        const character = currentCharacters[characterIndex];
+
+        if (!character.notes) {
+            character.notes = [];
+        }
+
+        character.notes.unshift(note);
+
+        console.log('character', character);
+        console.log('currentCharacters', currentCharacters);
+
+        // Save to local storage
+        // await AsyncStorage.setItem(
+        //     `characters_${userEmail}`,
+        //     JSON.stringify(currentCharacters)
+        // );
+        //
+        // // Update Firebase
+        // await setDoc(
+        //     doc(db, 'characters', userEmail, 'character', characterId),
+        //     character
+        // );
+
+        dispatch(characterSlice.actions.setNote({ characterId, note }));
+        Toast.show({ type: 'success', text1: 'Note saved successfully!' });
+
+        console.log('Note added successfully to character:', character.name);
+    }
+};
+
 export const characterSlice = createSlice({
     name: CHARACTER_MODULE_KEY,
     initialState,
@@ -161,6 +223,24 @@ export const characterSlice = createSlice({
         },
         setCharacters: (state, action: PayloadAction<GenericCharacter[]>) => {
             state.characters = action.payload;
+        },
+        setNote: (
+            state,
+            action: PayloadAction<{ characterId: string; note: Note }>
+        ) => {
+            const characterIndex = state.characters.findIndex(
+                (char) => char.id === action.payload.characterId
+            );
+
+            if (characterIndex !== -1) {
+                const character = state.characters[characterIndex];
+
+                if (!character.notes) {
+                    character.notes = [];
+                }
+
+                character.notes.unshift(action.payload.note); // add newest note at top
+            }
         },
     },
 });

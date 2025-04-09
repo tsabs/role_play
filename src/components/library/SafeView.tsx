@@ -19,7 +19,7 @@ const SafeView = ({ title, parentStyles, styles, children }: SafeViewProps) => {
     const navigation = useNavigation();
     return (
         <View style={[SafeViewStyle.container, parentStyles]}>
-            <StatusBar />
+            <StatusBar translucent={false} />
             {title && (
                 <View style={SafeViewStyle.header}>
                     <IconButton
@@ -41,7 +41,7 @@ const SafeViewStyle = StyleSheet.create({
     container: {
         flex: 1,
         padding: theme.space.xxxl,
-        marginTop: 40,
+        marginTop: 45,
         backgroundColor: '#f0f0f0',
     },
     header: {

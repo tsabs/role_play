@@ -19,10 +19,15 @@ const BottomBar = ({ elements, props }: BottomBarProps) => {
         <Shadow>
             <View style={styles.container}>
                 {elements.map((element, index) => {
+                    const isSelected = index === props.state.index;
                     return (
                         <Fragment key={index}>
                             <TouchableOpacity
-                                style={styles.iconContainer}
+                                style={
+                                    isSelected
+                                        ? styles.selectedIconContainer
+                                        : styles.iconContainer
+                                }
                                 onPress={() =>
                                     props.navigation.navigate(
                                         element.screenName
@@ -32,7 +37,11 @@ const BottomBar = ({ elements, props }: BottomBarProps) => {
                                 <Ionicons
                                     name={element.icon as any}
                                     size={iconSize}
-                                    color={theme.colors.primary}
+                                    color={
+                                        isSelected
+                                            ? theme.colors.white
+                                            : theme.colors.primary
+                                    }
                                 />
                             </TouchableOpacity>
                             <Separator />
@@ -53,7 +62,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: 'red',
+    },
+    selectedIconContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.primary,
     },
 });
 

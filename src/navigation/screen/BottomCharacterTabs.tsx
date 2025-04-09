@@ -4,8 +4,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import BottomBar from '../../components/library/BottomBar';
 import CharacterOverview from '../../views/singleCharacter/CharacterOverview';
-import CharacterNotes from '../../views/singleCharacter/CharacterNotes';
 import { RootStackParamList } from '../RootNavigation';
+import CharacterNotesScreen from './CharacterNotesScreen';
 
 const BottomNavigator = createBottomTabNavigator();
 
@@ -15,8 +15,13 @@ type BottomCharacterTabsProps = NativeStackScreenProps<
 >;
 
 const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
-    const renderComponent = useCallback(
+    const renderOverviewComponent = useCallback(
         () => CharacterOverview({ character: route.params.character }),
+        []
+    );
+
+    const renderNotesComponent = useCallback(
+        () => CharacterNotesScreen({ characterId: route.params.character.id }),
         []
     );
 
@@ -28,7 +33,7 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
                 BottomBar({
                     elements: [
                         { icon: 'profile', screenName: 'CharacterOverview' },
-                        { icon: 'book', screenName: 'CharacterNotes' },
+                        { icon: 'book', screenName: 'CharacterNotesScreen' },
                     ],
                     props,
                 })
@@ -36,12 +41,12 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
         >
             <BottomNavigator.Screen
                 name="CharacterOverview"
-                component={renderComponent}
+                component={renderOverviewComponent}
                 options={{ headerShown: false }}
             />
             <BottomNavigator.Screen
-                name="CharacterNotes"
-                component={CharacterNotes}
+                name="CharacterNotesScreen"
+                component={renderNotesComponent}
                 options={{ headerShown: false }}
             />
         </BottomNavigator.Navigator>

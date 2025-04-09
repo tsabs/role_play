@@ -8,3 +8,11 @@ export const selectAllCharacters = createSelector(
     selectCharacterState,
     (charactersState) => charactersState?.characters
 );
+
+export const selectNotes = (characterId: string) => {
+    return createSelector(selectCharacterState, (charactersState) => {
+        return charactersState?.characters.find(
+            (character) => character.id === characterId
+        ).notes;
+    });
+};

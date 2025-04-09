@@ -26,6 +26,9 @@ export type RootStackParamList = {
     CharacterFormProvider: {
         gameType: string;
     };
+    CharacterNotesScreen: {
+        characterId: string;
+    };
     BottomCharacterTabs: {
         character: GenericCharacter;
     };
