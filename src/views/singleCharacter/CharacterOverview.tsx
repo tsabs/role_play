@@ -9,13 +9,13 @@ import {
 import { List } from 'react-native-paper';
 
 import SafeView from '../../components/library/SafeView';
-import { GenericCharacter } from '../../store/character/slice';
 import { DND_CHARACTER_DEFAULT } from '../../../assets';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { theme } from '../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import CustomText from '../../components/atom/CustomText';
+import { GenericCharacter } from '../../types/games/d2d5e';
 
 interface CharacterOverviewProps {
     character: GenericCharacter;
@@ -82,7 +82,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                             <List.Accordion
                                 key={accordion.id}
                                 style={styles.accordionContainer}
-                                title={t(accordion.title)}
+                                title={<CustomText text={t(accordion.title)} />}
                                 id={accordion.id}
                             >
                                 <Animated.View

@@ -11,9 +11,7 @@ web-build/
 /android
 
 # Firebase
-firebaseConfig.ts
-google-services.json
-GoogleService-Info.plist
+
 
 # Native
 *.orig.*

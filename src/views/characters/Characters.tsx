@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Title } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
 import SafeView from '../../components/library/SafeView';
@@ -12,6 +12,7 @@ import { useAuth } from '../../navigation/hook/useAuth';
 import { selectAllCharacters } from '../../store/character/selectors';
 import CharacterItem from '../../components/character/CharacterItem';
 import Separator from '../../components/library/Separator';
+import CustomText from '../../components/atom/CustomText';
 
 const margin = 10;
 
@@ -41,7 +42,10 @@ const CharactersScreen = () => {
     return (
         <SafeView>
             <View style={styles.title}>
-                <Title>{t('characters.title')}</Title>
+                <CustomText
+                    fontSize={theme.fontSize.extraLarge}
+                    text={t('characters.title')}
+                />
             </View>
             <Button
                 style={styles.button}

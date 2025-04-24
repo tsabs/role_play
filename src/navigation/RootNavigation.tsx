@@ -1,17 +1,16 @@
+import { Fragment, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from '../views/login/Login';
-
 import GamesScreen from '../views/games/Games';
 import CharactersScreen from '../views/characters/Characters';
 import { AuthProps, useAuth } from './hook/useAuth';
 import CharacterItem from '../components/character/CharacterItem';
 import { CharacterFormProvider } from '../components/character/form/CharacterFormProvider';
 import BottomBar from '../components/library/BottomBar';
-import { Fragment } from 'react';
-import { GenericCharacter } from '../store/character/slice';
 import BottomCharacterTabs from './screen/BottomCharacterTabs';
+import { GenericCharacter } from '../types/games/d2d5e';
 
 const BottomNavigator = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -111,7 +110,7 @@ const MainStack = () => {
                 animationDuration: 1000,
             }}
         >
-            {auth?.user ? (
+            {auth?.user?.uid ? (
                 <Fragment>
                     <Stack.Screen
                         name="ProtectedScreen"

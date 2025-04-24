@@ -1,3 +1,28 @@
+import { Note } from '../note';
+
+type Ability = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
+
+type AbilityScores = {
+    [key in Ability]: number;
+};
+
+interface SkillProficiency {
+    name: string;
+    ability: Ability;
+    isProficient: boolean;
+    isExpert: boolean;
+}
+
+interface Proficiency {
+    name: string;
+    type: 'skill' | 'weapon' | 'tool' | 'language' | 'saving-throw';
+}
+
+interface CharacterEquipment {
+    item: ElementIdentification;
+    quantity: number;
+}
+
 interface PreRequestMultiClass {
     minimum_score: number;
     ability_score: ElementIdentification;
@@ -7,7 +32,7 @@ interface PreRequestMultiClass {
 interface ElementIdentification {
     name: string;
     index: string;
-    url: string;
+    url?: string;
 }
 
 interface OptionChoice {
@@ -101,4 +126,30 @@ interface DndClass {
     url: string;
 }
 
-export { DndBackground, DndClass, DndRace };
+interface GenericCharacter {
+    id: string;
+    name: string;
+    userEmail: string;
+    description: string;
+    background: string;
+    // Cause DnD has background as talent this is actually the user imagined background
+    race: string;
+    className: string;
+    gameType: string;
+    characterImg?: string;
+    gameId?: string;
+    additionalBackground?: string;
+    notes?: Note[];
+}
+
+export {
+    GenericCharacter,
+    CharacterEquipment,
+    Proficiency,
+    SkillProficiency,
+    AbilityScores,
+    Ability,
+    DndBackground,
+    DndClass,
+    DndRace,
+};

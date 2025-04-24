@@ -10,6 +10,8 @@ import {
     DndClass,
     DndRace,
 } from '../../../../types/games/d2d5e';
+import CustomText from '../../../atom/CustomText';
+import { theme } from '../../../../../style/theme';
 
 const spacer = 20;
 
@@ -28,20 +30,25 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     return (
         <Fragment>
             <View style={styles(spacer).selectedValue}>
-                <Text variant={'titleMedium'} style={styles(spacer).subTitle}>
-                    {t(`characterForm.listSelect${name}`)}
-                </Text>
+                <CustomText
+                    text={t(`characterForm.listSelect${name}`)}
+                    fontSize={theme.fontSize.large}
+                    style={styles(spacer).subTitle}
+                />
 
                 {selectedName && (
-                    <Text style={styles(spacer).subText}>
-                        {name === 'Backgrounds'
-                            ? t(
-                                  `character.${name.toLowerCase()}.${selectedName}.name`
-                              )
-                            : t(
-                                  `character.${name.toLowerCase()}.${selectedName}`
-                              )}
-                    </Text>
+                    <CustomText
+                        text={
+                            name === 'Backgrounds'
+                                ? t(
+                                      `character.${name.toLowerCase()}.${selectedName}.name`
+                                  )
+                                : t(
+                                      `character.${name.toLowerCase()}.${selectedName}`
+                                  )
+                        }
+                        style={styles(spacer).subText}
+                    />
                 )}
             </View>
             <FlatList

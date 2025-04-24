@@ -4,7 +4,7 @@ import RootNavigation from './src/navigation/RootNavigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/navigation/hook/useAuth';
-import { PaperProvider } from 'react-native-paper';
+import { DefaultTheme, PaperProvider } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
 import './src/locales/index';
@@ -14,10 +14,18 @@ declare global {
     interface AppState {}
 }
 
+const paperTheme = {
+    ...DefaultTheme,
+    // colors: {
+    //     ...DefaultTheme.colors,
+    //     // etc.
+    // },
+};
+
 export default function App() {
     return (
         <Provider store={store}>
-            <PaperProvider>
+            <PaperProvider theme={paperTheme}>
                 <AuthProvider>
                     <GestureHandlerRootView style={{ flex: 1 }}>
                         <NavigationContainer>

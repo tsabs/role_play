@@ -1,42 +1,20 @@
 import { Dispatch } from 'react';
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-    collection,
-    doc,
-    deleteDoc,
-    getDocs,
-    setDoc,
-    updateDoc,
-} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
-
-export interface Note {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface GenericCharacter {
-    id: string;
-    name: string;
-    userEmail: string;
-    description: string;
-    background: string;
-    // Cause DnD has background as talent this is actually the user imagined background
-    race: string;
-    className: string;
-    gameType: string;
-    characterImg?: string;
-    gameId?: string;
-    additionalBackground?: string;
-    notes?: Note[];
-}
+import { GenericCharacter } from '../../types/games/d2d5e';
+import { Note } from '../../types/note';
+import {
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    setDoc,
+    updateDoc,
+} from '@react-native-firebase/firestore';
 
 interface CharactersState {
     characters: GenericCharacter[];
@@ -56,7 +34,7 @@ export const loadCharactersFromFirebase = async (
     clientEmail: string,
     dispatch: Dispatch<any>
 ) => {
-    const docRef = collection(db, 'characters', clientEmail, 'character');
+    const docRef = collection(db(), 'characters', clientEmail, 'character');
     const docSnapshot = await getDocs(docRef);
 
     // Extract data from each document
@@ -84,8 +62,6 @@ export const loadCharacters = async (userEmail: string, dispatch: any) => {
             `characters_${userEmail}`
         );
 
-        // console.log(JSON.parse(storedCharacters));
-
         if (storedCharacters) {
             console.log('Using cached characters');
             dispatch(
@@ -107,7 +83,7 @@ export const callAddCharacter = async (
     dispatch: Dispatch<AnyAction>
 ) => {
     await setDoc(
-        doc(db, 'characters', character.userEmail, 'character', character.id),
+        doc(db(), 'characters', character.userEmail, 'character', character.id),
         character
     )
         .then(async () => {
@@ -142,7 +118,7 @@ export const callRemoveCharacter = async (
     dispatch: Dispatch<any>
 ) => {
     await deleteDoc(
-        doc(db, 'characters', userEmail, 'character', characterId)
+        doc(db(), 'characters', userEmail, 'character', characterId)
     ).then(async () => {
         const storedCharacters = await AsyncStorage.getItem(
             `characters_${userEmail}`
@@ -192,7 +168,7 @@ export const callAddNote = async (
         console.log('currentCharacters', currentCharacters);
 
         const noteRef = doc(
-            db,
+            db(),
             'characters',
             userEmail,
             'character',

@@ -3,6 +3,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
+import { auth as authFirebase } from '../../../firebaseConfig';
+
 import { signUpUser, loginUser } from '../../store/user/service';
 import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
 import { CharacterFormProvider } from '../../components/character/form/CharacterFormProvider';
@@ -12,11 +14,15 @@ const LoginScreen = () => {
     const auth: AuthProps = useAuth();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(auth?.loading);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (auth?.loading !== isLoading) {
             setIsLoading(auth?.loading);
+        }
+        if (isLoading === true) {
+            console.log('yes');
+            authFirebase.currentUser?.getIdToken(true);
         }
     }, [auth.loading, isLoading]);
 
@@ -34,11 +40,12 @@ const LoginScreen = () => {
 
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
-            .then(() =>
+            .then((res) => {
                 navigation.navigate('ProtectedScreen', {
                     screen: CharacterFormProvider,
-                })
-            )
+                });
+            })
+            .catch((err) => console.log('error on log', err))
             .finally(() => setIsLoading(false));
     }, [email, password, navigation]);
 

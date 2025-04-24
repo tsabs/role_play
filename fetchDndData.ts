@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from '@react-native-firebase/firestore';
 const BASE_URL = 'https://www.dnd5eapi.co/api';
 
 // List of D&D 5E categories to fetch
@@ -29,7 +29,7 @@ const saveToFirestore = async (category: string) => {
             );
             const itemDataJson = await itemData.json();
             await setDoc(
-                doc(db, 'games', 'dnd5e', category, itemDataJson.index),
+                doc(db(), 'games', 'dnd5e', category, itemDataJson.index),
                 itemDataJson
             );
         }

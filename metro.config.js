@@ -9,14 +9,21 @@
 //
 // module.exports = wrapWithReanimatedMetroConfig(config);
 
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+// metro.config.js
+const { getDefaultConfig } = require('@expo/metro-config');
 
-/**
- * Metro configuration
- * https://metrobundler.dev/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
-const config = {};
+const config = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = config;
+
+// const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+//
+// /**
+//  * Metro configuration
+//  * https://metrobundler.dev/docs/configuration
+//  *
+//  * @type {import('metro-config').MetroConfig}
+//  */
+// const config = {};
+//
+// module.exports = mergeConfig(getDefaultConfig(__dirname), config);

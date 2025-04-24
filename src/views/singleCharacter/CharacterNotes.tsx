@@ -9,13 +9,14 @@ import {
     View,
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
-
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { callAddNote, Note } from '../../store/character/slice';
+
+import { callAddNote } from '../../store/character/slice';
 import { useAppDispatch } from '../../store';
 import { theme } from '../../../style/theme';
 import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
 import CustomButton from '../../components/atom/CustomButton';
+import { Note } from '../../types/note';
 
 const inputAccessoryViewID = 'customAccessory';
 
@@ -29,6 +30,7 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
     const dispatch = useAppDispatch();
 
     const saveNote = useCallback(async () => {
+        console.log('saving note');
         const note: Note = {
             id: Date.now().toString(),
             title,

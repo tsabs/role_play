@@ -2,10 +2,10 @@ import { auth, db } from '../../../firebaseConfig';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+} from '@react-native-firebase/auth';
 
 import { LoginUserType, SignUpUserType } from './types';
+import { doc, setDoc } from '@react-native-firebase/firestore';
 
 export const signUpUser = async ({ email, password }: SignUpUserType) => {
     try {
@@ -17,7 +17,7 @@ export const signUpUser = async ({ email, password }: SignUpUserType) => {
         const user = userCredential.user;
 
         // Save user role in Firestore
-        await setDoc(doc(db, 'users', user.email), {
+        await setDoc(doc(db(), 'users', user.email), {
             email,
             uid: user.uid,
         })

@@ -2,13 +2,13 @@ import { Fragment, useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { List, Text } from 'react-native-paper';
-
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Note } from '../../store/character/slice';
+
 import { useAppSelector } from '../../store';
 import { selectNotes } from '../../store/character/selectors';
 import { theme } from '../../../style/theme';
 import CustomText from '../../components/atom/CustomText';
+import { Note } from '../../types/note';
 
 const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
     const [notes, setNotes] = useState<Note[]>([]);

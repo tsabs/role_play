@@ -5,6 +5,7 @@ import { IconButton, Text } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 
 import { theme } from '../../../style/theme';
+import CustomText from '../atom/CustomText';
 
 const headerHeight = 50;
 
@@ -39,7 +40,10 @@ const SafeView = ({
                         }
                     />
                     <View style={SafeViewStyle.textContainer}>
-                        <Text variant={'titleLarge'}>{title}</Text>
+                        <CustomText
+                            fontSize={theme.fontSize.extraLarge}
+                            text={title}
+                        />
                     </View>
                 </View>
             )}

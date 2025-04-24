@@ -2,20 +2,18 @@ import { useCallback, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 
-import {
-    callRemoveCharacter,
-    GenericCharacter,
-} from '../../store/character/slice';
+import { callRemoveCharacter } from '../../store/character/slice';
 import { theme } from '../../../style/theme';
 import { DND_CHARACTER_DEFAULT } from '../../../assets';
 import { useAppDispatch } from '../../store';
 import Separator from '../library/Separator';
 import CustomDialog from '../library/CustomDialog';
-import { BlurView } from 'expo-blur';
+import { GenericCharacter } from '../../types/games/d2d5e';
 
 interface CharacterItemProps {
     character: GenericCharacter;

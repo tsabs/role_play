@@ -7,7 +7,12 @@ export const styles = (
     isDisabled?: boolean
 ) =>
     StyleSheet.create({
-        container: { paddingHorizontal: spacer },
+        container: {
+            paddingHorizontal: spacer,
+            // marginBottom: isSelected ? 300 : 0,
+            // paddingBottom: 500,
+            // backgroundColor: theme.colors.primary,
+        },
         subTitle: {
             fontSize: theme.fontSize.extraLarge,
             marginTop: spacer,
