@@ -34,7 +34,7 @@ export const loadCharactersFromFirebase = async (
     clientEmail: string,
     dispatch: Dispatch<any>
 ) => {
-    const docRef = collection(db(), 'characters', clientEmail, 'character');
+    const docRef = collection(db, 'characters', clientEmail, 'character');
     const docSnapshot = await getDocs(docRef);
 
     // Extract data from each document
@@ -83,7 +83,7 @@ export const callAddCharacter = async (
     dispatch: Dispatch<AnyAction>
 ) => {
     await setDoc(
-        doc(db(), 'characters', character.userEmail, 'character', character.id),
+        doc(db, 'characters', character.userEmail, 'character', character.id),
         character
     )
         .then(async () => {
@@ -118,7 +118,7 @@ export const callRemoveCharacter = async (
     dispatch: Dispatch<any>
 ) => {
     await deleteDoc(
-        doc(db(), 'characters', userEmail, 'character', characterId)
+        doc(db, 'characters', userEmail, 'character', characterId)
     ).then(async () => {
         const storedCharacters = await AsyncStorage.getItem(
             `characters_${userEmail}`
@@ -168,7 +168,7 @@ export const callAddNote = async (
         console.log('currentCharacters', currentCharacters);
 
         const noteRef = doc(
-            db(),
+            db,
             'characters',
             userEmail,
             'character',

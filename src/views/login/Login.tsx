@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-import { auth as authFirebase } from '../../../firebaseConfig';
+// import { auth as authFirebase, db } from '../../../firebaseConfig';
 
 import { signUpUser, loginUser } from '../../store/user/service';
 import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
@@ -20,10 +20,9 @@ const LoginScreen = () => {
         if (auth?.loading !== isLoading) {
             setIsLoading(auth?.loading);
         }
-        if (isLoading === true) {
-            console.log('yes');
-            authFirebase.currentUser?.getIdToken(true);
-        }
+        // if (isLoading === true) {
+        //     console.log('Login auth user : ', auth);
+        // }
     }, [auth.loading, isLoading]);
 
     const signUp = useCallback(

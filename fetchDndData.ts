@@ -29,7 +29,7 @@ const saveToFirestore = async (category: string) => {
             );
             const itemDataJson = await itemData.json();
             await setDoc(
-                doc(db(), 'games', 'dnd5e', category, itemDataJson.index),
+                doc(db, 'games', 'dnd5e', category, itemDataJson.index),
                 itemDataJson
             );
         }

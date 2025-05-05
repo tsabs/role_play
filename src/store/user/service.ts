@@ -17,7 +17,7 @@ export const signUpUser = async ({ email, password }: SignUpUserType) => {
         const user = userCredential.user;
 
         // Save user role in Firestore
-        await setDoc(doc(db(), 'users', user.email), {
+        await setDoc(doc(db, 'users', user.email), {
             email,
             uid: user.uid,
         })

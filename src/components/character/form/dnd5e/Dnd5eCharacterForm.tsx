@@ -37,6 +37,7 @@ import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
 import CustomText from '../../../atom/CustomText';
 import { SkillsForm } from './SkillsForm';
 import AbilityForm from './AbilityForm';
+import { ABILITIES } from './constants';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -54,8 +55,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
     const auth: AuthProps = useAuth();
-    // const route = useRoute();
-    // const { gameType } = route.params;
 
     if (!auth.user) return <Fragment />;
 
@@ -72,7 +71,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [selectedBackground, setSelectedBackground] =
         useState<CharacterBackground>(null);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-    console.log('keyboard', Keyboard.isVisible(), isKeyboardVisible);
 
     const callGetBackgrounds = useCallback(async () => {
         const backgrounds = (await getBackgrounds().catch((err) =>
@@ -97,34 +95,44 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         setClasses(classes);
     }, []);
 
-    const listenerVisible = useCallback(() => {
-        Keyboard.addListener('keyboardDidShow', () => {
-            setIsKeyboardVisible(true);
-        });
-    }, []);
-
-    const listener = useCallback(() => {
-        Keyboard.addListener('keyboardDidHide', () => {
-            setIsKeyboardVisible(false);
-        });
-    }, []);
-
-    useEffect(() => {
-        listenerVisible();
-        listener();
-    }, []);
-
     useEffect(() => {
         Promise.all([callGetBackgrounds(), callGetClasses(), callGetRaces()]);
     }, [gameType]);
+    useEffect(() => {
+        const listenerKeyBoardDidShow = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setIsKeyboardVisible(true);
+                console.log('is visible');
+            }
+        );
+        return () => listenerKeyBoardDidShow.remove();
+    }, []);
+    useEffect(() => {
+        const listenerKeyBoardDidShow = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setIsKeyboardVisible(false);
+            }
+        );
+        return () => listenerKeyBoardDidShow.remove();
+    }, []);
 
     const scrollViewStyle = useMemo<ViewStyle>(() => {
-        return Keyboard.isVisible() || selectedBackground
-            ? {
-                  height: Dimensions.get('screen').height - 150,
-              }
-            : {};
-    }, [selectedBackground]);
+        if (isKeyboardVisible) {
+            return {
+                height: Dimensions.get('window').height - 400,
+            };
+        }
+        if (selectedBackground) {
+            return {
+                height: Dimensions.get('window').height - 150,
+            };
+        }
+        return {
+            height: Dimensions.get('window').height - 50,
+        };
+    }, [isKeyboardVisible, Keyboard.isVisible(), selectedBackground]);
 
     const textDisplay: Array<{
         label: string;
@@ -141,97 +149,92 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             title={'Créez votre personnage'}
             styles={styles(spacer, isKeyboardVisible).container}
         >
-            <ScrollView style={scrollViewStyle}>
-                {textDisplay.map(({ label, value, setValue }, index) => {
-                    return (
-                        <Fragment key={`${label}-${index}`}>
-                            <TextInput
-                                mode="outlined"
-                                multiline={true}
-                                numberOfLines={10}
-                                label={label}
-                                value={value}
-                                onChangeText={setValue}
-                                activeOutlineColor={theme.colors.primary}
-                                outlineColor={theme.colors.primary}
-                                style={{ marginVertical: theme.space.l }}
+            <KeyboardAvoidingView behavior={'padding'} enabled>
+                <ScrollView style={scrollViewStyle}>
+                    {textDisplay.map(({ label, value, setValue }, index) => {
+                        return (
+                            <Fragment key={`${label}-${index}`}>
+                                <TextInput
+                                    mode="outlined"
+                                    multiline={true}
+                                    numberOfLines={10}
+                                    label={label}
+                                    value={value}
+                                    onChangeText={setValue}
+                                    activeOutlineColor={theme.colors.primary}
+                                    outlineColor={theme.colors.primary}
+                                    style={{ marginVertical: theme.space.l }}
+                                />
+                                <Separator horizontal />
+                            </Fragment>
+                        );
+                    })}
+                    <LabeledList
+                        name="Races"
+                        values={races}
+                        setSelectedValue={setSelectedRace}
+                        selectedName={selectedRace}
+                    />
+                    <LabeledList
+                        name="Classes"
+                        values={classes}
+                        setSelectedValue={setSelectedClass}
+                        selectedName={selectedClass}
+                    />
+                    <LabeledList
+                        name="Backgrounds"
+                        values={backgrounds}
+                        setSelectedValue={setSelectedBackground}
+                        selectedName={selectedBackground?.name}
+                    />
+                    {selectedBackground?.name && (
+                        <Animated.View
+                            key={selectedBackground.name}
+                            style={{ padding: theme.space.md }}
+                            entering={SlideInLeft.delay(100)}
+                        >
+                            <CustomText
+                                text={t(
+                                    `character.backgrounds.${selectedBackground.name}.description`
+                                )}
                             />
-                            <Separator horizontal />
-                        </Fragment>
-                    );
-                })}
-                <LabeledList
-                    name="Races"
-                    values={races}
-                    setSelectedValue={setSelectedRace}
-                    selectedName={selectedRace}
-                />
-                <LabeledList
-                    name="Classes"
-                    values={classes}
-                    setSelectedValue={setSelectedClass}
-                    selectedName={selectedClass}
-                />
-                <LabeledList
-                    name="Backgrounds"
-                    values={backgrounds}
-                    setSelectedValue={setSelectedBackground}
-                    selectedName={selectedBackground?.name}
-                />
-                {selectedBackground?.name && (
-                    <Animated.View
-                        key={selectedBackground.name}
-                        style={{ padding: theme.space.md }}
-                        entering={SlideInLeft.delay(100)}
+                        </Animated.View>
+                    )}
+
+                    <AbilityForm
+                        abilities={ABILITIES}
+                        onChange={(ability) => setSelectedAbility(ability)}
+                    />
+
+                    <TouchableOpacity
+                        style={
+                            styles(spacer, !selectedClass || !selectedRace)
+                                .saveButton
+                        }
+                        onPress={() => {
+                            callAddCharacter(
+                                {
+                                    id: uuidv4(),
+                                    name,
+                                    description,
+                                    userEmail: auth.user.email,
+                                    additionalBackground: history,
+                                    race: selectedRace,
+                                    className: selectedClass,
+                                    background: selectedBackground.name,
+                                    gameType: 'd2d5e',
+                                },
+                                dispatch
+                            ).then(() => navigation.goBack());
+                        }}
+                        disabled={!selectedClass || !selectedRace}
                     >
-                        <CustomText
-                            text={t(
-                                `character.backgrounds.${selectedBackground.name}.description`
-                            )}
-                        />
-                    </Animated.View>
-                )}
+                        <Text style={styles(spacer).saveButtonText}>Next</Text>
+                    </TouchableOpacity>
+                </ScrollView>
 
-                <AbilityForm
-                    abilities={{
-                        CHA: 12,
-                        WIS: 8,
-                        DEX: 16,
-                        STR: 16,
-                        CON: 16,
-                        INT: 16,
-                    }}
-                    onChange={(ability) => setSelectedAbility(ability)}
-                />
-
-                <TouchableOpacity
-                    style={
-                        styles(spacer, !selectedClass || !selectedRace)
-                            .saveButton
-                    }
-                    onPress={() => {
-                        callAddCharacter(
-                            {
-                                id: uuidv4(),
-                                name,
-                                description,
-                                userEmail: auth.user.email,
-                                additionalBackground: history,
-                                race: selectedRace,
-                                className: selectedClass,
-                                background: selectedBackground.name,
-                                gameType: 'd2d5e',
-                            },
-                            dispatch
-                        ).then(() => navigation.goBack());
-                    }}
-                    disabled={!selectedClass || !selectedRace}
-                >
-                    <Text style={styles(spacer).saveButtonText}>Next</Text>
-                </TouchableOpacity>
-            </ScrollView>
-
-            {Keyboard.isVisible() && <Separator margin={300} />}
+                {/*{<Separator margin={300} />}*/}
+            </KeyboardAvoidingView>
         </SafeView>
     );
 };
