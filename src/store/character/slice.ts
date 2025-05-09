@@ -5,7 +5,6 @@ import Toast from 'react-native-toast-message';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
-import { GenericCharacter } from '../../types/games/d2d5e';
 import { Note } from '../../types/note';
 import {
     collection,
@@ -15,9 +14,10 @@ import {
     setDoc,
     updateDoc,
 } from '@react-native-firebase/firestore';
+import { Character } from '../../types/generic';
 
 interface CharactersState {
-    characters: GenericCharacter[];
+    characters: Character[];
 }
 
 const initialState: CharactersState = {
@@ -38,7 +38,7 @@ export const loadCharactersFromFirebase = async (
     const docSnapshot = await getDocs(docRef);
 
     // Extract data from each document
-    const characters: GenericCharacter[] = docSnapshot.docs.map((doc) => ({
+    const characters: Character[] = docSnapshot.docs.map((doc) => ({
         ...(doc.data() as any),
     }));
 
@@ -79,7 +79,7 @@ export const loadCharacters = async (userEmail: string, dispatch: any) => {
 };
 
 export const callAddCharacter = async (
-    character: GenericCharacter,
+    character: Character,
     dispatch: Dispatch<AnyAction>
 ) => {
     await setDoc(
@@ -90,7 +90,7 @@ export const callAddCharacter = async (
             const storedCharacters = await AsyncStorage.getItem(
                 `characters_${character.userEmail}`
             );
-            const currentCharacters: GenericCharacter[] = storedCharacters
+            const currentCharacters: Character[] = storedCharacters
                 ? JSON.parse(storedCharacters)
                 : [];
 
@@ -123,7 +123,7 @@ export const callRemoveCharacter = async (
         const storedCharacters = await AsyncStorage.getItem(
             `characters_${userEmail}`
         );
-        let currentCharacters: GenericCharacter[] = storedCharacters
+        let currentCharacters: Character[] = storedCharacters
             ? JSON.parse(storedCharacters)
             : [];
         currentCharacters = currentCharacters.filter(
@@ -147,7 +147,7 @@ export const callAddNote = async (
     const storedCharacters = await AsyncStorage.getItem(
         `characters_${userEmail}`
     );
-    let currentCharacters: GenericCharacter[] = storedCharacters
+    let currentCharacters: Character[] = storedCharacters
         ? JSON.parse(storedCharacters)
         : [];
 
@@ -202,7 +202,7 @@ export const characterSlice = createSlice({
     name: CHARACTER_MODULE_KEY,
     initialState,
     reducers: {
-        setCharacter: (state, action: PayloadAction<GenericCharacter>) => {
+        setCharacter: (state, action: PayloadAction<Character>) => {
             state.characters.push(action.payload);
         },
         removeCharacter: (state, action: PayloadAction<{ id: string }>) => {
@@ -210,7 +210,7 @@ export const characterSlice = createSlice({
                 (character) => character.id !== action.payload.id
             );
         },
-        setCharacters: (state, action: PayloadAction<GenericCharacter[]>) => {
+        setCharacters: (state, action: PayloadAction<Character[]>) => {
             state.characters = action.payload;
         },
         setNote: (

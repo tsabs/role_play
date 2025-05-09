@@ -1,10 +1,10 @@
 const ABILITIES = {
-    CHA: 12,
-    WIS: 8,
-    DEX: 16,
-    STR: 16,
-    CON: 16,
-    INT: 16,
+    CHA: 0,
+    WIS: 0,
+    DEX: 0,
+    STR: 0,
+    CON: 0,
+    INT: 0,
 };
 
 export { ABILITIES };

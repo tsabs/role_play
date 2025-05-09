@@ -13,10 +13,10 @@ import { DND_CHARACTER_DEFAULT } from '../../../assets';
 import { useAppDispatch } from '../../store';
 import Separator from '../library/Separator';
 import CustomDialog from '../library/CustomDialog';
-import { GenericCharacter } from '../../types/games/d2d5e';
+import { Character } from '../../types/generic';
 
 interface CharacterItemProps {
-    character: GenericCharacter;
+    character: Character;
     index: number;
 }
 

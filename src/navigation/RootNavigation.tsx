@@ -10,7 +10,7 @@ import CharacterItem from '../components/character/CharacterItem';
 import { CharacterFormProvider } from '../components/character/form/CharacterFormProvider';
 import BottomBar from '../components/library/BottomBar';
 import BottomCharacterTabs from './screen/BottomCharacterTabs';
-import { GenericCharacter } from '../types/games/d2d5e';
+import { Character } from '../types/generic';
 
 const BottomNavigator = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -28,7 +28,7 @@ export type RootStackParamList = {
         characterId: string;
     };
     BottomCharacterTabs: {
-        character: GenericCharacter;
+        character: Character;
     };
     CharacterNotes: {};
 };

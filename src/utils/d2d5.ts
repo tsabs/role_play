@@ -1,4 +1,5 @@
-import { Ability, SkillProficiency } from '../types/games/d2d5e';
+import { SkillProficiency } from '../types/games/d2d5e';
+import { Ability } from '../types/generic';
 
 const calculateModifier = (score: number) => Math.floor((score - 10) / 2);
 

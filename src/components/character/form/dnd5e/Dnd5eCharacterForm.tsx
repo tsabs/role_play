@@ -23,11 +23,10 @@ import SafeView from '../../../library/SafeView';
 import { styles } from './characterFormStyles';
 import { theme } from '../../../../../style/theme';
 import {
-    Ability,
+    DnDAbility,
     DndBackground,
     DndClass,
     DndRace,
-    SkillProficiency,
 } from '../../../../types/games/d2d5e';
 import LabeledList from './LabeledList';
 import Separator from '../../../library/Separator';
@@ -35,9 +34,9 @@ import { callAddCharacter } from '../../../../store/character/slice';
 import { useDispatch } from 'react-redux';
 import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
 import CustomText from '../../../atom/CustomText';
-import { SkillsForm } from './SkillsForm';
-import AbilityForm from './AbilityForm';
+import AbilityForm from '../generic/AbilityForm';
 import { ABILITIES } from './constants';
+import { Ability, GAME_TYPE } from '../../../../types/generic';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -64,7 +63,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [classes, setClasses] = useState<DndClass[] | []>([]);
     const [races, setRaces] = useState<DndRace[] | []>([]);
     const [selectedAbility, setSelectedAbility] =
-        useState<Record<Ability, number>>(null);
+        useState<Record<DnDAbility, number>>(ABILITIES);
     const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
     const [selectedClass, setSelectedClass] = useState<string>(null);
     const [selectedRace, setSelectedRace] = useState<string>(null);
@@ -202,7 +201,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     )}
 
                     <AbilityForm
-                        abilities={ABILITIES}
+                        abilities={selectedAbility as Record<Ability, number>}
+                        isEditMode={true}
                         onChange={(ability) => setSelectedAbility(ability)}
                     />
 
@@ -212,6 +212,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                 .saveButton
                         }
                         onPress={() => {
+                            console.log('selected ability', selectedAbility);
                             callAddCharacter(
                                 {
                                     id: uuidv4(),
@@ -220,9 +221,10 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     userEmail: auth.user.email,
                                     additionalBackground: history,
                                     race: selectedRace,
+                                    abilities: selectedAbility,
                                     className: selectedClass,
                                     background: selectedBackground.name,
-                                    gameType: 'd2d5e',
+                                    gameType: GAME_TYPE.DND5E,
                                 },
                                 dispatch
                             ).then(() => navigation.goBack());

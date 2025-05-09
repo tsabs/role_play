@@ -48,13 +48,13 @@ export const CharacterNotesScreen = ({
                 // lazy={true}
                 name="CharacterNotes"
                 component={renderNotesComponent}
-                options={{ headerShown: true }}
+                // options={{ headerShown: true }}
             />
             <Tab.Screen
                 // lazy={true}
                 name="CharacterHistoryNotes"
                 component={renderHistoryNotesComponent}
-                options={{ headerShown: true }}
+                // options={{ headerShown: true }}
             />
         </Tab.Navigator>
     );

@@ -1,14 +1,15 @@
 import { Note } from '../note';
+import { GAME_TYPE, GenericCharacter } from '../generic';
 
-type Ability = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
+type DnDAbility = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';
 
 type AbilityScores = {
-    [key in Ability]: number;
+    [key in DnDAbility]: number;
 };
 
 interface SkillProficiency {
     name: string;
-    ability: Ability;
+    ability: DnDAbility;
     isProficient: boolean;
     isExpert: boolean;
 }
@@ -126,29 +127,18 @@ interface DndClass {
     url: string;
 }
 
-interface GenericCharacter {
-    id: string;
-    name: string;
-    userEmail: string;
-    description: string;
-    background: string;
-    // Cause DnD has background as talent this is actually the user imagined background
-    race: string;
-    className: string;
-    gameType: string;
-    characterImg?: string;
-    gameId?: string;
-    additionalBackground?: string;
-    notes?: Note[];
+interface DnDCharacter extends GenericCharacter<DnDAbility> {
+    abilities: Record<DnDAbility, number>;
+    gameType: GAME_TYPE.DND5E;
 }
 
 export {
-    GenericCharacter,
+    DnDCharacter,
     CharacterEquipment,
     Proficiency,
     SkillProficiency,
     AbilityScores,
-    Ability,
+    DnDAbility,
     DndBackground,
     DndClass,
     DndRace,

@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { View } from 'react-native';
 import { Text, Checkbox, Divider } from 'react-native-paper';
-import { Ability, SkillProficiency } from '../../../../types/games/d2d5e';
+import { SkillProficiency } from '../../../../types/games/d2d5e';
 import { getSkillModifier } from '../../../../utils/d2d5';
+import { Ability } from '../../../../types/generic';
 
 interface SkillsFormProps {
     skills: SkillProficiency[];

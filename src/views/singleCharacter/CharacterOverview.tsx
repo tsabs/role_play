@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import {
     Dimensions,
     ImageBackground,
@@ -15,10 +15,13 @@ import { theme } from '../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import CustomText from '../../components/atom/CustomText';
-import { GenericCharacter } from '../../types/games/d2d5e';
+import { Character, GAME_TYPE } from '../../types/generic';
+import AbilityForm from '../../components/character/form/generic/AbilityForm';
+import { DnDAbility } from '../../types/games/d2d5e';
+import { WarHammerAbility } from '../../types/games/warHammer';
 
 interface CharacterOverviewProps {
-    character: GenericCharacter;
+    character: Character;
 }
 
 const { height, width } = Dimensions.get('screen');
@@ -26,43 +29,93 @@ const { height, width } = Dimensions.get('screen');
 const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const { t } = useTranslation();
     const tabBarHeight = useBottomTabBarHeight();
+    const [currentForm, setCurrentForm] = useState<string | undefined>(
+        undefined
+    );
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [expandedId, setExpandedId] = useState<number | null>(null);
 
-    const accordions = [
-        {
-            id: 1,
-            title: 'character.overview.accordion.charcacterInformations',
-            content: (
-                <Fragment>
-                    <View>
-                        <CustomText text={character.description} />
-                    </View>
-                    <View>
-                        <CustomText text={character.additionalBackground} />
-                    </View>
-                </Fragment>
-            ),
-        },
-        {
-            id: 2,
-            title: 'character.overview.accordion.equipments',
-            content: <CustomText text="Will come soon" />,
-        },
-        {
-            id: 3,
-            title: 'character.overview.accordion.characteristics',
-            content: <CustomText text="Will come soon" />,
-        },
-        {
-            id: 4,
-            title: 'character.overview.accordion.skills',
-            content: <CustomText text="Will come soon" />,
-        },
-        {
-            id: 5,
-            title: 'character.overview.accordion.spells',
-            content: <CustomText text="Will come soon" />,
-        },
-    ];
+    const handleEditMode = useCallback(() => {
+        setIsEditMode((previousState) => {
+            return !previousState;
+        });
+    }, []);
+
+    const displayAbilityForm = useCallback(() => {
+        switch (character.gameType) {
+            default:
+            case GAME_TYPE.DND5E:
+                return (
+                    <AbilityForm<DnDAbility>
+                        abilities={
+                            character?.abilities as Record<DnDAbility, number>
+                        }
+                        onChange={() => {}}
+                        isEditModeEnabled={true}
+                        onEditMode={handleEditMode}
+                        isEditMode={isEditMode}
+                    />
+                );
+            case GAME_TYPE.WAR_HAMMER:
+                return (
+                    <AbilityForm<WarHammerAbility>
+                        abilities={
+                            character?.abilities as Record<
+                                WarHammerAbility,
+                                number
+                            >
+                        }
+                        onChange={() => {}}
+                        isEditModeEnabled={true}
+                        isEditMode={isEditMode}
+                    />
+                );
+        }
+    }, [character?.abilities, isEditMode, handleEditMode]);
+
+    const accordions = useMemo(
+        () => [
+            {
+                id: 1,
+                title: 'character.overview.accordion.charcacterInformations',
+                content: (
+                    <Fragment>
+                        <View>
+                            <CustomText text={character.description} />
+                        </View>
+                        <View>
+                            <CustomText text={character.additionalBackground} />
+                        </View>
+                    </Fragment>
+                ),
+            },
+            {
+                id: 2,
+                title: 'character.overview.accordion.equipments',
+                content: <CustomText text="Will come soon" />,
+            },
+            {
+                id: 3,
+                title: 'character.overview.accordion.characteristics',
+                content: displayAbilityForm(),
+            },
+            {
+                id: 4,
+                title: 'character.overview.accordion.skills',
+                content: <CustomText text="Will come soon" />,
+            },
+            {
+                id: 5,
+                title: 'character.overview.accordion.spells',
+                content: <CustomText text="Will come soon" />,
+            },
+        ],
+        [
+            character.description,
+            character.additionalBackground,
+            displayAbilityForm,
+        ]
+    );
 
     return (
         <SafeView parentStyles={{ flex: 1, padding: 0 }} title={character.name}>
@@ -81,7 +134,20 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                         return (
                             <List.Accordion
                                 key={accordion.id}
+                                expanded={expandedId === accordion.id}
                                 style={styles.accordionContainer}
+                                onPress={() => {
+                                    setExpandedId(
+                                        expandedId === accordion.id
+                                            ? null
+                                            : accordion.id
+                                    );
+                                    setCurrentForm(accordion.id.toString());
+                                }}
+                                // right={(props) => {
+                                //     console.log(props);
+                                //     return <CustomButton text={'Press me'} />;
+                                // }}
                                 title={<CustomText text={t(accordion.title)} />}
                                 id={accordion.id}
                             >
