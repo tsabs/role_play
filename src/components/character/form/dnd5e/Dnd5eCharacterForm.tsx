@@ -203,7 +203,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     <AbilityForm
                         abilities={selectedAbility as Record<Ability, number>}
                         isEditMode={true}
-                        onChange={(ability) => setSelectedAbility(ability)}
+                        onChange={setSelectedAbility}
                     />
 
                     <TouchableOpacity

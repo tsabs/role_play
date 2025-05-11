@@ -1,4 +1,3 @@
-import { Note } from '../note';
 import { GAME_TYPE, GenericCharacter } from '../generic';
 
 type DnDAbility = 'STR' | 'DEX' | 'CON' | 'INT' | 'WIS' | 'CHA';

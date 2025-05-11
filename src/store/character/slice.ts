@@ -112,6 +112,45 @@ export const callAddCharacter = async (
         .catch((error) => console.error('Error adding character:', error));
 };
 
+export const callUpdateCharacter = async (
+    character: Character,
+    dispatch: Dispatch<AnyAction>
+) => {
+    await setDoc(
+        doc(db, 'characters', character.userEmail, 'character', character.id),
+        character,
+        { merge: true }
+    )
+        .then(async () => {
+            const storedCharacters = await AsyncStorage.getItem(
+                `characters_${character.userEmail}`
+            );
+
+            const parsedCharacters: Character[] = storedCharacters
+                ? JSON.parse(storedCharacters)
+                : [];
+
+            const updatedCharacters = parsedCharacters.map(
+                (storedChar: Character) =>
+                    storedChar.id === character.id ? character : storedChar
+            );
+
+            await AsyncStorage.setItem(
+                `characters_${character.userEmail}`,
+                JSON.stringify(updatedCharacters)
+            );
+
+            dispatch(characterSlice.actions.updateCharacter(character));
+            Toast.show({
+                type: 'success',
+                text1: 'Character added successfully!',
+            });
+
+            console.log('updatedCharacters : ', updatedCharacters);
+        })
+        .catch((error) => console.error('Error updating character:', error));
+};
+
 export const callRemoveCharacter = async (
     userEmail: string,
     characterId: string,
@@ -204,6 +243,14 @@ export const characterSlice = createSlice({
     reducers: {
         setCharacter: (state, action: PayloadAction<Character>) => {
             state.characters.push(action.payload);
+        },
+        updateCharacter: (state, action: PayloadAction<Character>) => {
+            const index = state.characters.findIndex(
+                (char) => char.id === action.payload.id
+            );
+            if (index !== -1) {
+                state.characters[index] = action.payload;
+            }
         },
         removeCharacter: (state, action: PayloadAction<{ id: string }>) => {
             state.characters = state.characters.filter(

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Dimensions,
     ImageBackground,
@@ -15,31 +15,65 @@ import { theme } from '../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import CustomText from '../../components/atom/CustomText';
-import { Character, GAME_TYPE } from '../../types/generic';
+import { Ability, Character, GAME_TYPE } from '../../types/generic';
 import AbilityForm from '../../components/character/form/generic/AbilityForm';
 import { DnDAbility } from '../../types/games/d2d5e';
 import { WarHammerAbility } from '../../types/games/warHammer';
+import { callUpdateCharacter } from '../../store/character/slice';
+import { ABILITIES } from '../../components/character/form/dnd5e/constants';
+import { useAppDispatch } from '../../store';
 
 interface CharacterOverviewProps {
     character: Character;
+}
+
+interface OnSaveAbilities<T extends Ability> {
+    [key: string]: Record<T, number>;
 }
 
 const { height, width } = Dimensions.get('screen');
 
 const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const { t } = useTranslation();
+    const dispatch = useAppDispatch();
     const tabBarHeight = useBottomTabBarHeight();
     const [currentForm, setCurrentForm] = useState<string | undefined>(
         undefined
     );
     const [isEditMode, setIsEditMode] = useState(false);
     const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [selectedAbilities, setSelectedAbilities] = useState<
+        Record<Ability, number> | undefined
+    >(undefined);
 
     const handleEditMode = useCallback(() => {
         setIsEditMode((previousState) => {
             return !previousState;
         });
     }, []);
+
+    const handleUpdateCharacter = useCallback(
+        (updated: Record<Ability, number>) => {
+            setSelectedAbilities(updated);
+        },
+        []
+    );
+
+    const handleSaveEdit = useCallback(
+        async (abilities: OnSaveAbilities<Ability>) => {
+            const updatedCharacter = { ...character, ...abilities };
+            await callUpdateCharacter(updatedCharacter, dispatch);
+        },
+        []
+    );
+
+    useEffect(() => {
+        if (selectedAbilities === undefined) {
+            setSelectedAbilities(
+                character?.abilities as Record<Ability, number>
+            );
+        }
+    }, [character?.abilities]);
 
     const displayAbilityForm = useCallback(() => {
         switch (character.gameType) {
@@ -48,9 +82,11 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                 return (
                     <AbilityForm<DnDAbility>
                         abilities={
-                            character?.abilities as Record<DnDAbility, number>
+                            (selectedAbilities as Record<DnDAbility, number>) ||
+                            ABILITIES
                         }
-                        onChange={() => {}}
+                        onChange={handleUpdateCharacter}
+                        onSaveEdit={handleSaveEdit}
                         isEditModeEnabled={true}
                         onEditMode={handleEditMode}
                         isEditMode={isEditMode}
@@ -60,18 +96,24 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                 return (
                     <AbilityForm<WarHammerAbility>
                         abilities={
-                            character?.abilities as Record<
+                            selectedAbilities as Record<
                                 WarHammerAbility,
                                 number
                             >
                         }
-                        onChange={() => {}}
+                        onChange={handleUpdateCharacter}
                         isEditModeEnabled={true}
                         isEditMode={isEditMode}
                     />
                 );
         }
-    }, [character?.abilities, isEditMode, handleEditMode]);
+    }, [
+        character.gameType,
+        isEditMode,
+        selectedAbilities,
+        handleEditMode,
+        handleUpdateCharacter,
+    ]);
 
     const accordions = useMemo(
         () => [
@@ -144,10 +186,6 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                                     );
                                     setCurrentForm(accordion.id.toString());
                                 }}
-                                // right={(props) => {
-                                //     console.log(props);
-                                //     return <CustomButton text={'Press me'} />;
-                                // }}
                                 title={<CustomText text={t(accordion.title)} />}
                                 id={accordion.id}
                             >
