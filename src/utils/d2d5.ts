@@ -1,6 +1,11 @@
 import { SkillProficiency } from '../types/games/d2d5e';
 import { Ability } from '../types/generic';
 
+export const maxLevels = Array.from({ length: 20 }, (_, i) => {
+    const label = i + 1;
+    return { label: label.toString(), value: i + 1 };
+});
+
 const calculateModifier = (score: number) => Math.floor((score - 10) / 2);
 
 const getProficiencyBonus = (level: number) => Math.floor((level - 1) / 4) + 2;

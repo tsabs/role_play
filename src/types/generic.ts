@@ -15,6 +15,7 @@ interface GenericCharacter<T extends Ability> {
     userEmail: string;
     description: string;
     background: string;
+    level: number;
     abilities: Record<T, number>;
     // Cause DnD has background as talent this is actually the user imagined background
     race: string;

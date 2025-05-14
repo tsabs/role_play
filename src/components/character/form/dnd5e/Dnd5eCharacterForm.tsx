@@ -37,6 +37,8 @@ import CustomText from '../../../atom/CustomText';
 import AbilityForm from '../generic/AbilityForm';
 import { ABILITIES } from './constants';
 import { Ability, GAME_TYPE } from '../../../../types/generic';
+import CustomSelectionButton from '../../../atom/CustomSelectionButton';
+import { maxLevels } from '../../../../utils/d2d5';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -70,6 +72,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [selectedBackground, setSelectedBackground] =
         useState<CharacterBackground>(null);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+    const [level, setLevel] = useState(1);
 
     const callGetBackgrounds = useCallback(async () => {
         const backgrounds = (await getBackgrounds().catch((err) =>
@@ -149,6 +152,11 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             styles={styles(spacer, isKeyboardVisible).container}
         >
             <KeyboardAvoidingView behavior={'padding'} enabled>
+                <CustomSelectionButton
+                    items={maxLevels}
+                    placeHolder={'Choisissez un niveau'}
+                    onSelect={(value) => setLevel(value)}
+                />
                 <ScrollView style={scrollViewStyle}>
                     {textDisplay.map(({ label, value, setValue }, index) => {
                         return (
@@ -221,6 +229,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     userEmail: auth.user.email,
                                     additionalBackground: history,
                                     race: selectedRace,
+                                    level,
                                     abilities: selectedAbility,
                                     className: selectedClass,
                                     background: selectedBackground.name,

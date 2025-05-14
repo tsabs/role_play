@@ -27,6 +27,8 @@ import {
 import { ABILITIES } from '../../components/character/form/dnd5e/constants';
 import { useAppDispatch } from '../../store';
 import CharacterTalentClassFormProvider from '../../components/character/CharacterTalentClassFormProvider';
+import CustomSelectionButton from '../../components/atom/CustomSelectionButton';
+import { maxLevels } from '../../utils/d2d5';
 
 interface CharacterOverviewProps {
     character: Character;
@@ -45,11 +47,12 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const [currentForm, setCurrentForm] = useState<string | undefined>(
         undefined
     );
-    // const [classData, setClassData] = useState()
+    const [classData, setClassData] = useState(undefined);
 
     console.log(character);
     const [isEditMode, setIsEditMode] = useState(false);
     const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [level, setLevel] = useState(character.level);
     const [selectedAbilities, setSelectedAbilities] = useState<
         Record<Ability, number> | undefined
     >(undefined);
@@ -78,6 +81,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const handleClassData = useCallback(async () => {
         await loadClassData(character.gameType, character.className)
             .then((res) => {
+                setClassData(res);
                 console.log('class data : ', res);
             })
             .catch((err) => console.log('error getting class data', err));
@@ -87,7 +91,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         await loadSpecificTalentClassPerLevel(
             character.gameType,
             character.className,
-            '1'
+            character.level.toString()
         )
             .then((res) => {
                 console.log('talent result : ', res);
@@ -149,6 +153,13 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         handleUpdateCharacter,
     ]);
 
+    const handleSelectLevel = useCallback(async (value: string | number) => {
+        const newLevel = Number(value);
+        setLevel(newLevel);
+        const updatedCharacter = { ...character, level: newLevel };
+        await callUpdateCharacter(updatedCharacter, dispatch);
+    }, []);
+
     const accordions = useMemo(
         () => [
             {
@@ -173,7 +184,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                         gameType={character.gameType}
                         characterClass={character.className}
                         abilities={selectedAbilities}
-                        level={'1'}
+                        level={character.level}
                     />
                 ),
             },
@@ -201,8 +212,23 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         [
             character.description,
             character.additionalBackground,
+            character.level,
+            selectedAbilities,
             displayAbilityForm,
         ]
+    );
+
+    const totalHp = useMemo(
+        () =>
+            classData?.hit_die && level
+                ? level === 1
+                    ? classData.hit_die
+                    : classData.hit_die +
+                      Math.ceil((classData.hit_die * (level - 1)) / 2) +
+                      level -
+                      1
+                : 1,
+        [level, classData?.hit_die]
     );
 
     return (
@@ -216,12 +242,26 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                         source={DND_CHARACTER_DEFAULT}
                         style={styles.imageBackground}
                     >
+                        <View style={styles.levelBadge}>
+                            <CustomSelectionButton
+                                items={maxLevels}
+                                customStyle={{
+                                    flexDirection: 'row',
+                                }}
+                                preSelectedValue={{
+                                    label: level.toString(),
+                                    value: level,
+                                }}
+                                displayValue={`LVL: ${level}`}
+                                onSelect={handleSelectLevel}
+                            />
+                        </View>
                         <View style={styles.lifePointsBadge}>
                             <CustomText
                                 fontSize={16}
                                 fontWeight={'bold'}
                                 color={theme.colors.white}
-                                text={'25 PV'}
+                                text={`${totalHp} PV`}
                             />
                         </View>
                     </ImageBackground>
@@ -269,6 +309,15 @@ const styles = StyleSheet.create({
     },
     accordionContent: {
         padding: theme.space.md,
+    },
+    levelBadge: {
+        position: 'absolute',
+        left: theme.space.md,
+        top: theme.space.md,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        paddingHorizontal: theme.space.md,
+        paddingVertical: theme.space.sm,
+        borderRadius: theme.radius.md,
     },
     lifePointsBadge: {
         position: 'absolute',

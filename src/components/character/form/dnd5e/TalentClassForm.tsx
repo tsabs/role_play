@@ -9,7 +9,7 @@ import PaladinTalentForm from '../../dnd5e/classSpecifics/PaladinTalentForm';
 
 interface TalentClassFormProps {
     characterClass: string;
-    level: string;
+    level: number;
     abilities: Record<string, number>;
 }
 
@@ -19,51 +19,31 @@ const TalentClassForm = ({
     abilities,
 }: TalentClassFormProps) => {
     const renderClassSpecific = () => {
-        const integerLevel = parseInt(level, 10);
         switch (characterClass) {
             case 'bard':
-                return (
-                    <BardTalentForm
-                        level={integerLevel}
-                        abilities={abilities}
-                    />
-                );
+                return <BardTalentForm level={level} abilities={abilities} />;
             case 'barbarian':
                 return (
-                    <BarbarianTalentForm
-                        level={integerLevel}
-                        abilities={abilities}
-                    />
+                    <BarbarianTalentForm level={level} abilities={abilities} />
                 );
             case 'ranger':
-                return <RangerTalentForm level={integerLevel} />;
+                return <RangerTalentForm level={level} />;
             case 'fighter':
                 return (
                     <FighterTalentForm
-                        level={integerLevel}
+                        level={level}
                         // abilities={abilities}
                     />
                 );
             case 'cleric':
-                return (
-                    <ClericTalentForm
-                        level={integerLevel}
-                        abilities={abilities}
-                    />
-                );
+                return <ClericTalentForm level={level} abilities={abilities} />;
             case 'sorcerer':
                 return (
-                    <SorcererTalentForm
-                        level={integerLevel}
-                        abilities={abilities}
-                    />
+                    <SorcererTalentForm level={level} abilities={abilities} />
                 );
             case 'paladin':
                 return (
-                    <PaladinTalentForm
-                        level={integerLevel}
-                        abilities={abilities}
-                    />
+                    <PaladinTalentForm level={level} abilities={abilities} />
                 );
             default:
                 return <CustomText text="Class not yet supported." />;

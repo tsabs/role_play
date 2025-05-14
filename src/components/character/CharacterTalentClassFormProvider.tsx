@@ -5,7 +5,7 @@ import CustomText from '../atom/CustomText';
 interface CharacterTalentClassFormProviderProps {
     gameType: string;
     characterClass: string;
-    level: string;
+    level: number;
     abilities: Record<string, number>;
 }
 
@@ -15,7 +15,6 @@ const CharacterTalentClassFormProvider = ({
     level,
     abilities,
 }: CharacterTalentClassFormProviderProps) => {
-    // const { gameType } = route.params;
     switch (gameType) {
         case GAME_TYPE.DND5E:
             return (

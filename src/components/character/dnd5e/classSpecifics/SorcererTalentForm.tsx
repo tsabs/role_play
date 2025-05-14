@@ -14,7 +14,7 @@ const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
     const { t } = useTranslation();
     const chaMod = calculateModifier(abilities['CHA'] ?? 10);
     const sorceryPoints = getSorceryPoints(level);
-    const maxSpellsKnown = Math.min(15, Math.max(2, level + chaMod));
+    const maxSpellsKnown = Math.min(Math.max(2, level + chaMod), 15);
 
     return (
         <View style={styles.container}>
