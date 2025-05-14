@@ -184,7 +184,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                         gameType={character.gameType}
                         characterClass={character.className}
                         abilities={selectedAbilities}
-                        level={character.level}
+                        level={level}
                     />
                 ),
             },
@@ -212,7 +212,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         [
             character.description,
             character.additionalBackground,
-            character.level,
+            level,
             selectedAbilities,
             displayAbilityForm,
         ]

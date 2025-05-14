@@ -2,6 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../atom/CustomText';
+import { useMemo } from 'react';
 
 interface BarbarianTalentFormProps {
     level: number;
@@ -27,11 +28,20 @@ const BarbarianTalentForm = ({
     abilities,
 }: BarbarianTalentFormProps) => {
     const { t } = useTranslation();
-    const rageUses = getRageUses(level);
-    const rageBonus = getRageDamageBonus(level);
-    const dexMod = Math.floor(((abilities['DEX'] || 10) - 10) / 2);
-    const conMod = Math.floor(((abilities['CON'] || 10) - 10) / 2);
-    const unarmoredAC = Math.max(10 + dexMod + conMod, 10);
+    const rageUses = useMemo(() => getRageUses(level), [level]);
+    const rageBonus = useMemo(() => getRageDamageBonus(level), [level]);
+    const dexMod = useMemo(
+        () => Math.floor(((abilities['DEX'] || 10) - 10) / 2),
+        [abilities]
+    );
+    const conMod = useMemo(
+        () => Math.floor(((abilities['CON'] || 10) - 10) / 2),
+        [abilities]
+    );
+    const unarmoredAC = useMemo(
+        () => Math.max(10 + dexMod + conMod, 10),
+        [dexMod, conMod]
+    );
 
     return (
         <View style={styles.container}>

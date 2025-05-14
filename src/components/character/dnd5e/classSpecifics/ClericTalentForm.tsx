@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -11,8 +12,14 @@ interface ClericTalentFormProps {
 
 const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
     const { t } = useTranslation();
-    const wisMod = calculateModifier(abilities['WIS'] ?? 10);
-    const preparedSpells = Math.max(wisMod + level, 1);
+    const wisMod = useMemo(
+        () => calculateModifier(abilities['WIS'] ?? 10),
+        [abilities]
+    );
+    const preparedSpells = useMemo(
+        () => Math.max(wisMod + level, 1),
+        [wisMod, level]
+    );
 
     return (
         <View style={styles.container}>

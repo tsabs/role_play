@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import CustomText from '../../../atom/CustomText';
 import BardTalentForm from '../../dnd5e/classSpecifics/BardTalentForm';
 import BarbarianTalentForm from '../../dnd5e/classSpecifics/BarbarianTalentForm';
@@ -18,7 +20,7 @@ const TalentClassForm = ({
     level,
     abilities,
 }: TalentClassFormProps) => {
-    const renderClassSpecific = () => {
+    const renderClassSpecific = useCallback(() => {
         switch (characterClass) {
             case 'bard':
                 return <BardTalentForm level={level} abilities={abilities} />;
@@ -48,7 +50,7 @@ const TalentClassForm = ({
             default:
                 return <CustomText text="Class not yet supported." />;
         }
-    };
+    }, [level, abilities]);
 
     return renderClassSpecific();
 };

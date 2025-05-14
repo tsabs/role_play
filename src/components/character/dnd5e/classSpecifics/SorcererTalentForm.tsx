@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+
 import { calculateModifier } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
-import { useTranslation } from 'react-i18next';
 
 interface SorcererTalentFormProps {
     level: number;
@@ -12,9 +14,15 @@ const getSorceryPoints = (level: number) => level;
 
 const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
     const { t } = useTranslation();
-    const chaMod = calculateModifier(abilities['CHA'] ?? 10);
-    const sorceryPoints = getSorceryPoints(level);
-    const maxSpellsKnown = Math.min(Math.max(2, level + chaMod), 15);
+    const chaMod = useMemo(
+        () => calculateModifier(abilities['CHA'] ?? 10),
+        [abilities]
+    );
+    const sorceryPoints = useMemo(() => getSorceryPoints(level), [level]);
+    const maxSpellsKnown = useMemo(
+        () => Math.min(Math.max(2, level + chaMod), 15),
+        [level, chaMod]
+    );
 
     return (
         <View style={styles.container}>

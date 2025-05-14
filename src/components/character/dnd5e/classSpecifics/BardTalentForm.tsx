@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -18,10 +19,13 @@ const getInspirationDie = (level: number) => {
 
 const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
     const { t } = useTranslation();
-    const chaMod = calculateModifier(abilities['CHA'] || 10);
-    const uses = Math.max(chaMod, 1); // At least 1 use
+    const chaMod = useMemo(
+        () => calculateModifier(abilities['CHA'] || 10),
+        [abilities]
+    );
+    const uses = useMemo(() => Math.max(chaMod, 1), [chaMod]); // At least 1 use
 
-    const inspirationDie = getInspirationDie(level);
+    const inspirationDie = useMemo(() => getInspirationDie(level), [level]);
 
     return (
         <View style={styles.container}>

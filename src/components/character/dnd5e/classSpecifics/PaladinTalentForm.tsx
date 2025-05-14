@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+
 import { calculateModifier } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
-import { useTranslation } from 'react-i18next';
 
 interface PaladinTalentFormProps {
     level: number;
@@ -12,8 +14,11 @@ const getLayOnHands = (level: number): number => level * 5;
 
 const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
     const { t } = useTranslation();
-    const layOnHands = getLayOnHands(level);
-    const chaMod = calculateModifier(abilities['CHA'] ?? 10);
+    const layOnHands = useMemo(() => getLayOnHands(level), [level]);
+    const chaMod = useMemo(
+        () => calculateModifier(abilities['CHA'] ?? 10),
+        [abilities]
+    );
 
     return (
         <View style={styles.container}>

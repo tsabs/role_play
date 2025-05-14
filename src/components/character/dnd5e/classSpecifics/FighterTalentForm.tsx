@@ -26,22 +26,6 @@ const FighterTalentForm = ({ level }: FighterTalentFormProps) => {
                 )}
             />
 
-            {level >= 2 && (
-                <>
-                    <CustomText
-                        style={styles.sectionTitle}
-                        text={t(
-                            'character.classes.fighter.talents.actionSurgeTitle'
-                        )}
-                    />
-                    <CustomText
-                        text={t(
-                            'character.classes.fighter.talents.actionSurgeDescription'
-                        )}
-                    />
-                </>
-            )}
-
             {level >= 1 && (
                 <>
                     <CustomText
@@ -58,17 +42,17 @@ const FighterTalentForm = ({ level }: FighterTalentFormProps) => {
                 </>
             )}
 
-            {level >= 5 && (
+            {level >= 2 && (
                 <>
                     <CustomText
                         style={styles.sectionTitle}
                         text={t(
-                            'character.classes.fighter.talents.extraAttackTitle'
+                            'character.classes.fighter.talents.actionSurgeTitle'
                         )}
                     />
                     <CustomText
                         text={t(
-                            'character.classes.fighter.talents.extraAttackDescription'
+                            'character.classes.fighter.talents.actionSurgeDescription'
                         )}
                     />
                 </>
@@ -85,6 +69,22 @@ const FighterTalentForm = ({ level }: FighterTalentFormProps) => {
                     <CustomText
                         text={t(
                             'character.classes.fighter.talents.martialArchetypeDescription'
+                        )}
+                    />
+                </>
+            )}
+
+            {level >= 5 && (
+                <>
+                    <CustomText
+                        style={styles.sectionTitle}
+                        text={t(
+                            'character.classes.fighter.talents.extraAttackTitle'
+                        )}
+                    />
+                    <CustomText
+                        text={t(
+                            'character.classes.fighter.talents.extraAttackDescription'
                         )}
                     />
                 </>
