@@ -17,4 +17,4 @@ const getSkillModifier = (
     return mod;
 };
 
-export { getSkillModifier };
+export { calculateModifier, getSkillModifier };

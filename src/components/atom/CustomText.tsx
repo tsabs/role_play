@@ -4,6 +4,7 @@ import { theme } from '../../../style/theme';
 
 interface CustomTextProps extends TextProps {
     text: string;
+    fontWeight?: TextStyle['fontWeight'];
     color?: string;
     fontSize?: number;
 }
@@ -11,12 +12,14 @@ interface CustomTextProps extends TextProps {
 const CustomText = ({
     text,
     color = theme.colors.textPrimary,
+    fontWeight = 'normal',
     fontSize = theme.fontSize.medium,
     style,
     ...props
 }: CustomTextProps) => {
     const quickStyle: TextStyle = {
         color,
+        fontWeight,
         fontSize,
     };
 

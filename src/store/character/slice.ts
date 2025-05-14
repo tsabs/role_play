@@ -10,11 +10,13 @@ import {
     collection,
     deleteDoc,
     doc,
+    getDoc,
     getDocs,
     setDoc,
     updateDoc,
 } from '@react-native-firebase/firestore';
-import { Character } from '../../types/generic';
+import { Character, GAME_TYPE } from '../../types/generic';
+import { gameType } from '../game/types';
 
 interface CharactersState {
     characters: Character[];
@@ -55,6 +57,33 @@ export const loadCharactersFromFirebase = async (
     }
 };
 
+export const loadClassData = async (gameType, gameClass) => {
+    const docRef = doc(db, 'games', gameType, 'classes', gameClass);
+    const docSnapshot = await getDoc(docRef);
+
+    return docSnapshot.data();
+};
+
+export const loadSpecificTalentClassPerLevel = async (
+    gameType: GAME_TYPE,
+    gameClass: string,
+    level: string
+) => {
+    const docRef = collection(
+        db,
+        'games',
+        gameType,
+        'classes',
+        gameClass,
+        'levels'
+    );
+    const docSnapshot = await getDocs(docRef);
+
+    return docSnapshot.docs
+        .find((item) => item.data().level.toString() === level)
+        .data();
+};
+
 // Async function to load from AsyncStorage
 export const loadCharacters = async (userEmail: string, dispatch: any) => {
     try {
@@ -62,15 +91,15 @@ export const loadCharacters = async (userEmail: string, dispatch: any) => {
             `characters_${userEmail}`
         );
 
-        if (storedCharacters) {
-            console.log('Using cached characters');
-            dispatch(
-                characterSlice.actions.setCharacters(
-                    JSON.parse(storedCharacters)
-                )
-            );
-            return JSON.parse(storedCharacters); // Use cached data
-        }
+        // if (storedCharacters) {
+        //     console.log('Using cached characters');
+        //     dispatch(
+        //         characterSlice.actions.setCharacters(
+        //             JSON.parse(storedCharacters)
+        //         )
+        //     );
+        //     return JSON.parse(storedCharacters); // Use cached data
+        // }
 
         await loadCharactersFromFirebase(userEmail, dispatch); // Fetch from Firebase only if local storage is empty
     } catch (error) {

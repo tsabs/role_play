@@ -79,8 +79,10 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
                         <View style={styles.contentHeader}>
                             <Text style={styles.name}>{character.name}</Text>
                             <Text style={styles.info}>
-                                {t(`character.races.${character.race}`)} -{' '}
-                                {t(`character.classes.${character.className}`)}
+                                {t(`character.races.${character.race}.name`)} -{' '}
+                                {t(
+                                    `character.classes.${character.className}.name`
+                                )}
                             </Text>
                         </View>
                         <LabeledElement

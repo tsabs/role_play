@@ -19,9 +19,14 @@ import { Ability, Character, GAME_TYPE } from '../../types/generic';
 import AbilityForm from '../../components/character/form/generic/AbilityForm';
 import { DnDAbility } from '../../types/games/d2d5e';
 import { WarHammerAbility } from '../../types/games/warHammer';
-import { callUpdateCharacter } from '../../store/character/slice';
+import {
+    callUpdateCharacter,
+    loadClassData,
+    loadSpecificTalentClassPerLevel,
+} from '../../store/character/slice';
 import { ABILITIES } from '../../components/character/form/dnd5e/constants';
 import { useAppDispatch } from '../../store';
+import CharacterTalentClassFormProvider from '../../components/character/CharacterTalentClassFormProvider';
 
 interface CharacterOverviewProps {
     character: Character;
@@ -40,6 +45,9 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const [currentForm, setCurrentForm] = useState<string | undefined>(
         undefined
     );
+    // const [classData, setClassData] = useState()
+
+    console.log(character);
     const [isEditMode, setIsEditMode] = useState(false);
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [selectedAbilities, setSelectedAbilities] = useState<
@@ -66,6 +74,32 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
         },
         []
     );
+
+    const handleClassData = useCallback(async () => {
+        await loadClassData(character.gameType, character.className)
+            .then((res) => {
+                console.log('class data : ', res);
+            })
+            .catch((err) => console.log('error getting class data', err));
+    }, [character.gameType, character.className]);
+
+    const handleClassSpecificTalent = useCallback(async () => {
+        await loadSpecificTalentClassPerLevel(
+            character.gameType,
+            character.className,
+            '1'
+        )
+            .then((res) => {
+                console.log('talent result : ', res);
+            })
+            .catch((err) =>
+                console.log('error getting level specific class talent', err)
+            );
+    }, []);
+
+    useEffect(() => {
+        Promise.all([handleClassSpecificTalent(), handleClassData()]);
+    }, [handleClassSpecificTalent, handleClassData]);
 
     useEffect(() => {
         if (selectedAbilities === undefined) {
@@ -133,21 +167,33 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
             },
             {
                 id: 2,
+                title: `character.classes.${character.className}.name`,
+                content: (
+                    <CharacterTalentClassFormProvider
+                        gameType={character.gameType}
+                        characterClass={character.className}
+                        abilities={selectedAbilities}
+                        level={'1'}
+                    />
+                ),
+            },
+            {
+                id: 3,
                 title: 'character.overview.accordion.equipments',
                 content: <CustomText text="Will come soon" />,
             },
             {
-                id: 3,
+                id: 4,
                 title: 'character.overview.accordion.characteristics',
                 content: displayAbilityForm(),
             },
             {
-                id: 4,
+                id: 5,
                 title: 'character.overview.accordion.skills',
                 content: <CustomText text="Will come soon" />,
             },
             {
-                id: 5,
+                id: 6,
                 title: 'character.overview.accordion.spells',
                 content: <CustomText text="Will come soon" />,
             },
@@ -169,7 +215,16 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
                     <ImageBackground
                         source={DND_CHARACTER_DEFAULT}
                         style={styles.imageBackground}
-                    />
+                    >
+                        <View style={styles.lifePointsBadge}>
+                            <CustomText
+                                fontSize={16}
+                                fontWeight={'bold'}
+                                color={theme.colors.white}
+                                text={'25 PV'}
+                            />
+                        </View>
+                    </ImageBackground>
                 </Animated.View>
                 <List.AccordionGroup>
                     {accordions.map((accordion) => {
@@ -214,6 +269,15 @@ const styles = StyleSheet.create({
     },
     accordionContent: {
         padding: theme.space.md,
+    },
+    lifePointsBadge: {
+        position: 'absolute',
+        top: theme.space.md,
+        right: theme.space.md,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        paddingHorizontal: theme.space.md,
+        paddingVertical: theme.space.sm,
+        borderRadius: theme.radius.md,
     },
 });
 

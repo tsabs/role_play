@@ -96,7 +96,7 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                                     : t(
                                           `character.${name.toLowerCase()}.${
                                               item.index
-                                          }`
+                                          }.name`
                                       )}
                             </Text>
                         </TouchableOpacity>

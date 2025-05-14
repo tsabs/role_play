@@ -7,33 +7,177 @@
     "removeCharacter": "Remove this character: {{name}} ?",
     "removeCharacterDescription": "Are you sure you want to remove this character? This action cannot be undone.",
     "races": {
-      "dragonborn": "Dragonborn",
-      "dwarf": "Dwarf",
-      "elf": "Elf",
-      "gnome": "Gnome",
-      "half-elf": "Half-Elf",
-      "half-orc": "Half-Orc",
-      "halfling": "Halfling",
-      "human": "Human",
-      "tiefling": "Tiefling",
-      "high-elf": "High Elf",
-      "hill-dwarf": "Hill Dwarf",
-      "lightfoot-halfling": "Lightfoot Halfling",
-      "rock-gnome": "Rock Gnome"
+      "dragonborn": {
+        "name": "Dragonborn"
+      },
+      "dwarf": {
+        "name": "Dwarf"
+      },
+      "elf": {
+        "name": "Elf"
+      },
+      "gnome": {
+        "name": "Gnome"
+      },
+      "half-elf": {
+        "name": "Half-Elf"
+      },
+      "half-orc": {
+        "name": "Half-Orc"
+      },
+      "halfling": {
+        "name": "Halfling"
+      },
+      "human": {
+        "name": "Human"
+      },
+      "tiefling": {
+        "name": "Tiefling"
+      },
+      "high-elf": {
+        "name": "High Elf"
+      },
+      "hill-dwarf": {
+        "name": "Hill Dwarf"
+      },
+      "lightfoot-halfling": {
+        "name": "Lightfoot Halfling"
+      },
+      "rock-gnome": {
+        "name": "Rock Gnome"
+      }
     },
     "classes":   {
-      "barbarian": "Barbarian",
-      "bard": "Bard",
-      "cleric": "Cleric",
-      "druid": "Druid",
-      "fighter": "Fighter",
-      "monk": "Monk",
-      "paladin": "Paladin",
-      "ranger": "Ranger",
-      "rogue": "Rogue",
-      "sorcerer": "Sorcerer",
-      "warlock": "Warlock",
-      "wizard": "Wizard"
+      "barbarian": {
+        "name": "Barbarian",
+        "talents": {
+          "rageTitle": "🪓 Rage",
+          "ragesPerLongRest": "Rages per long rest: {{rageUses}}",
+          "bonusDamageWhileRaging": "Bonus damage while raging: +{{rageBonus}}",
+          "resistanceToPhysicalDamage": "Resistance to physical damage while raging.",
+          "unarmoredDefenseTitle": "🛡️ Unarmored Defense",
+          "unarmoredAC": "Your AC = 10 + DEX ({{dexMod}}) + CON ({{conMod}}) = {{unarmoredAC}}",
+          "recklessAttackTitle": "⚔️ Reckless Attack",
+          "recklessAttackDescription": "Gain advantage on melee attacks using STR. Attack rolls against you have advantage.",
+          "dangerSenseTitle": "⚠️ Danger Sense",
+          "dangerSenseDescription": "Advantage on DEX saves against effects you can see."
+        }
+
+      },
+      "bard": {
+        "name": "Bard",
+        "talents": {
+          "bardicInspirationTitle": "🎵 Bardic Inspiration",
+          "bardicInspirationDescription": "You can use Bardic Inspiration {{uses}} times per long rest.",
+          "inspirationDice": "Dice: {{inspirationDie}} (based on level {{level}})",
+          "bonusActionDescription": "Bonus action to inspire an ally within 60 ft.",
+          "songOfRestTitle": "🎶 Song of Rest",
+          "songOfRestDescription": "While taking a short rest, allies gain extra healing.",
+          "jackOfAllTradesTitle": "🎭 Jack of All Trades",
+          "jackOfAllTradesDescription": "Add half proficiency bonus to all ability checks not already proficient."
+        }
+      },
+      "cleric": {
+        "name": "Cleric",
+        "talents": {
+          "spellcastingTitle": "🛐 Spellcasting",
+          "preparedSpellsDescription": "You can prepare {{preparedSpells}} cleric spells (WIS mod + level).",
+          "spellcastingAccessDescription": "You have access to all cleric spells, but only prepare a subset each day.",
+          "channelDivinityTitle": "🙏 Channel Divinity",
+          "channelDivinityUnlocked": "Unlocked at level 2.",
+          "channelDivinityDescription": "Use divine energy to fuel subclass abilities.",
+          "channelDivinityUses": "1 use per rest (2 at level 6, 3 at 18).",
+          "divineInterventionTitle": "✨ Divine Intervention",
+          "divineInterventionDescription": "Call on your deity for a miracle. Chance based on your level (percentile)."
+        }
+      },
+      "druid": {
+        "name": "Druid",
+        "talents": {
+
+        }
+      },
+      "fighter": {
+        "name": "Fighter",
+        "talents": {
+          "secondWindTitle": "💪 Second Wind",
+          "secondWindDescription": "As a bonus action, heal {{healAmount}} once per short rest.",
+          "actionSurgeTitle": "⚡ Action Surge",
+          "actionSurgeDescription": "Take one additional action on your turn. Once per short rest.",
+          "fightingStyleTitle": "🛡 Fighting Style",
+          "fightingStyleDescription": "Choose a fighting style: Defense, Dueling, Great Weapon Fighting, etc.",
+          "extraAttackTitle": "⚔ Extra Attack",
+          "extraAttackDescription": "You can attack twice, instead of once, when you take the Attack action.",
+          "martialArchetypeTitle": "🧠 Martial Archetype",
+          "martialArchetypeDescription": "Choose an archetype: Champion, Battle Master, Eldritch Knight, etc."
+        }
+      },
+      "monk": {
+        "name": "Monk",
+        "talents": {
+
+        }
+      },
+      "paladin": {
+        "name": "Paladin",
+        "talents": {
+          "layOnHandsTitle": "🛡 Lay on Hands",
+          "layOnHandsDescription": "You can restore {{layOnHands}} HP per long rest.",
+          "layOnHandsUsage": "You can spend 5 HP to cure disease or poison.",
+          "divineSmiteTitle": "💥 Divine Smite",
+          "divineSmiteDescription": "When you hit, expend a spell slot to deal radiant damage.",
+          "divineHealthTitle": "🏰 Divine Health",
+          "divineHealthDescription": "You are immune to disease.",
+          "sacredOathTitle": "🕊 Sacred Oath",
+          "sacredOathDescription": "Choose an Oath subclass at level 3.",
+          "spellcastingTitle": "✨ Spellcasting",
+          "spellcastingDescription": "You can prepare CHA mod ({{chaMod}}) + half your level in Paladin spells."
+        }
+      },
+      "ranger": {
+        "name": "Ranger",
+        "talents": {
+          "favoredEnemyTitle": "🏹 Favored Enemy",
+          "favoredEnemyDescription": "Choose {{count}} favored enemy type(s). Gain bonuses to tracking, language, and damage.",
+          "naturalExplorerTitle": "🌲 Natural Explorer",
+          "naturalExplorerDescription": "Choose {{count}} favored terrain type(s). Gain bonuses in that terrain.",
+          "fightingStyleTitle": "🛡 Fighting Style",
+          "fightingStyleDescription": "Choose a style: Archery, Defense, Dueling, etc.",
+          "spellcastingTitle": "✨ Spellcasting",
+          "spellcastingDescription": "You can cast ranger spells. You prepare a number equal to WIS modifier + half your level."
+        }
+      },
+      "rogue": {
+        "name": "Rogue",
+        "talents": {
+
+        }
+      },
+      "sorcerer": {
+        "name": "Sorcerer",
+        "talents": {
+          "spellcastingTitle": "✨ Spellcasting",
+          "spellsKnownDescription": "You know up to {{maxSpellsKnown}} sorcerer spells (level + CHA mod).",
+          "spellcastingAccessDescription": "You can cast and upcast spells using spell slots.",
+          "sorceryPointsTitle": "🔮 Sorcery Points",
+          "sorceryPointsDescription": "You have {{sorceryPoints}} sorcery point(s) (equals your level).",
+          "sorceryPointsUsage": "Use for Metamagic or convert into spell slots.",
+          "metamagicTitle": "🌀 Metamagic",
+          "metamagicDescription": "Choose 2 Metamagic options (3 at level 10)."
+        }
+      },
+      "warlock": {
+        "name": "Warlock",
+        "talents": {
+
+        }
+      },
+      "wizard": {
+        "name": "Wizard",
+        "talents": {
+
+        }
+      }
     },
     "backgrounds": {
       "acolyte": {

@@ -18,20 +18,55 @@ const categories = [
     // 'subraces',
 ];
 
-const saveToFirestore = async (category: string) => {
+// const saveToFirestore = async (category: string) => {
+//     try {
+//         const response = await fetch(`https://www.dnd5eapi.co/api/${category}`);
+//         const data = await response.json();
+//
+//         for (const cls of data.results) {
+//             const itemData = await fetch(
+//                 `${BASE_URL}/${category}/${cls.index}`
+//             );
+//             const itemDataJson = await itemData.json();
+//             await setDoc(
+//                 doc(db, 'games', 'dnd5e', category, itemDataJson.index),
+//                 itemDataJson
+//             );
+//         }
+//
+//         console.log('D&D Classes saved to Firestore!');
+//     } catch (error) {
+//         console.error('Error saving classes:', error);
+//     }
+// };
+
+export const saveToFirestore = async (characterClass?: string) => {
     try {
-        const response = await fetch(`https://www.dnd5eapi.co/api/${category}`);
+        const response = await fetch(`https://www.dnd5eapi.co/api/classes`);
         const data = await response.json();
 
         for (const cls of data.results) {
             const itemData = await fetch(
-                `${BASE_URL}/${category}/${cls.index}`
+                `${BASE_URL}/classes/${cls.index}/levels`
             );
             const itemDataJson = await itemData.json();
-            await setDoc(
-                doc(db, 'games', 'dnd5e', category, itemDataJson.index),
-                itemDataJson
-            );
+            // console.log('class : ', cls.index);
+            // console.log('class leveling content : ', itemDataJson);
+            for (const level of itemDataJson) {
+                // console.log('level: ', level.level, level);
+                await setDoc(
+                    doc(
+                        db,
+                        'games',
+                        'dnd5e',
+                        'classes',
+                        cls.index,
+                        'levels',
+                        `${level.level}`
+                    ),
+                    level
+                );
+            }
         }
 
         console.log('D&D Classes saved to Firestore!');

@@ -7,33 +7,176 @@
     "removeCharacter": "Supprmier ce personnage: {{name}} ?",
     "removeCharacterDescription": "Êtes-vous sûr de vouloir supprimer ce personnage ? Cette action est irréversible.",
     "races": {
-      "dragonborn": "Drakéide",
-      "dwarf": "Nain",
-      "elf": "Elfe",
-      "gnome": "Gnome",
-      "half-elf": "Demi-Elfe",
-      "half-orc": "Demi-Orc",
-      "halfling": "Halfelin",
-      "human": "Humain",
-      "tiefling": "Tieffelin",
-      "high-elf": "Elfe Haut",
-      "hill-dwarf": "Nain des Collines",
-      "lightfoot-halfling": "Halfelin Pied-Léger",
-      "rock-gnome": "Gnome des Roches"
+      "dragonborn": {
+        "name": "Drakéide"
+      },
+      "dwarf": {
+        "name":  "Nain"
+      },
+      "elf": {
+        "name":  "Elfe"
+      },
+      "gnome": {
+        "name":  "Gnome"
+      },
+      "half-elf": {
+        "name":  "Demi-Elfe"
+      },
+      "half-orc": {
+        "name":  "Demi-Orc"
+      },
+      "halfling": {
+        "name":  "Halfelin"
+      },
+      "human": {
+        "name":  "Humain"
+      },
+      "tiefling": {
+        "name":  "Tieffelin"
+      },
+      "high-elf": {
+        "name":  "Elfe Haut"
+      },
+      "hill-dwarf": {
+        "name":  "Nain des Collines"
+      },
+      "lightfoot-halfling": {
+        "name":  "Halfelin Pied-Léger"
+      },
+      "rock-gnome": {
+        "name":  "Gnome des Roches"
+      }
     },
     "classes": {
-      "barbarian": "Barbare",
-      "bard": "Barde",
-      "cleric": "Clerc",
-      "druid": "Druide",
-      "fighter": "Guerrier",
-      "monk": "Moine",
-      "paladin": "Paladin",
-      "ranger": "Rôdeur",
-      "rogue": "Voleur",
-      "sorcerer": "Ensorceleur",
-      "warlock": "Occultiste",
-      "wizard": "Magicien"
+      "barbarian": {
+        "name": "Barbare",
+        "talents": {
+          "rageTitle": "🪓 Rage",
+          "ragesPerLongRest": "Rages par repos long : {{rageUses}}",
+          "bonusDamageWhileRaging": "Bonus de dégâts en rageant : +{{rageBonus}}",
+          "resistanceToPhysicalDamage": "Résistance aux dégâts physiques en rageant.",
+          "unarmoredDefenseTitle": "🛡️ Défense sans Armure",
+          "unarmoredAC": "Votre CA = 10 + DEX ({{dexMod}}) + CON ({{conMod}}) = {{unarmoredAC}}",
+          "recklessAttackTitle": "⚔️ Attaque Imprudente",
+          "recklessAttackDescription": "Obtenez un avantage sur les attaques au corps à corps utilisant la FOR. Les jets d'attaque contre vous ont un avantage.",
+          "dangerSenseTitle": "⚠️ Sens du Danger",
+          "dangerSenseDescription": "Avantage sur les jets de sauvegarde de DEX contre les effets que vous pouvez voir."
+        }
+      },
+      "bard": {
+        "name": "Barde",
+        "talents":  {
+          "bardicInspirationTitle": "🎵 Inspiration Bardique",
+          "bardicInspirationDescription": "Vous pouvez utiliser l'Inspiration Bardique {{uses}} fois par repos long.",
+          "inspirationDice": "Dé : {{inspirationDie}} (basé sur le niveau {{level}})",
+          "bonusActionDescription": "Action bonus pour inspirer un allié dans un rayon de 60 pieds.",
+          "songOfRestTitle": "🎶 Chant de Repos",
+          "songOfRestDescription": "Pendant un repos court, les alliés obtiennent des soins supplémentaires.",
+          "jackOfAllTradesTitle": "🎭 Touche-à-Tout",
+          "jackOfAllTradesDescription": "Ajoutez la moitié du bonus de maîtrise à tous les jets de compétence non maîtrisés."
+        }
+      },
+      "cleric": {
+        "name": "Clerc",
+        "talents":  {
+          "spellcastingTitle": "🛐 Incantation",
+          "preparedSpellsDescription": "Vous pouvez préparer {{preparedSpells}} sorts de clerc (mod SAG + niveau).",
+          "spellcastingAccessDescription": "Vous avez accès à tous les sorts de clerc, mais vous n'en préparez qu'un sous-ensemble chaque jour.",
+          "channelDivinityTitle": "🙏 Canalisation de la Divinité",
+          "channelDivinityUnlocked": "Déverrouillé au niveau 2.",
+          "channelDivinityDescription": "Utilisez l'énergie divine pour alimenter les capacités de sous-classe.",
+          "channelDivinityUses": "1 utilisation par repos (2 au niveau 6, 3 au niveau 18).",
+          "divineInterventionTitle": "✨ Intervention Divine",
+          "divineInterventionDescription": "Faites appel à votre divinité pour un miracle. Chance basée sur votre niveau (pourcentage)."
+        }
+      },
+      "druid": {
+        "name":"Druide",
+        "talents":  {
+
+        }
+      },
+      "fighter": {
+        "name":  "Guerrier",
+        "talents":  {
+          "secondWindTitle": "💪 Second Souffle",
+          "secondWindDescription": "En tant qu'action bonus, soignez {{healAmount}} une fois par repos court.",
+          "actionSurgeTitle": "⚡ Surgissement d'Action",
+          "actionSurgeDescription": "Effectuez une action supplémentaire lors de votre tour. Une fois par repos court.",
+          "fightingStyleTitle": "🛡 Style de Combat",
+          "fightingStyleDescription": "Choisissez un style de combat : Défense, Duel, Combat à Armes Lourdes, etc.",
+          "extraAttackTitle": "⚔ Attaque Supplémentaire",
+          "extraAttackDescription": "Vous pouvez attaquer deux fois, au lieu d'une, lorsque vous prenez l'action d'attaquer.",
+          "martialArchetypeTitle": "🧠 Archétype Martial",
+          "martialArchetypeDescription": "Choisissez un archétype : Champion, Maître de Bataille, Chevalier Eldritch, etc."
+        }
+      },
+      "monk": {
+        "name": "Moine",
+        "talents":  {
+
+        }
+      },
+      "paladin": {
+        "name": "Paladin",
+        "talents":  {
+          "layOnHandsTitle": "🛡 Imposition des Mains",
+          "layOnHandsDescription": "Vous pouvez restaurer {{layOnHands}} PV par repos long.",
+          "layOnHandsUsage": "Vous pouvez dépenser 5 PV pour guérir une maladie ou un poison.",
+          "divineSmiteTitle": "💥 Châtiment Divin",
+          "divineSmiteDescription": "Lorsque vous touchez, dépensez un emplacement de sort pour infliger des dégâts radiants.",
+          "divineHealthTitle": "🏰 Santé Divine",
+          "divineHealthDescription": "Vous êtes immunisé contre les maladies.",
+          "sacredOathTitle": "🕊 Serment Sacré",
+          "sacredOathDescription": "Choisissez une sous-classe de Serment au niveau 3.",
+          "spellcastingTitle": "✨ Incantation",
+          "spellcastingDescription": "Vous pouvez préparer mod CHA ({{chaMod}}) + la moitié de votre niveau en sorts de Paladin."
+        }
+      },
+      "ranger": {
+        "name": "Rôdeur",
+        "talents":  {
+          "favoredEnemyTitle": "🏹 Ennemi Privilégié",
+          "favoredEnemyDescription": "Choisissez {{count}} type(s) d'ennemi privilégié. Obtenez des bonus pour le pistage, la langue et les dégâts.",
+          "naturalExplorerTitle": "🌲 Explorateur Naturel",
+          "naturalExplorerDescription": "Choisissez {{count}} type(s) de terrain privilégié. Obtenez des bonus dans ce terrain.",
+          "fightingStyleTitle": "🛡 Style de Combat",
+          "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
+          "spellcastingTitle": "✨ Incantation",
+          "spellcastingDescription": "Vous pouvez lancer des sorts de rôdeur. Vous préparez un nombre égal au modificateur de SAG + la moitié de votre niveau."
+        }
+      },
+      "rogue": {
+        "name": "Voleur",
+        "talents":  {
+
+        }
+      },
+      "sorcerer": {
+        "name": "Ensorceleur",
+        "talents":  {
+          "spellcastingTitle": "✨ Incantation",
+          "spellsKnownDescription": "Vous connaissez jusqu'à {{maxSpellsKnown}} sorts de ensorceleur (niveau + mod CHA).",
+          "spellcastingAccessDescription": "Vous pouvez lancer et surlancer des sorts en utilisant des emplacements de sorts.",
+          "sorceryPointsTitle": "🔮 Points de Sorcellerie",
+          "sorceryPointsDescription": "Vous avez {{sorceryPoints}} point(s) de sorcellerie (égal à votre niveau).",
+          "sorceryPointsUsage": "Utilisez pour la Métamagie ou convertissez en emplacements de sorts.",
+          "metamagicTitle": "🌀 Métamagie",
+          "metamagicDescription": "Choisissez 2 options de Métamagie (3 au niveau 10)."
+        }
+      },
+      "warlock": {
+        "name": "Occultiste",
+        "talents":  {
+
+        }
+      },
+      "wizard": {
+        "name":"Magicien",
+        "talents":  {
+
+        }
+      }
     },
     "backgrounds": {
       "acolyte": {
