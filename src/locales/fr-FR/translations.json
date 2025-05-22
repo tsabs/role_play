@@ -35,16 +35,31 @@
         "name":  "Tieffelin"
       },
       "high-elf": {
-        "name":  "Elfe Haut"
+        "name":  "Haut Elfe"
+      },
+      "dark-elf": {
+        "name": "Elfe Noir"
+      },
+      "wood-elf": {
+        "name":  "Elfe des Bois"
       },
       "hill-dwarf": {
         "name":  "Nain des Collines"
       },
+      "mountain-dwarf": {
+        "name": "Nain des Montagnes"
+      },
       "lightfoot-halfling": {
         "name":  "Halfelin Pied-Léger"
       },
+      "stout-halfling": {
+        "name": "Halfelin robuste"
+      },
       "rock-gnome": {
         "name":  "Gnome des Roches"
+      },
+      "forest-gnome": {
+        "name": "Gnome des Forêts"
       }
     },
     "classes": {
@@ -348,6 +363,9 @@
         "description": "Vous avez grandi dans les rues. Vous savez où vous cacher et quand vos yeux de chien battu vous permettront de décrocher un bon repas.\n\nPourquoi étiez-vous dans les rues ? Étiez-vous un fugueur ? Un orphelin ? Ou juste un enfant aventurier qui traînait tard ?"
       }
 },
+    "proficiencies": {
+
+    },
     "overview": {
       "accordion": {
         "charcacterInformations": "Information du personnage",

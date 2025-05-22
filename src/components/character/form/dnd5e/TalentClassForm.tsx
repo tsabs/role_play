@@ -8,11 +8,12 @@ import FighterTalentForm from '../../dnd5e/classSpecifics/FighterTalentForm';
 import ClericTalentForm from '../../dnd5e/classSpecifics/ClericTalentForm';
 import SorcererTalentForm from '../../dnd5e/classSpecifics/SorcererTalentForm';
 import PaladinTalentForm from '../../dnd5e/classSpecifics/PaladinTalentForm';
+import { DnDAbility } from '../../../../types/games/d2d5e';
 
 interface TalentClassFormProps {
     characterClass: string;
     level: number;
-    abilities: Record<string, number>;
+    abilities: Record<DnDAbility, number>;
 }
 
 const TalentClassForm = ({

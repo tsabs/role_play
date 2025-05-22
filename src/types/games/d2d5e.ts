@@ -37,16 +37,17 @@ interface ElementIdentification {
 
 interface OptionChoice {
     option_type: string;
-    item: ElementIdentification[];
+    item: ElementIdentification;
 }
 
 interface ProficiencyOption {
     choose: number;
-    desc: string;
+    desc?: string;
     from: {
         options: OptionChoice[];
         option_set_type: string;
     };
+    type: string;
 }
 
 interface StartingEquipment {
@@ -61,6 +62,15 @@ interface StartingEquipmentOption {
         options: OptionChoice[];
         option_set_type: string;
     };
+}
+
+interface LanguageOptions {
+    choose: number;
+    from: {
+        options: OptionChoice[];
+        option_set_type: string;
+    };
+    type: string;
 }
 
 // ----------------------------
@@ -89,13 +99,29 @@ interface DndBackground {
     tool_proficiencies: string | null;
 }
 
+interface DndSubRace {
+    ability_bonuses: AbilityBonus[];
+    index: string;
+    languages: ElementIdentification[];
+    name: string;
+    racial_traits: ElementIdentification[];
+    starting_proficiencies: ElementIdentification[];
+    updated_at: string;
+    url: string;
+    desc?: string;
+    race?: ElementIdentification;
+    alignment?: string;
+    speed?: number;
+    language_options?: LanguageOptions;
+}
+
 interface DndRace {
     ability_bonuses: AbilityBonus[];
     age: string;
     alignment: string;
     index: string;
     language_desc: string;
-    languges: ElementIdentification[];
+    languages: ElementIdentification[];
     name: string;
     size: string;
     size_description: string;
@@ -126,19 +152,34 @@ interface DndClass {
     url: string;
 }
 
-interface DnDCharacter extends GenericCharacter<DnDAbility> {
+interface DnDConfig {
+    ability: DnDAbility;
     abilities: Record<DnDAbility, number>;
+    race: DndRace;
+    className: DndClass;
+    selectedClassElements?: {
+        subClass?: ElementIdentification;
+        proficiencies_choice?: ElementIdentification[];
+    };
+    background: DndBackground;
     gameType: GAME_TYPE.DND5E;
 }
 
+type DnDCharacter = GenericCharacter<DnDConfig>;
+
 export {
+    DnDConfig,
     DnDCharacter,
     CharacterEquipment,
+    ElementIdentification,
     Proficiency,
+    ProficiencyOption,
+    OptionChoice,
     SkillProficiency,
     AbilityScores,
     DnDAbility,
     DndBackground,
     DndClass,
     DndRace,
+    DndSubRace,
 };

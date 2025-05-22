@@ -3,7 +3,6 @@ import {
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
-    ScrollView,
     TouchableOpacity,
     ViewStyle,
 } from 'react-native';
@@ -27,6 +26,7 @@ import {
     DndBackground,
     DndClass,
     DndRace,
+    ElementIdentification,
 } from '../../../../types/games/d2d5e';
 import LabeledList from './LabeledList';
 import Separator from '../../../library/Separator';
@@ -39,6 +39,8 @@ import { ABILITIES } from './constants';
 import { Ability, GAME_TYPE } from '../../../../types/generic';
 import CustomSelectionButton from '../../../atom/CustomSelectionButton';
 import { maxLevels } from '../../../../utils/d2d5';
+import ProficiencySelector from './proficiencies/ProficiencySelector';
+import VirtualizedScrollView from '../../../library/VirtualizedScrollView';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -67,7 +69,11 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [selectedAbility, setSelectedAbility] =
         useState<Record<DnDAbility, number>>(ABILITIES);
     const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
+    const [traits, setTraits] = useState<ElementIdentification[]>([]);
     const [selectedClass, setSelectedClass] = useState<string>(null);
+    const [selectProficiencies, setSelectProficiencies] = useState<
+        Record<string, string[]>
+    >({});
     const [selectedRace, setSelectedRace] = useState<string>(null);
     const [selectedBackground, setSelectedBackground] =
         useState<CharacterBackground>(null);
@@ -75,27 +81,34 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [level, setLevel] = useState(1);
 
     const callGetBackgrounds = useCallback(async () => {
-        const backgrounds = (await getBackgrounds().catch((err) =>
+        const resultBackgrounds = (await getBackgrounds().catch((err) =>
             console.log(err)
         )) as DndBackground[] | void;
-        if (!backgrounds) return [];
-        setBackgrounds(backgrounds);
+        if (!resultBackgrounds) return [];
+        setBackgrounds(resultBackgrounds);
     }, []);
     const callGetRaces = useCallback(async () => {
-        const races = (await getRaces().catch((err) => console.log(err))) as
-            | DndRace[]
-            | void;
-        if (!races) return [];
-        setRaces(races);
+        const resultRaces = (await getRaces().catch((err) =>
+            console.log(err)
+        )) as DndRace[] | void;
+        if (!resultRaces) return [];
+        setRaces(resultRaces);
     }, []);
 
     const callGetClasses = useCallback(async () => {
-        const classes = (await getClasses().catch((err) =>
+        const resultClasses = (await getClasses().catch((err) =>
             console.log(err)
         )) as DndClass[] | void;
-        if (!classes) return [];
-        setClasses(classes);
+        if (!resultClasses) return [];
+        setClasses(resultClasses);
     }, []);
+
+    const handleGroupChange = (groupId: string, selectedIndexes: string[]) => {
+        setSelectProficiencies((prev) => ({
+            ...prev,
+            [groupId]: selectedIndexes,
+        }));
+    };
 
     useEffect(() => {
         Promise.all([callGetBackgrounds(), callGetClasses(), callGetRaces()]);
@@ -132,7 +145,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             };
         }
         return {
-            height: Dimensions.get('window').height - 50,
+            height: Dimensions.get('window').height - 150,
         };
     }, [isKeyboardVisible, Keyboard.isVisible(), selectedBackground]);
 
@@ -141,10 +154,38 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         value: string;
         setValue: (value: string) => void;
     }> = [
-        { label: 'Name', value: name, setValue: setName },
+        { label: 'Nom', value: name, setValue: setName },
         { label: 'Description', value: description, setValue: setDescription },
-        { label: 'History', value: history, setValue: setHistory },
+        { label: 'Histoire', value: history, setValue: setHistory },
     ];
+
+    // console.log(
+    //     'selected race : ',
+    //     races?.find((item: DndRace) => item?.index === selectedRace)
+    // );
+
+    // console.log(
+    //     'selected backgrounds : ',
+    //     backgrounds?.find(
+    //         (item: DndBackground) => item?.slug === selectedBackground?.name
+    //     )
+    // );
+
+    console.log(
+        'selectedClass',
+        classes.find((item: DndClass) => item.index === selectedClass)
+    );
+
+    console.log(
+        'selectedRace',
+        races?.find((race: DndRace) => race.index === selectedRace)
+    );
+
+    const selectedObjectClass = classes?.find(
+        (item: DndClass) => item?.index === selectedClass
+    );
+
+    // console.log(classes.map((item: DndClass) => item.index));
 
     return (
         <SafeView
@@ -157,7 +198,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     placeHolder={'Choisissez un niveau'}
                     onSelect={(value) => setLevel(value)}
                 />
-                <ScrollView style={scrollViewStyle}>
+                <VirtualizedScrollView style={scrollViewStyle}>
                     {textDisplay.map(({ label, value, setValue }, index) => {
                         return (
                             <Fragment key={`${label}-${index}`}>
@@ -170,7 +211,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     onChangeText={setValue}
                                     activeOutlineColor={theme.colors.primary}
                                     outlineColor={theme.colors.primary}
-                                    style={{ marginVertical: theme.space.l }}
+                                    style={{
+                                        marginVertical: theme.space.l,
+                                    }}
                                 />
                                 <Separator horizontal />
                             </Fragment>
@@ -188,25 +231,38 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                         setSelectedValue={setSelectedClass}
                         selectedName={selectedClass}
                     />
+                    {selectedObjectClass?.proficiency_choices?.length > 0 &&
+                        selectedObjectClass.proficiency_choices.map(
+                            (item, index) => {
+                                return (
+                                    <ProficiencySelector
+                                        key={index}
+                                        data={item}
+                                        groupId={`group-${index}`}
+                                        onChange={handleGroupChange}
+                                    />
+                                );
+                            }
+                        )}
                     <LabeledList
                         name="Backgrounds"
                         values={backgrounds}
                         setSelectedValue={setSelectedBackground}
                         selectedName={selectedBackground?.name}
                     />
-                    {selectedBackground?.name && (
-                        <Animated.View
-                            key={selectedBackground.name}
-                            style={{ padding: theme.space.md }}
-                            entering={SlideInLeft.delay(100)}
-                        >
-                            <CustomText
-                                text={t(
-                                    `character.backgrounds.${selectedBackground.name}.description`
-                                )}
-                            />
-                        </Animated.View>
-                    )}
+                    {/*{selectedBackground?.name && (*/}
+                    {/*    <Animated.View*/}
+                    {/*        key={selectedBackground.name}*/}
+                    {/*        style={{ padding: theme.space.md }}*/}
+                    {/*        entering={SlideInLeft.delay(100)}*/}
+                    {/*    >*/}
+                    {/*        <CustomText*/}
+                    {/*            text={t(*/}
+                    {/*                `character.backgrounds.${selectedBackground.name}.description`*/}
+                    {/*            )}*/}
+                    {/*        />*/}
+                    {/*    </Animated.View>*/}
+                    {/*)}*/}
 
                     <AbilityForm
                         abilities={selectedAbility as Record<Ability, number>}
@@ -220,7 +276,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                 .saveButton
                         }
                         onPress={() => {
-                            console.log('selected ability', selectedAbility);
                             callAddCharacter(
                                 {
                                     id: uuidv4(),
@@ -228,11 +283,21 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     description,
                                     userEmail: auth.user.email,
                                     additionalBackground: history,
-                                    race: selectedRace,
+                                    race: races?.find(
+                                        (race: DndRace) =>
+                                            race.index === selectedRace
+                                    ),
                                     level,
                                     abilities: selectedAbility,
-                                    className: selectedClass,
-                                    background: selectedBackground.name,
+                                    className: classes?.find(
+                                        (dndClass: DndClass) =>
+                                            dndClass.index === selectedClass
+                                    ),
+                                    background: backgrounds?.find(
+                                        (dndBackground: DndBackground) =>
+                                            dndBackground.slug ===
+                                            selectedBackground?.name
+                                    ),
                                     gameType: GAME_TYPE.DND5E,
                                 },
                                 dispatch
@@ -242,9 +307,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     >
                         <Text style={styles(spacer).saveButtonText}>Next</Text>
                     </TouchableOpacity>
-                </ScrollView>
-
-                {/*{<Separator margin={300} />}*/}
+                </VirtualizedScrollView>
             </KeyboardAvoidingView>
         </SafeView>
     );

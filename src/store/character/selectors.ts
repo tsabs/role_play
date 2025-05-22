@@ -13,6 +13,6 @@ export const selectNotes = (characterId: string) => {
     return createSelector(selectCharacterState, (charactersState) => {
         return charactersState?.characters.find(
             (character) => character.id === characterId
-        ).notes;
+        )?.notes;
     });
 };

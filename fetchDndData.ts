@@ -1,6 +1,26 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc } from '@react-native-firebase/firestore';
+import { collection, doc, setDoc } from '@react-native-firebase/firestore';
+import { DndRace, DndSubRace } from './src/types/games/d2d5e';
 const BASE_URL = 'https://www.dnd5eapi.co/api';
+
+const halfelinRobuste: DndSubRace = {
+    ability_bonuses: [
+        { bonus: 2, ability_score: { name: 'DEX', index: 'dex' } },
+        { bonus: 1, ability_score: { name: 'CON', index: 'con' } },
+    ],
+    index: 'stout-halfling',
+    languages: [
+        { name: 'Commun', index: 'common' },
+        { name: 'Halfelin', index: 'halfling' },
+    ],
+    name: 'Stout Halfling',
+    starting_proficiencies: [],
+    racial_traits: [
+        { name: 'Robustesse des robustes', index: 'stout-resilience' },
+    ],
+    updated_at: '2025-05-20T00:00:00Z',
+    url: '/api/subraces/halfelin-robuste',
+};
 
 // List of D&D 5E categories to fetch
 const categories = [
@@ -17,6 +37,17 @@ const categories = [
     // 'magic-schools',
     // 'subraces',
 ];
+
+export const saveToFirstore = async () => {
+    try {
+        await setDoc(
+            doc(db, 'games', 'dnd5e', 'subraces', 'stout-halfling'),
+            halfelinRobuste
+        );
+    } catch (e) {
+        console.log('error when adding data to firestore', e);
+    }
+};
 
 // const saveToFirestore = async (category: string) => {
 //     try {

@@ -1,5 +1,11 @@
 import { Note } from './note';
-import { DnDAbility, DnDCharacter } from './games/d2d5e';
+import {
+    DnDAbility,
+    DndBackground,
+    DnDCharacter,
+    DndClass,
+    DndRace,
+} from './games/d2d5e';
 import { WarHammerAbility, WarHammerCharacter } from './games/warHammer';
 
 enum GAME_TYPE {
@@ -9,24 +15,33 @@ enum GAME_TYPE {
 
 type Ability = DnDAbility | WarHammerAbility;
 
-interface GenericCharacter<T extends Ability> {
+type Character = DnDCharacter | WarHammerCharacter;
+
+interface GenericCharacter<
+    Config extends {
+        gameType: GAME_TYPE;
+        abilities: any;
+        race: any;
+        className: any;
+        background: any;
+    },
+> {
     id: string;
     name: string;
     userEmail: string;
     description: string;
-    background: string;
     level: number;
-    abilities: Record<T, number>;
+
+    gameType: Config['gameType'];
+    abilities: Config['abilities'];
+    race: Config['race'];
+    className: Config['className'];
+    background: Config['background'];
     // Cause DnD has background as talent this is actually the user imagined background
-    race: string;
-    className: string;
-    gameType: GAME_TYPE;
     characterImg?: string;
     gameId?: string;
     additionalBackground?: string;
     notes?: Note[];
 }
-
-type Character = DnDCharacter | WarHammerCharacter;
 
 export { GenericCharacter, Character, Ability, GAME_TYPE };

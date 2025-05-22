@@ -1,46 +1,40 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import {
-    Dimensions,
-    ImageBackground,
-    ScrollView,
-    StyleSheet,
-    View,
-} from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
 import { List } from 'react-native-paper';
 
-import SafeView from '../../components/library/SafeView';
-import { DND_CHARACTER_DEFAULT } from '../../../assets';
+import SafeView from '../../../components/library/SafeView';
+import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { theme } from '../../../style/theme';
+import { theme } from '../../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
-import CustomText from '../../components/atom/CustomText';
-import { Ability, Character, GAME_TYPE } from '../../types/generic';
-import AbilityForm from '../../components/character/form/generic/AbilityForm';
-import { DnDAbility } from '../../types/games/d2d5e';
-import { WarHammerAbility } from '../../types/games/warHammer';
+import CustomText from '../../../components/atom/CustomText';
+import { Ability, Character, GAME_TYPE } from '../../../types/generic';
+import AbilityForm from '../../../components/character/form/generic/AbilityForm';
+import { DnDAbility, DnDCharacter } from '../../../types/games/d2d5e';
+import { WarHammerAbility } from '../../../types/games/warHammer';
 import {
     callUpdateCharacter,
     loadClassData,
     loadSpecificTalentClassPerLevel,
-} from '../../store/character/slice';
-import { ABILITIES } from '../../components/character/form/dnd5e/constants';
-import { useAppDispatch } from '../../store';
-import CharacterTalentClassFormProvider from '../../components/character/CharacterTalentClassFormProvider';
-import CustomSelectionButton from '../../components/atom/CustomSelectionButton';
-import { maxLevels } from '../../utils/d2d5';
+} from '../../../store/character/slice';
+import { ABILITIES } from '../../../components/character/form/dnd5e/constants';
+import { useAppDispatch } from '../../../store';
+import CharacterTalentClassFormProvider from '../../../components/character/CharacterTalentClassFormProvider';
+import CustomSelectionButton from '../../../components/atom/CustomSelectionButton';
+import { maxLevels } from '../../../utils/d2d5';
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../../utils/utils';
+import TalentClassForm from '../../../components/character/form/dnd5e/TalentClassForm';
 
-interface CharacterOverviewProps {
-    character: Character;
+interface CharacterOverviewDndProps {
+    character: DnDCharacter;
 }
 
 interface OnSaveAbilities<T extends Ability> {
     [key: string]: Record<T, number>;
 }
 
-const { height, width } = Dimensions.get('screen');
-
-const CharacterOverview = ({ character }: CharacterOverviewProps) => {
+const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const tabBarHeight = useBottomTabBarHeight();
@@ -79,7 +73,7 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     );
 
     const handleClassData = useCallback(async () => {
-        await loadClassData(character.gameType, character.className)
+        await loadClassData(character.gameType, character.className.index)
             .then((res) => {
                 setClassData(res);
                 console.log('class data : ', res);
@@ -90,7 +84,9 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     const handleClassSpecificTalent = useCallback(async () => {
         await loadSpecificTalentClassPerLevel(
             character.gameType,
-            character.className,
+            character.className?.index
+                ? character.className?.index
+                : (character.className as any),
             character.level.toString()
         )
             .then((res) => {
@@ -114,44 +110,20 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
     }, [character?.abilities]);
 
     const displayAbilityForm = useCallback(() => {
-        switch (character.gameType) {
-            default:
-            case GAME_TYPE.DND5E:
-                return (
-                    <AbilityForm<DnDAbility>
-                        abilities={
-                            (selectedAbilities as Record<DnDAbility, number>) ||
-                            ABILITIES
-                        }
-                        onChange={handleUpdateCharacter}
-                        onSaveEdit={handleSaveEdit}
-                        isEditModeEnabled={true}
-                        onEditMode={handleEditMode}
-                        isEditMode={isEditMode}
-                    />
-                );
-            case GAME_TYPE.WAR_HAMMER:
-                return (
-                    <AbilityForm<WarHammerAbility>
-                        abilities={
-                            selectedAbilities as Record<
-                                WarHammerAbility,
-                                number
-                            >
-                        }
-                        onChange={handleUpdateCharacter}
-                        isEditModeEnabled={true}
-                        isEditMode={isEditMode}
-                    />
-                );
-        }
-    }, [
-        character.gameType,
-        isEditMode,
-        selectedAbilities,
-        handleEditMode,
-        handleUpdateCharacter,
-    ]);
+        return (
+            <AbilityForm<DnDAbility>
+                abilities={
+                    (selectedAbilities as Record<DnDAbility, number>) ||
+                    ABILITIES
+                }
+                onChange={handleUpdateCharacter}
+                onSaveEdit={handleSaveEdit}
+                isEditModeEnabled={true}
+                onEditMode={handleEditMode}
+                isEditMode={isEditMode}
+            />
+        );
+    }, [isEditMode, selectedAbilities, handleEditMode, handleUpdateCharacter]);
 
     const handleSelectLevel = useCallback(async (value: string | number) => {
         const newLevel = Number(value);
@@ -178,13 +150,12 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
             },
             {
                 id: 2,
-                title: `character.classes.${character.className}.name`,
+                title: `character.classes.${character.className.index}.name`,
                 content: (
-                    <CharacterTalentClassFormProvider
-                        gameType={character.gameType}
-                        characterClass={character.className}
+                    <TalentClassForm
                         abilities={selectedAbilities}
                         level={level}
+                        characterClass={character.className.index}
                     />
                 ),
             },
@@ -301,8 +272,8 @@ const CharacterOverview = ({ character }: CharacterOverviewProps) => {
 
 const styles = StyleSheet.create({
     imageBackground: {
-        width,
-        height: height / 2,
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT / 2,
     },
     accordionContainer: {
         backgroundColor: theme.colors.light,
@@ -330,4 +301,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CharacterOverview;
+export default CharacterOverviewDnd;

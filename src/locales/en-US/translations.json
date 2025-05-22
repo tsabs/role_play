@@ -37,14 +37,29 @@
       "high-elf": {
         "name": "High Elf"
       },
+      "dark-elf": {
+        "name": "Dark Elf"
+      },
+      "wood-elf": {
+        "name":  "Wood Elf"
+      },
       "hill-dwarf": {
         "name": "Hill Dwarf"
+      },
+      "mountain-dwarf": {
+        "name": "Mountain Dwarf"
       },
       "lightfoot-halfling": {
         "name": "Lightfoot Halfling"
       },
+      "stout-halfling": {
+        "name": "Stout Halfling"
+      },
       "rock-gnome": {
         "name": "Rock Gnome"
+      },
+      "forest-gnome": {
+        "name": "Forest Gnome"
       }
     },
     "classes":   {

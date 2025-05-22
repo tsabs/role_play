@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Provider } from 'react-redux';
 import RootNavigation from './src/navigation/RootNavigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -23,6 +23,11 @@ const paperTheme = {
 };
 
 export default function App() {
+    const onHideToaster = useCallback(() => {
+        //
+        Toast.hide();
+    }, []);
+
     return (
         <Provider store={store}>
             <PaperProvider theme={paperTheme}>
@@ -30,7 +35,7 @@ export default function App() {
                     <GestureHandlerRootView style={{ flex: 1 }}>
                         <NavigationContainer>
                             <RootNavigation />
-                            <Toast topOffset={75} />
+                            <Toast onPress={onHideToaster} topOffset={75} />
                         </NavigationContainer>
                     </GestureHandlerRootView>
                 </AuthProvider>
