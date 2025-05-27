@@ -1,5 +1,10 @@
 import { db } from './firebaseConfig';
-import { collection, doc, setDoc } from '@react-native-firebase/firestore';
+import {
+    collection,
+    doc,
+    setDoc,
+    updateDoc,
+} from '@react-native-firebase/firestore';
 import { DndRace, DndSubRace } from './src/types/games/d2d5e';
 const BASE_URL = 'https://www.dnd5eapi.co/api';
 
@@ -22,6 +27,95 @@ const halfelinRobuste: DndSubRace = {
     url: '/api/subraces/halfelin-robuste',
 };
 
+const traitAdaptsToRaceProficienciesOption = {
+    choose: 1,
+    from: {
+        option_set_type: 'options_array',
+        options: [
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-black',
+                    name: 'Draconic Ancestry (Black)',
+                    url: '/api/2014/traits/draconic-ancestry-black',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-blue',
+                    name: 'Draconic Ancestry (Blue)',
+                    url: '/api/2014/traits/draconic-ancestry-blue',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-brass',
+                    name: 'Draconic Ancestry (Brass)',
+                    url: '/api/2014/traits/draconic-ancestry-brass',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-bronze',
+                    name: 'Draconic Ancestry (Bronze)',
+                    url: '/api/2014/traits/draconic-ancestry-bronze',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-copper',
+                    name: 'Draconic Ancestry (Copper)',
+                    url: '/api/2014/traits/draconic-ancestry-copper',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-gold',
+                    name: 'Draconic Ancestry (Gold)',
+                    url: '/api/2014/traits/draconic-ancestry-gold',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-green',
+                    name: 'Draconic Ancestry (Green)',
+                    url: '/api/2014/traits/draconic-ancestry-green',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-red',
+                    name: 'Draconic Ancestry (Red)',
+                    url: '/api/2014/traits/draconic-ancestry-red',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-silver',
+                    name: 'Draconic Ancestry (Silver)',
+                    url: '/api/2014/traits/draconic-ancestry-silver',
+                },
+            },
+            {
+                option_type: 'reference',
+                item: {
+                    index: 'draconic-ancestry-white',
+                    name: 'Draconic Ancestry (White)',
+                    url: '/api/2014/traits/draconic-ancestry-white',
+                },
+            },
+        ],
+    },
+};
+
 // List of D&D 5E categories to fetch
 const categories = [
     // 'spells',
@@ -41,9 +135,18 @@ const categories = [
 export const saveToFirstore = async () => {
     try {
         await setDoc(
-            doc(db, 'games', 'dnd5e', 'subraces', 'stout-halfling'),
-            halfelinRobuste
+            doc(db, 'games', 'dnd5e', 'races', 'dragonborn'),
+            traitAdaptsToRaceProficienciesOption
         );
+    } catch (e) {
+        console.log('error when adding data to firestore', e);
+    }
+};
+export const updateDocument = async () => {
+    try {
+        await updateDoc(doc(db, 'games', 'dnd5e', 'races', 'dragonborn'), {
+            starting_proficiency_options: traitAdaptsToRaceProficienciesOption,
+        });
     } catch (e) {
         console.log('error when adding data to firestore', e);
     }

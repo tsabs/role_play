@@ -28,6 +28,13 @@ const getTraits = async () => {
     return traitsSnapshot.docs.map((doc) => doc.data());
 };
 
+const getSkills = async () => {
+    const skillsRef = collection(db, 'games', 'dnd5e', 'skills');
+    const skillsSnapshot = await getDocs(skillsRef);
+
+    return skillsSnapshot.docs.map((doc) => doc.data());
+};
+
 const getRaces = async () => {
     const racesRef = collection(db, 'games', 'dnd5e', 'races');
     const subRacesRef = collection(db, 'games', 'dnd5e', 'subraces');
@@ -79,4 +86,4 @@ const getRaces = async () => {
     return [...originalRace.map((doc) => doc.data()), ...mergeRaces];
 };
 
-export { getBackgrounds, getClasses, getRaces };
+export { getBackgrounds, getClasses, getRaces, getSkills };

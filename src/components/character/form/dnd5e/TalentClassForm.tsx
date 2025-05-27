@@ -51,7 +51,7 @@ const TalentClassForm = ({
             default:
                 return <CustomText text="Class not yet supported." />;
         }
-    }, [level, abilities]);
+    }, [level, abilities, characterClass]);
 
     return renderClassSpecific();
 };

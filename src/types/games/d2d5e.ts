@@ -117,6 +117,7 @@ interface DndSubRace {
 
 interface DndRace {
     ability_bonuses: AbilityBonus[];
+    ability_bonus_options: ProficiencyOption;
     age: string;
     alignment: string;
     index: string;
@@ -127,6 +128,7 @@ interface DndRace {
     size_description: string;
     speed: number;
     starting_proficiencies: ElementIdentification[];
+    starting_proficiency_options: ProficiencyOption;
     subraces: ElementIdentification[];
     traits: ElementIdentification[];
     updated_at: string;
@@ -157,9 +159,18 @@ interface DnDConfig {
     abilities: Record<DnDAbility, number>;
     race: DndRace;
     className: DndClass;
-    selectedClassElements?: {
-        subClass?: ElementIdentification;
-        proficiencies_choice?: ElementIdentification[];
+    selectedClassElements: {
+        classChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
+        selected_subclass?: string;
+    };
+    selectedRaceElements: {
+        raceChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
+    };
+    selectedBackgroundElements?: {
+        backgroundChoices?: Record<
+            string,
+            Array<{ index: string; bonus?: number }>
+        >;
     };
     background: DndBackground;
     gameType: GAME_TYPE.DND5E;

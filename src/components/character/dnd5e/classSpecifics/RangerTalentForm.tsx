@@ -1,7 +1,8 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../atom/CustomText';
+import { genericClassFormStyles } from './genericStyle';
 
 interface RangerTalentFormProps {
     level: number;
@@ -15,12 +16,16 @@ const getNaturalExplorerCount = (level: number): number => {
     return level >= 10 ? 3 : level >= 6 ? 2 : 1;
 };
 
+const titleSize = 16;
+
 const RangerTalentForm = ({ level }: RangerTalentFormProps) => {
     const { t } = useTranslation();
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
-                style={styles.title}
+                style={genericClassFormStyles.title}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t('character.classes.ranger.talents.favoredEnemyTitle')}
             />
             <CustomText
@@ -31,7 +36,9 @@ const RangerTalentForm = ({ level }: RangerTalentFormProps) => {
             />
 
             <CustomText
-                style={styles.sectionTitle}
+                style={genericClassFormStyles.sectionTitle}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t(
                     'character.classes.ranger.talents.naturalExplorerTitle'
                 )}
@@ -46,7 +53,9 @@ const RangerTalentForm = ({ level }: RangerTalentFormProps) => {
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.ranger.talents.fightingStyleTitle'
                         )}
@@ -62,7 +71,9 @@ const RangerTalentForm = ({ level }: RangerTalentFormProps) => {
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.ranger.talents.spellcastingTitle'
                         )}
@@ -77,11 +88,5 @@ const RangerTalentForm = ({ level }: RangerTalentFormProps) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default RangerTalentForm;

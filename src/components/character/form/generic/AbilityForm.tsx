@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { Fragment, useCallback, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { IconButton, TextInput } from 'react-native-paper';
 
 import CustomText from '../../../atom/CustomText';
 import { theme } from '../../../../../style/theme';
 import { Ability } from '../../../../types/generic';
-import { IconButton } from 'react-native-paper';
 import { ABILITIES } from '../dnd5e/constants';
 
 interface OnSaveAbilities<T extends Ability> {
@@ -13,27 +13,32 @@ interface OnSaveAbilities<T extends Ability> {
 
 interface AbilityFormProps<T extends Ability> {
     onChange: (updated: Record<T, number>) => void;
+    abilityBonuses?: Array<{ index: string; bonus?: number }>;
     onEditMode?: () => void;
     onSaveEdit?: (abilities: OnSaveAbilities<T>) => void;
     abilities?: Record<T, number>;
     isEditMode?: boolean;
     isEditModeEnabled?: boolean;
+    remainingPoints?: number;
+    level?: number;
 }
 
 const AbilityForm = <T extends Ability>({
     abilities,
+    abilityBonuses,
     onChange,
     onEditMode,
     onSaveEdit,
     isEditModeEnabled,
     isEditMode,
+    remainingPoints,
+    level = 1,
 }: AbilityFormProps<T>) => {
     const [selectedAbility, setSelectedAbility] =
         useState<Record<T, number>>(abilities);
     const handleChange = useCallback(
-        (key: Ability, value: string) => {
-            const num = parseInt(value) || 0;
-            const updated = { ...abilities, [key]: num };
+        (key: Ability, value: number) => {
+            const updated = { ...abilities, [key]: value };
             setSelectedAbility(updated);
             onChange(updated);
         },
@@ -45,6 +50,8 @@ const AbilityForm = <T extends Ability>({
             onSaveEdit({ abilities: selectedAbility });
         }
     }, [isEditModeEnabled, selectedAbility, onSaveEdit]);
+
+    console.log(abilityBonuses, 'abilityBonuses');
 
     return (
         <View
@@ -68,42 +75,102 @@ const AbilityForm = <T extends Ability>({
                     />
                 </View>
             )}
-
             <View style={styles.container}>
                 {Object.entries(abilities || ABILITIES)?.map(
                     ([abilityKey, abilityValue]) => {
+                        const ability = abilityBonuses?.find(
+                            (abilityBonus) =>
+                                abilityBonus.index === abilityKey.toLowerCase()
+                        );
                         return (
                             <View key={abilityKey} style={styles.ability}>
-                                <CustomText
-                                    style={styles.abilityKey}
-                                    text={`${abilityKey}`}
-                                />
                                 {isEditMode ? (
-                                    <TextInput
-                                        keyboardType="numeric"
-                                        value={
-                                            abilityValue === 0
-                                                ? ''
-                                                : abilityValue.toString()
-                                        }
-                                        onChangeText={(value) =>
-                                            handleChange(
-                                                abilityKey as Ability,
-                                                value
-                                            )
-                                        }
-                                        style={styles.abilityInputValue}
-                                    />
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View>
+                                            <IconButton
+                                                icon={'plus'}
+                                                size={14}
+                                                style={{
+                                                    backgroundColor:
+                                                        theme.colors.primary,
+                                                }}
+                                                iconColor={theme.colors.white}
+                                                onPress={() =>
+                                                    handleChange(
+                                                        abilityKey as Ability,
+                                                        abilityValue + 1
+                                                    )
+                                                }
+                                            />
+                                            <IconButton
+                                                onPress={() =>
+                                                    handleChange(
+                                                        abilityKey as Ability,
+                                                        abilityValue - 1
+                                                    )
+                                                }
+                                                iconColor={theme.colors.white}
+                                                style={{
+                                                    backgroundColor:
+                                                        theme.colors.primary,
+                                                }}
+                                                size={14}
+                                                icon={'minus'}
+                                            />
+                                        </View>
+                                        <TextInput
+                                            mode="outlined"
+                                            keyboardType="numeric"
+                                            disabled={true}
+                                            label={`${abilityKey}`}
+                                            value={
+                                                abilityValue === 0
+                                                    ? ''
+                                                    : abilityValue.toString()
+                                            }
+                                            outlineStyle={{
+                                                borderColor:
+                                                    theme.colors.primary,
+                                            }}
+                                            textColor={theme.colors.textPrimary}
+                                            outlineColor={theme.colors.primary}
+                                            style={{
+                                                marginVertical: theme.space.l,
+                                            }}
+                                        />
+                                    </View>
                                 ) : (
-                                    <CustomText
-                                        style={styles.abilityDisplayValue}
-                                        color={theme.colors.primary}
-                                        text={abilityValue.toString()}
-                                    />
+                                    <Fragment>
+                                        <CustomText
+                                            style={styles.abilityKey}
+                                            text={`${abilityKey}`}
+                                        />
+                                        <CustomText
+                                            style={styles.abilityDisplayValue}
+                                            color={theme.colors.primary}
+                                            text={
+                                                ability?.index ===
+                                                abilityKey.toLowerCase()
+                                                    ? `${
+                                                          abilityValue +
+                                                          ability.bonus
+                                                      }`
+                                                    : abilityValue.toString()
+                                            }
+                                        />
+                                    </Fragment>
                                 )}
                             </View>
                         );
                     }
+                )}
+                {isEditMode && remainingPoints >= 0 && (
+                    <CustomText
+                        style={{
+                            marginBottom: theme.space.sm,
+                        }}
+                        text={`Points restants: ${remainingPoints}`}
+                    />
                 )}
             </View>
         </View>
@@ -125,6 +192,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: theme.space.sm,
         minWidth: 100,
+        flex: 1,
         alignItems: 'center',
     },
     abilityKey: {
@@ -134,14 +202,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontWeight: 'bold',
-    },
-    abilityInputValue: {
-        flex: 1,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: theme.space.sm,
-        marginTop: 4,
     },
     abilityDisplayValue: {
         flex: 1,

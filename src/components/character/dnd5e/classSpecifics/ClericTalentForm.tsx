@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { calculateModifier } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
+import { genericClassFormStyles } from './genericStyle';
 
 interface ClericTalentFormProps {
     level: number;
     abilities: Record<string, number>;
 }
+const titleSize = 16;
 
 const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
     const { t } = useTranslation();
@@ -22,9 +24,11 @@ const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
-                style={styles.title}
+                style={genericClassFormStyles.title}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t('character.classes.cleric.talents.spellcastingTitle')}
             />
             <CustomText
@@ -40,7 +44,9 @@ const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
             />
 
             <CustomText
-                style={styles.sectionTitle}
+                style={genericClassFormStyles.sectionTitle}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t(
                     'character.classes.cleric.talents.channelDivinityTitle'
                 )}
@@ -69,7 +75,9 @@ const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
             {level >= 10 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.cleric.talents.divineInterventionTitle'
                         )}
@@ -84,11 +92,5 @@ const ClericTalentForm = ({ level, abilities }: ClericTalentFormProps) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default ClericTalentForm;

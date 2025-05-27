@@ -363,11 +363,86 @@
         "description": "Vous avez grandi dans les rues. Vous savez où vous cacher et quand vos yeux de chien battu vous permettront de décrocher un bon repas.\n\nPourquoi étiez-vous dans les rues ? Étiez-vous un fugueur ? Un orphelin ? Ou juste un enfant aventurier qui traînait tard ?"
       }
 },
-    "proficiencies": {
-
+    "skills": {
+      "acrobatics": {
+        "index": "acrobatics",
+        "name": "Acrobaties"
+      },
+      "animal-handling": {
+        "index": "animal-handling",
+        "name": "Dressage"
+      },
+      "arcana": {
+        "index": "arcana",
+        "name": "Arcanes"
+      },
+      "athletics": {
+        "index": "athletics",
+        "name": "Athlétisme"
+      },
+      "deception": {
+        "index": "deception",
+        "name": "Tromperie"
+      },
+      "history": {
+        "index": "history",
+        "name": "Histoire"
+      },
+      "insight": {
+        "index": "insight",
+        "name": "Psychologie"
+      },
+      "intimidation": {
+        "index": "intimidation",
+        "name": "Intimidation"
+      },
+      "investigation": {
+        "index": "investigation",
+        "name": "Investigation"
+      },
+      "medicine": {
+        "index": "medicine",
+        "name": "Médecine"
+      },
+      "nature": {
+        "index": "nature",
+        "name": "Nature"
+      },
+      "perception": {
+        "index": "perception",
+        "name": "Perception"
+      },
+      "performance": {
+        "index": "performance",
+        "name": "Représentation"
+      },
+      "persuasion": {
+        "index": "persuasion",
+        "name": "Persuasion"
+      },
+      "religion": {
+        "index": "religion",
+        "name": "Religion"
+      },
+      "sleight-of-hand": {
+        "index": "sleight-of-hand",
+        "name": "Escamotage"
+      },
+      "stealth": {
+        "index": "stealth",
+        "name": "Discrétion"
+      },
+      "survival": {
+        "index": "survival",
+        "name": "Survie"
+      }
     },
     "overview": {
       "accordion": {
+        "label": {
+          "charInformation": "Description du personnage: ",
+          "additionalBackground": "Informations supplémentaires: "
+        },
         "charcacterInformations": "Information du personnage",
         "equipments": "Equipements",
         "characteristics": "Caractéristiques",

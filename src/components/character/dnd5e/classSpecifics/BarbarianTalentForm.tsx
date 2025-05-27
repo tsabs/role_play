@@ -1,8 +1,9 @@
-import { View, StyleSheet } from 'react-native';
+import { useMemo } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../atom/CustomText';
-import { useMemo } from 'react';
+import { genericClassFormStyles } from './genericStyle';
 
 interface BarbarianTalentFormProps {
     level: number;
@@ -22,6 +23,8 @@ const getRageDamageBonus = (level: number): number => {
     if (level >= 9) return 3;
     return 2;
 };
+
+const titleTextSize = 16;
 
 const BarbarianTalentForm = ({
     level,
@@ -44,10 +47,12 @@ const BarbarianTalentForm = ({
     );
 
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
+                fontSize={titleTextSize}
+                fontWeight="bold"
                 text={t(`character.classes.barbarian.talents.rageTitle`)}
-                style={styles.title}
+                style={genericClassFormStyles.title}
             />
             <CustomText
                 text={t(
@@ -70,7 +75,9 @@ const BarbarianTalentForm = ({
             />
 
             <CustomText
-                style={styles.sectionTitle}
+                style={genericClassFormStyles.sectionTitle}
+                fontSize={titleTextSize}
+                fontWeight="bold"
                 text={t(
                     `character.classes.barbarian.talents.unarmoredDefenseTitle`
                 )}
@@ -86,7 +93,9 @@ const BarbarianTalentForm = ({
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleTextSize}
+                        fontWeight="bold"
                         text={t(
                             `character.classes.barbarian.talents.recklessAttackTitle`
                         )}
@@ -97,7 +106,9 @@ const BarbarianTalentForm = ({
                         )}
                     />
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleTextSize}
+                        fontWeight="bold"
                         text={t(
                             `character.classes.barbarian.talents.dangerSenseTitle`
                         )}
@@ -112,11 +123,5 @@ const BarbarianTalentForm = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default BarbarianTalentForm;

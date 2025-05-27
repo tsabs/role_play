@@ -7,11 +7,18 @@ import {
     TouchableRipple,
 } from 'react-native-paper';
 import {
+    ElementIdentification,
     OptionChoice,
     ProficiencyOption,
 } from '../../../../../types/games/d2d5e';
 import { theme } from '../../../../../../style/theme';
 import CustomText from '../../../../atom/CustomText';
+
+type AbilityOption = {
+    ability_score: ElementIdentification;
+    bonus: number;
+    option_type: 'ability_bonus';
+};
 
 type ChoiceOption = {
     option_type: 'choice';
@@ -20,7 +27,10 @@ type ChoiceOption = {
 
 type ProficiencySelectorProps = {
     data: ProficiencyOption;
-    onChange?: (groupId: string, selectedIndexes: string[]) => void;
+    onChange?: (
+        groupId: string,
+        selectedIndexes: { index: string; bonus?: number }[]
+    ) => void;
     groupId?: string;
 };
 
@@ -29,32 +39,77 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     onChange,
     groupId,
 }) => {
-    const [selected, setSelected] = useState<string[]>([]);
+    const [selected, setSelected] = useState<
+        { index: string; bonus?: number }[]
+    >([]);
     const [collapsed, setCollapsed] = useState(false);
 
-    const handleToggle = (index: string) => {
-        let updated = [...selected];
-        if (updated.includes(index)) {
-            updated = updated.filter((i) => i !== index);
-        } else if (updated.length < data.choose) {
-            updated.push(index);
-        }
-        setSelected(updated);
-        onChange?.(groupId ?? '', updated);
-    };
+    const handleToggle = useCallback(
+        (index: string, bonus?: number) => {
+            let updated = [...selected];
+            // console.log(index);
+            const exists = updated.find((item) => item.index === index);
+            if (exists) {
+                updated = updated.filter((i) => i.index !== index);
+            } else if (updated.length < data.choose) {
+                if (bonus) {
+                    updated.push({ index, bonus });
+                } else {
+                    updated.push({ index });
+                }
+            }
+            // console.log('updated', updated, groupId);
+            setSelected(updated);
+            onChange?.(groupId ?? '', updated);
+        },
+        [selected, groupId, onChange]
+    );
 
     const renderItem = useCallback(
         ({ item: option, index }) => {
             if (option.option_type === 'reference') {
                 const ref = option as OptionChoice;
-                const isChecked = selected.includes(ref.item.index);
+                const refOption = ref.item.index.includes('skill-')
+                    ? ref.item.index.split('skill-')[1]
+                    : ref.item.index;
+
+                // console.log('ref', ref);
+
+                const isChecked = !!selected.find((i) => i.index === refOption);
+                // const isGroupIdAndIsCheck = data.
+
+                if (groupId === 'choice') {
+                    // console.log('cool', ref.item.index);
+                    // console.log('cool', ref.item);
+                    // console.log('data', data);
+                    // console.log('selected', selected);
+                }
                 return (
                     <Checkbox.Item
                         key={ref.item.index}
                         label={ref.item.name}
                         color={theme.colors.primary}
                         status={isChecked ? 'checked' : 'unchecked'}
-                        onPress={() => handleToggle(ref.item.index)}
+                        onPress={() => handleToggle(refOption)}
+                        disabled={!isChecked && selected.length >= data.choose}
+                    />
+                );
+            }
+
+            if (option.option_type === 'ability_bonus') {
+                const ref = option as AbilityOption;
+                const isChecked = !!selected.find(
+                    (i) => i.index === ref.ability_score.index
+                );
+                return (
+                    <Checkbox.Item
+                        key={`race-ability-bonus-${ref.ability_score.index}`}
+                        label={ref.ability_score.name}
+                        color={theme.colors.primary}
+                        status={isChecked ? 'checked' : 'unchecked'}
+                        onPress={() =>
+                            handleToggle(ref.ability_score.index, ref.bonus)
+                        }
                         disabled={!isChecked && selected.length >= data.choose}
                     />
                 );
@@ -65,14 +120,18 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                 return (
                     <View key={`choice-${index}`} style={styles.nested}>
                         <Divider style={styles.divider} />
-                        <ProficiencySelector data={choice} />
+                        <ProficiencySelector
+                            groupId={'choice'}
+                            data={choice}
+                            onChange={onChange}
+                        />
                     </View>
                 );
             }
 
             return null;
         },
-        [data.choose, selected]
+        [data.choose, selected, handleToggle]
     );
 
     return (

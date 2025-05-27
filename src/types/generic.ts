@@ -35,7 +35,13 @@ interface GenericCharacter<
     gameType: Config['gameType'];
     abilities: Config['abilities'];
     race: Config['race'];
+    selectedRaceElements?: Config extends { selectedRaceElements: any }
+        ? Config['selectedRaceElements']
+        : never;
     className: Config['className'];
+    selectedClassElements?: Config extends { selectedClassElements: any }
+        ? Config['selectedClassElements']
+        : never;
     background: Config['background'];
     // Cause DnD has background as talent this is actually the user imagined background
     characterImg?: string;

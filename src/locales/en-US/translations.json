@@ -364,8 +364,86 @@
         "description": "You grew up on the streets. You know where to hide and when your puppy dog eyes will earn you a hot meal.\n\nWhy were you on the streets? Were you a runaway? An orphan? Or just an adventurous kid who stayed out late?"
       }
     },
+    "skills": {
+      "acrobatics": {
+        "index": "acrobatics",
+        "name": "Acrobatics"
+      },
+      "animal-handling": {
+        "index": "animal-handling",
+        "name": "Animal Handling"
+      },
+      "arcana": {
+        "index": "arcana",
+        "name": "Arcana"
+      },
+      "athletics": {
+        "index": "athletics",
+        "name": "Athletics"
+      },
+      "deception": {
+        "index": "deception",
+        "name": "Deception"
+      },
+      "history": {
+        "index": "history",
+        "name": "History"
+      },
+      "insight": {
+        "index": "insight",
+        "name": "Insight"
+      },
+      "intimidation": {
+        "index": "intimidation",
+        "name": "Intimidation"
+      },
+      "investigation": {
+        "index": "investigation",
+        "name": "Investigation"
+      },
+      "medicine": {
+        "index": "medicine",
+        "name": "Medicine"
+      },
+      "nature": {
+        "index": "nature",
+        "name": "Nature"
+      },
+      "perception": {
+        "index": "perception",
+        "name": "Perception"
+      },
+      "performance": {
+        "index": "performance",
+        "name": "Performance"
+      },
+      "persuasion": {
+        "index": "persuasion",
+        "name": "Persuasion"
+      },
+      "religion": {
+        "index": "religion",
+        "name": "Religion"
+      },
+      "sleight-of-hand": {
+        "index": "sleight-of-hand",
+        "name": "Sleight of Hand"
+      },
+      "stealth": {
+        "index": "stealth",
+        "name": "Stealth"
+      },
+      "survival": {
+        "index": "survival",
+        "name": "Survival"
+      }
+    },
     "overview": {
       "accordion": {
+        "label": {
+          "charInformation": "Character description: ",
+          "additionalBackground": "Additional informations: "
+        },
         "charcacterInformations": "Character Informations",
         "equipments": "Equipements",
         "characteristics": "Characteristics",

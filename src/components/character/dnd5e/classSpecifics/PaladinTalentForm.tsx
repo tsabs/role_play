@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { calculateModifier } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
+import { genericClassFormStyles } from './genericStyle';
 
 interface PaladinTalentFormProps {
     level: number;
@@ -11,6 +12,8 @@ interface PaladinTalentFormProps {
 }
 
 const getLayOnHands = (level: number): number => level * 5;
+
+const titleSize = 16;
 
 const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
     const { t } = useTranslation();
@@ -21,9 +24,11 @@ const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
-                style={styles.title}
+                style={genericClassFormStyles.title}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t('character.classes.paladin.talents.layOnHandsTitle')}
             />
             <CustomText
@@ -39,7 +44,9 @@ const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.paladin.talents.divineSmiteTitle'
                         )}
@@ -52,38 +59,12 @@ const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
                 </>
             )}
 
-            {level >= 3 && (
-                <>
-                    <CustomText
-                        style={styles.sectionTitle}
-                        text={t(
-                            'character.classes.paladin.talents.divineHealthTitle'
-                        )}
-                    />
-                    <CustomText
-                        text={t(
-                            'character.classes.paladin.talents.divineHealthDescription'
-                        )}
-                    />
-
-                    <CustomText
-                        style={styles.sectionTitle}
-                        text={t(
-                            'character.classes.paladin.talents.sacredOathTitle'
-                        )}
-                    />
-                    <CustomText
-                        text={t(
-                            'character.classes.paladin.talents.sacredOathDescription'
-                        )}
-                    />
-                </>
-            )}
-
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.paladin.talents.spellcastingTitle'
                         )}
@@ -96,14 +77,40 @@ const PaladinTalentForm = ({ level, abilities }: PaladinTalentFormProps) => {
                     />
                 </>
             )}
+
+            {level >= 3 && (
+                <>
+                    <CustomText
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
+                        text={t(
+                            'character.classes.paladin.talents.divineHealthTitle'
+                        )}
+                    />
+                    <CustomText
+                        text={t(
+                            'character.classes.paladin.talents.divineHealthDescription'
+                        )}
+                    />
+
+                    <CustomText
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
+                        text={t(
+                            'character.classes.paladin.talents.sacredOathTitle'
+                        )}
+                    />
+                    <CustomText
+                        text={t(
+                            'character.classes.paladin.talents.sacredOathDescription'
+                        )}
+                    />
+                </>
+            )}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default PaladinTalentForm;

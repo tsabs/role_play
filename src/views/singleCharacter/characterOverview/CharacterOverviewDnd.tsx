@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
-import { List } from 'react-native-paper';
+import { Divider, List } from 'react-native-paper';
 
 import SafeView from '../../../components/library/SafeView';
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
@@ -22,9 +22,16 @@ import { ABILITIES } from '../../../components/character/form/dnd5e/constants';
 import { useAppDispatch } from '../../../store';
 import CharacterTalentClassFormProvider from '../../../components/character/CharacterTalentClassFormProvider';
 import CustomSelectionButton from '../../../components/atom/CustomSelectionButton';
-import { maxLevels } from '../../../utils/d2d5';
+import {
+    maxLevels,
+    mergeAbilityBonuses,
+    remainingPoints,
+    transformRaceAbilities,
+} from '../../../utils/d2d5';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../../utils/utils';
 import TalentClassForm from '../../../components/character/form/dnd5e/TalentClassForm';
+import SkillsList from '../../../components/character/form/dnd5e/SkillsList';
+import VirtualizedScrollView from '../../../components/library/VirtualizedScrollView';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;
@@ -43,7 +50,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     );
     const [classData, setClassData] = useState(undefined);
 
-    console.log(character);
+    // console.log(character);
     const [isEditMode, setIsEditMode] = useState(false);
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [level, setLevel] = useState(character.level);
@@ -76,7 +83,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         await loadClassData(character.gameType, character.className.index)
             .then((res) => {
                 setClassData(res);
-                console.log('class data : ', res);
+                // console.log('class data : ', res);
             })
             .catch((err) => console.log('error getting class data', err));
     }, [character.gameType, character.className]);
@@ -90,7 +97,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             character.level.toString()
         )
             .then((res) => {
-                console.log('talent result : ', res);
+                // console.log('talent result : ', res);
             })
             .catch((err) =>
                 console.log('error getting level specific class talent', err)
@@ -109,28 +116,28 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         }
     }, [character?.abilities]);
 
-    const displayAbilityForm = useCallback(() => {
-        return (
-            <AbilityForm<DnDAbility>
-                abilities={
-                    (selectedAbilities as Record<DnDAbility, number>) ||
-                    ABILITIES
-                }
-                onChange={handleUpdateCharacter}
-                onSaveEdit={handleSaveEdit}
-                isEditModeEnabled={true}
-                onEditMode={handleEditMode}
-                isEditMode={isEditMode}
-            />
-        );
-    }, [isEditMode, selectedAbilities, handleEditMode, handleUpdateCharacter]);
-
     const handleSelectLevel = useCallback(async (value: string | number) => {
         const newLevel = Number(value);
         setLevel(newLevel);
         const updatedCharacter = { ...character, level: newLevel };
         await callUpdateCharacter(updatedCharacter, dispatch);
     }, []);
+
+    const transformedAbilities = useMemo(
+        () => transformRaceAbilities(character?.race?.ability_bonuses),
+        [character?.race?.ability_bonuses]
+    );
+
+    const mergeAbilities = useMemo(
+        () =>
+            mergeAbilityBonuses(
+                character?.selectedRaceElements?.raceChoices?.[
+                    `${character?.race?.index}-skills`
+                ] || [],
+                transformedAbilities
+            ),
+        [character?.selectedRaceElements?.raceChoices, transformedAbilities]
+    );
 
     const accordions = useMemo(
         () => [
@@ -140,9 +147,22 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 content: (
                     <Fragment>
                         <View>
+                            <CustomText
+                                fontWeight="bold"
+                                text={t(
+                                    'character.overview.accordion.label.charInformation'
+                                )}
+                            />
                             <CustomText text={character.description} />
                         </View>
+                        <Divider style={{ marginVertical: theme.space.md }} />
                         <View>
+                            <CustomText
+                                fontWeight="bold"
+                                text={t(
+                                    'character.overview.accordion.label.additionalBackground'
+                                )}
+                            />
                             <CustomText text={character.additionalBackground} />
                         </View>
                     </Fragment>
@@ -167,12 +187,28 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 4,
                 title: 'character.overview.accordion.characteristics',
-                content: displayAbilityForm(),
+                content: (
+                    <AbilityForm<DnDAbility>
+                        abilities={
+                            (selectedAbilities as Record<DnDAbility, number>) ||
+                            ABILITIES
+                        }
+                        onChange={handleUpdateCharacter}
+                        onSaveEdit={handleSaveEdit}
+                        isEditModeEnabled={true}
+                        onEditMode={handleEditMode}
+                        isEditMode={isEditMode}
+                        abilityBonuses={mergeAbilities}
+                        remainingPoints={remainingPoints(
+                            selectedAbilities || ABILITIES
+                        )}
+                    />
+                ),
             },
             {
                 id: 5,
                 title: 'character.overview.accordion.skills',
-                content: <CustomText text="Will come soon" />,
+                content: <SkillsList character={character} />,
             },
             {
                 id: 6,
@@ -185,7 +221,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             character.additionalBackground,
             level,
             selectedAbilities,
-            displayAbilityForm,
+            handleUpdateCharacter,
+            handleSaveEdit,
+            handleEditMode,
+            isEditMode,
+            mergeAbilities,
         ]
     );
 
@@ -204,7 +244,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
 
     return (
         <SafeView parentStyles={{ flex: 1, padding: 0 }} title={character.name}>
-            <ScrollView
+            <VirtualizedScrollView
                 scrollEnabled={true}
                 contentContainerStyle={{ paddingBottom: tabBarHeight }}
             >
@@ -252,7 +292,12 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                                     );
                                     setCurrentForm(accordion.id.toString());
                                 }}
-                                title={<CustomText text={t(accordion.title)} />}
+                                title={
+                                    <CustomText
+                                        fontSize={16}
+                                        text={t(accordion.title)}
+                                    />
+                                }
                                 id={accordion.id}
                             >
                                 <Animated.View
@@ -265,7 +310,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                         );
                     })}
                 </List.AccordionGroup>
-            </ScrollView>
+            </VirtualizedScrollView>
         </SafeView>
     );
 };

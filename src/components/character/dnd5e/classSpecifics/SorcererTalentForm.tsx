@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { calculateModifier } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
+import { genericClassFormStyles } from './genericStyle';
 
 interface SorcererTalentFormProps {
     level: number;
@@ -11,6 +12,8 @@ interface SorcererTalentFormProps {
 }
 
 const getSorceryPoints = (level: number) => level;
+
+const titleSize = 16;
 
 const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
     const { t } = useTranslation();
@@ -25,9 +28,11 @@ const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
-                style={styles.title}
+                style={genericClassFormStyles.title}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t('character.classes.sorcerer.talents.spellcastingTitle')}
             />
             <CustomText
@@ -43,7 +48,9 @@ const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
             />
 
             <CustomText
-                style={styles.sectionTitle}
+                style={genericClassFormStyles.sectionTitle}
+                fontSize={titleSize}
+                fontWeight="bold"
                 text={t(
                     'character.classes.sorcerer.talents.sorceryPointsTitle'
                 )}
@@ -63,7 +70,9 @@ const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
             {level >= 3 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.sorcerer.talents.metamagicTitle'
                         )}
@@ -78,11 +87,5 @@ const SorcererTalentForm = ({ level, abilities }: SorcererTalentFormProps) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default SorcererTalentForm;

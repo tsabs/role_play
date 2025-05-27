@@ -9,16 +9,12 @@ export const styles = (
     StyleSheet.create({
         container: {
             paddingHorizontal: spacer,
-            // marginBottom: isSelected ? 300 : 0,
-            // paddingBottom: 500,
-            // backgroundColor: theme.colors.primary,
         },
         subTitle: {
             fontSize: theme.fontSize.extraLarge,
             marginTop: spacer,
         },
         subText: {
-            fontSize: theme.fontSize.extraLarge,
             marginTop: spacer,
         },
         selectedValue: {
@@ -28,10 +24,10 @@ export const styles = (
             alignItems: 'center',
         },
         choiceButton: {
-            padding: 10,
+            padding: theme.space.l,
             backgroundColor: theme.colors.secondary25,
             borderRadius: theme.radius.sm,
-            marginHorizontal: theme.space.xs,
+            margin: theme.space.xs,
         },
         selected: {
             alignSelf: 'flex-start',
@@ -45,10 +41,9 @@ export const styles = (
             backgroundColor: isDisabled
                 ? theme.colors.secondary25
                 : theme.colors.primary,
-            padding: theme.space.xxl,
+            padding: theme.space.l,
             borderRadius: theme.radius.md,
             marginTop: theme.space.xxxl,
             alignItems: 'center',
         },
-        saveButtonText: { color: 'white', fontSize: 18 },
     });

@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../atom/CustomText';
 import { calculateModifier } from '../../../../utils/d2d5';
+import { genericClassFormStyles } from './genericStyle';
 
 interface BardTalentFormProps {
     level: number;
@@ -17,6 +18,8 @@ const getInspirationDie = (level: number) => {
     return '1d6';
 };
 
+const titleTextSize = 16;
+
 const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
     const { t } = useTranslation();
     const chaMod = useMemo(
@@ -28,12 +31,14 @@ const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
     const inspirationDie = useMemo(() => getInspirationDie(level), [level]);
 
     return (
-        <View style={styles.container}>
+        <View style={genericClassFormStyles.container}>
             <CustomText
                 text={t(
                     'character.classes.bard.talents.bardicInspirationTitle'
                 )}
-                style={styles.title}
+                fontSize={titleTextSize}
+                fontWeight="bold"
+                style={genericClassFormStyles.title}
             />
             <CustomText
                 text={t(
@@ -56,7 +61,9 @@ const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        style={genericClassFormStyles.sectionTitle}
+                        fontSize={titleTextSize}
+                        fontWeight="bold"
                         text={t(
                             'character.classes.bard.talents.songOfRestTitle'
                         )}
@@ -72,7 +79,9 @@ const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
             {level >= 2 && (
                 <>
                     <CustomText
-                        style={styles.sectionTitle}
+                        fontSize={titleTextSize}
+                        fontWeight="bold"
+                        style={genericClassFormStyles.sectionTitle}
                         text={t(
                             'character.classes.bard.talents.jackOfAllTradesTitle'
                         )}
@@ -87,11 +96,5 @@ const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { padding: 10 },
-    title: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-    sectionTitle: { marginTop: 12, fontWeight: 'bold' },
-});
 
 export default BardTalentForm;
