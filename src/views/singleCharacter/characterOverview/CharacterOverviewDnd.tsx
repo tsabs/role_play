@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 
 import SafeView from '../../../components/library/SafeView';
@@ -9,10 +9,9 @@ import { theme } from '../../../../style/theme';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import CustomText from '../../../components/atom/CustomText';
-import { Ability, Character, GAME_TYPE } from '../../../types/generic';
+import { Ability } from '../../../types/generic';
 import AbilityForm from '../../../components/character/form/generic/AbilityForm';
 import { DnDAbility, DnDCharacter } from '../../../types/games/d2d5e';
-import { WarHammerAbility } from '../../../types/games/warHammer';
 import {
     callUpdateCharacter,
     loadClassData,
@@ -20,7 +19,6 @@ import {
 } from '../../../store/character/slice';
 import { ABILITIES } from '../../../components/character/form/dnd5e/constants';
 import { useAppDispatch } from '../../../store';
-import CharacterTalentClassFormProvider from '../../../components/character/CharacterTalentClassFormProvider';
 import CustomSelectionButton from '../../../components/atom/CustomSelectionButton';
 import {
     maxLevels,

@@ -3,12 +3,10 @@ import {
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
-    TouchableOpacity,
     ViewStyle,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Text, TextInput } from 'react-native-paper';
-import Animated, { SlideInLeft } from 'react-native-reanimated';
+import { TextInput } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,17 +32,14 @@ import Separator from '../../../library/Separator';
 import { callAddCharacter } from '../../../../store/character/slice';
 import { useDispatch } from 'react-redux';
 import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
-import CustomText from '../../../atom/CustomText';
 import AbilityForm from '../generic/AbilityForm';
 import { ABILITIES } from './constants';
 import { Ability, GAME_TYPE } from '../../../../types/generic';
 import CustomSelectionButton from '../../../atom/CustomSelectionButton';
 import {
-    getPointBuyCost,
     maxLevels,
     mergeAbilityBonuses,
     remainingPoints,
-    TOTAL_BUY_POINTS,
     transformRaceAbilities,
 } from '../../../../utils/d2d5';
 import ProficiencySelector from './proficiencies/ProficiencySelector';
@@ -79,7 +74,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [selectedAbility, setSelectedAbility] =
         useState<Record<DnDAbility, number>>(ABILITIES);
     const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
-    const [traits, setTraits] = useState<ElementIdentification[]>([]);
     const [selectedClass, setSelectedClass] = useState<string>(null);
     const [selectProficiencies, setSelectProficiencies] = useState<
         Record<string, { index: string; bonus?: number }[]>
@@ -130,7 +124,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             groupId: string,
             selectedIndexes: { index: string; bonus?: number }[]
         ) => {
-            // console.log('handke group class selection : ', selectedIndexes);
             setSelectProficiencies((prev) => ({
                 ...prev,
                 [groupId]: selectedIndexes,
@@ -145,9 +138,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             selectedIndexes: { index: string; bonus?: number }[]
         ) => {
             setRaceSelectionOptions((prev) => {
-                if (prev[groupId]) {
-                    // console.log('cooool', prev[groupId]);
-                }
                 return {
                     ...prev,
                     [groupId]: selectedIndexes,

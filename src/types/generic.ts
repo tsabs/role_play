@@ -1,11 +1,5 @@
 import { Note } from './note';
-import {
-    DnDAbility,
-    DndBackground,
-    DnDCharacter,
-    DndClass,
-    DndRace,
-} from './games/d2d5e';
+import { DnDAbility, DnDCharacter } from './games/d2d5e';
 import { WarHammerAbility, WarHammerCharacter } from './games/warHammer';
 
 enum GAME_TYPE {

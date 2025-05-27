@@ -86,7 +86,7 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                     <Animated.View
                         entering={FadeInLeft.delay(columnIndex * 100)}
                     >
-                        {column.map((item: any, rowIndex: number) => {
+                        {column.map((item: any) => {
                             const itemKey = item?.slug || item.index;
                             const isSelected = selectedName === itemKey;
 

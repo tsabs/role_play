@@ -36,7 +36,7 @@ interface SkillsListProps {
 
 const SkillsList: FC<SkillsListProps> = ({ character }) => {
     const renderItem = useCallback(
-        ({ item: [skill, ability], index }) => {
+        ({ item: [skill, ability] }) => {
             const transformBonuses = transformRaceAbilities(
                 character?.race?.ability_bonuses || []
             );
