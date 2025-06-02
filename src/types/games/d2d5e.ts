@@ -43,6 +43,7 @@ interface OptionChoice {
 interface ProficiencyOption {
     choose: number;
     desc?: string;
+    desc_fr?: string;
     from: {
         options: OptionChoice[];
         option_set_type: string;

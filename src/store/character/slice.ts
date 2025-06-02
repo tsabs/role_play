@@ -175,7 +175,7 @@ export const callUpdateCharacter = async (
                 text1: 'Character added successfully!',
             });
 
-            console.log('updatedCharacters : ', updatedCharacters);
+            console.log('updatedCharacter : ', character);
         })
         .catch((error) => console.error('Error updating character:', error));
 };

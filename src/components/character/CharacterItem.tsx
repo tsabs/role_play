@@ -17,7 +17,7 @@ const CharacterItem = ({ character, index }: CharacterItemProps) => {
             case GAME_TYPE.WAR_HAMMER:
                 return <WHCharacterItem character={character} index={index} />;
         }
-    }, []);
+    }, [character, index]);
 
     return renderCharacterItem();
 };

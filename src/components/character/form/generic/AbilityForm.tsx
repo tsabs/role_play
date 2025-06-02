@@ -6,6 +6,7 @@ import CustomText from '../../../atom/CustomText';
 import { theme } from '../../../../../style/theme';
 import { Ability } from '../../../../types/generic';
 import { ABILITIES } from '../dnd5e/constants';
+import { useTranslation } from 'react-i18next';
 
 interface OnSaveAbilities<T extends Ability> {
     [key: string]: Record<T, number>;
@@ -34,6 +35,7 @@ const AbilityForm = <T extends Ability>({
     remainingPoints,
     level = 1,
 }: AbilityFormProps<T>) => {
+    const { t } = useTranslation();
     const [selectedAbility, setSelectedAbility] =
         useState<Record<T, number>>(abilities);
     const handleChange = useCallback(
@@ -50,8 +52,6 @@ const AbilityForm = <T extends Ability>({
             onSaveEdit({ abilities: selectedAbility });
         }
     }, [isEditModeEnabled, selectedAbility, onSaveEdit]);
-
-    console.log(abilityBonuses, 'abilityBonuses');
 
     return (
         <View
@@ -122,7 +122,9 @@ const AbilityForm = <T extends Ability>({
                                             mode="outlined"
                                             keyboardType="numeric"
                                             disabled={true}
-                                            label={`${abilityKey}`}
+                                            label={t(
+                                                `character.abilities.${abilityKey}`
+                                            )}
                                             value={
                                                 abilityValue === 0
                                                     ? ''
@@ -143,7 +145,9 @@ const AbilityForm = <T extends Ability>({
                                     <Fragment>
                                         <CustomText
                                             style={styles.abilityKey}
-                                            text={`${abilityKey}`}
+                                            text={t(
+                                                `character.abilities.${abilityKey}`
+                                            )}
                                         />
                                         <CustomText
                                             style={styles.abilityDisplayValue}

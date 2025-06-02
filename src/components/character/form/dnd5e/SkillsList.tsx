@@ -4,10 +4,12 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { AbilityScores, DnDCharacter } from '../../../../types/games/d2d5e';
 import {
     calculateModifier,
+    getProficiencyBonus,
     mergeAbilityBonuses,
     transformRaceAbilities,
 } from '../../../../utils/d2d5';
 import CustomText from '../../../atom/CustomText';
+import { theme } from '../../../../../style/theme';
 
 const SKILLS: { [key: string]: keyof AbilityScores } = {
     acrobatics: 'DEX',
@@ -32,9 +34,10 @@ const SKILLS: { [key: string]: keyof AbilityScores } = {
 
 interface SkillsListProps {
     character: DnDCharacter;
+    level: number;
 }
 
-const SkillsList: FC<SkillsListProps> = ({ character }) => {
+const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
     const renderItem = useCallback(
         ({ item: [skill, ability] }) => {
             const transformBonuses = transformRaceAbilities(
@@ -50,10 +53,34 @@ const SkillsList: FC<SkillsListProps> = ({ character }) => {
                 mergeBonuses.find(
                     (aBonus) => aBonus.index === ability.toLowerCase()
                 )?.bonus || 0;
-            const mod = calculateModifier(
-                character.abilities[ability] + abilityBonus
-            );
+            const proficientSkills =
+                character?.selectedClassElements?.classChoices?.[
+                    `${character?.className?.index}-class-0`
+                ]?.some((proficientSkill) => proficientSkill?.index === skill);
+
+            const profBonus = getProficiencyBonus(level);
+            const mod =
+                calculateModifier(character.abilities[ability] + abilityBonus) +
+                (proficientSkills ? profBonus : 0);
             const sign = mod >= 0 ? '+' : '';
+            const displayColor = () => {
+                switch (mod) {
+                    case 0:
+                        return theme.colors.textSecondary;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        return theme.colors.success;
+                    case -1:
+                    case -2:
+                        return theme.colors.danger;
+                    default:
+                        return theme.colors.textPrimary;
+                }
+            };
             return (
                 <View key={skill} style={styles.skillRow}>
                     <CustomText
@@ -66,17 +93,26 @@ const SkillsList: FC<SkillsListProps> = ({ character }) => {
                             fontSize={16}
                             fontWeight="bold"
                             text={sign}
+                            color={theme.colors.textSecondary}
                         />
                         <CustomText
                             fontSize={16}
                             fontWeight="bold"
                             text={`${mod}`}
+                            color={displayColor()}
                         />
                     </View>
                 </View>
             );
         },
-        [character.abilities]
+        [
+            level,
+            character.race,
+            character.selectedRaceElements,
+            character.className,
+            character.selectedClassElements,
+            character.abilities,
+        ]
     );
 
     return (
@@ -88,15 +124,18 @@ const SkillsList: FC<SkillsListProps> = ({ character }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8,
+        padding: theme.space.md,
     },
     skillRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 4,
+        marginBottom: theme.space.sm,
+        borderBottomWidth: 1,
+        borderColor: theme.colors.secondary50,
     },
     skillName: {
         textTransform: 'capitalize',
+        paddingBottom: theme.space.md,
     },
 });
 

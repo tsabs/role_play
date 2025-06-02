@@ -13,6 +13,7 @@ import {
 } from '../../../../../types/games/d2d5e';
 import { theme } from '../../../../../../style/theme';
 import CustomText from '../../../../atom/CustomText';
+import { useTranslation } from 'react-i18next';
 
 type AbilityOption = {
     ability_score: ElementIdentification;
@@ -39,6 +40,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     onChange,
     groupId,
 }) => {
+    const { t } = useTranslation();
     const [selected, setSelected] = useState<
         { index: string; bonus?: number }[]
     >([]);
@@ -73,8 +75,6 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                     ? ref.item.index.split('skill-')[1]
                     : ref.item.index;
 
-                // console.log('ref', ref);
-
                 const isChecked = !!selected.find((i) => i.index === refOption);
                 // const isGroupIdAndIsCheck = data.
 
@@ -84,10 +84,17 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                     // console.log('data', data);
                     // console.log('selected', selected);
                 }
+
                 return (
                     <Checkbox.Item
                         key={ref.item.index}
-                        label={ref.item.name}
+                        label={
+                            ref.item.index.includes('skill-')
+                                ? t(`character.skills.${refOption}.name`)
+                                : t(
+                                      `character.starting_selections.${refOption}.name`
+                                  )
+                        }
                         color={theme.colors.primary}
                         status={isChecked ? 'checked' : 'unchecked'}
                         onPress={() => handleToggle(refOption)}
@@ -104,7 +111,9 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                 return (
                     <Checkbox.Item
                         key={`race-ability-bonus-${ref.ability_score.index}`}
-                        label={ref.ability_score.name}
+                        label={t(
+                            `character.abilities.${ref.ability_score.name}`
+                        )}
                         color={theme.colors.primary}
                         status={isChecked ? 'checked' : 'unchecked'}
                         onPress={() =>
@@ -144,7 +153,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                             numberOfLines={3}
                             fontSize={16}
                             fontWeight="bold"
-                            text={data.desc}
+                            text={data?.desc_fr ? data.desc_fr : data.desc}
                         />
                         <CustomText
                             fontSize={16}

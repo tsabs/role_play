@@ -48,7 +48,6 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     );
     const [classData, setClassData] = useState(undefined);
 
-    // console.log(character);
     const [isEditMode, setIsEditMode] = useState(false);
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [level, setLevel] = useState(character.level);
@@ -74,7 +73,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             const updatedCharacter = { ...character, ...abilities };
             await callUpdateCharacter(updatedCharacter, dispatch);
         },
-        []
+        [character]
     );
 
     const handleClassData = useCallback(async () => {
@@ -100,7 +99,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             .catch((err) =>
                 console.log('error getting level specific class talent', err)
             );
-    }, []);
+    }, [character?.className, character?.gameType, character?.level]);
 
     useEffect(() => {
         Promise.all([handleClassSpecificTalent(), handleClassData()]);
@@ -114,12 +113,15 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         }
     }, [character?.abilities]);
 
-    const handleSelectLevel = useCallback(async (value: string | number) => {
-        const newLevel = Number(value);
-        setLevel(newLevel);
-        const updatedCharacter = { ...character, level: newLevel };
-        await callUpdateCharacter(updatedCharacter, dispatch);
-    }, []);
+    const handleSelectLevel = useCallback(
+        async (value: string | number) => {
+            const newLevel = Number(value);
+            setLevel(newLevel);
+            const updatedCharacter = { ...character, level: newLevel };
+            await callUpdateCharacter(updatedCharacter, dispatch);
+        },
+        [character, callUpdateCharacter, dispatch]
+    );
 
     const transformedAbilities = useMemo(
         () => transformRaceAbilities(character?.race?.ability_bonuses),
@@ -206,7 +208,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 5,
                 title: 'character.overview.accordion.skills',
-                content: <SkillsList character={character} />,
+                content: <SkillsList character={character} level={level} />,
             },
             {
                 id: 6,
@@ -215,8 +217,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             },
         ],
         [
-            character.description,
-            character.additionalBackground,
+            character,
             level,
             selectedAbilities,
             handleUpdateCharacter,

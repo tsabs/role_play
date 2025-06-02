@@ -4,6 +4,14 @@
     "titleButtonText": "Créer un personnage"
   },
   "character": {
+    "abilities": {
+      "STR": "FOR",
+      "DEX": "DEX",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "SAG",
+      "CHA": "CHA"
+    },
     "removeCharacter": "Supprmier ce personnage: {{name}} ?",
     "removeCharacterDescription": "Êtes-vous sûr de vouloir supprimer ce personnage ? Cette action est irréversible.",
     "races": {
@@ -435,6 +443,125 @@
       "survival": {
         "index": "survival",
         "name": "Survie"
+      }
+    },
+    "starting_selections": {
+      "draconic-ancestry-black": {
+        "name": "Ancetre draconique (noir)"
+      },
+      "draconic-ancestry-blue": {
+          "name": "Ancetre draconique (bleu)"
+      },
+      "draconic-ancestry-brass": {
+        "name": "Ancetre draconique (laiton)"
+      },
+      "draconic-ancestry-bronze": {
+        "name": "Ancetre draconique (bronze)"
+      },
+      "draconic-ancestry-copper": {
+        "name": "Ancetre draconique (cuivre)"
+      },
+      "draconic-ancestry-gold": {
+        "name": "Ancetre draconique (or)"
+      },
+      "draconic-ancestry-green": {
+        "name": "Ancetre draconique (vert)"
+      },
+      "draconic-ancestry-red": {
+        "name": "Ancetre draconique (rouge)"
+      },
+      "draconic-ancestry-silver": {
+        "name": "Ancetre draconique (argent)"
+      },
+      "draconic-ancestry-white": {
+        "name": "Ancetre draconique (blanc)"
+      },
+      "viol": {
+        "name": "viole"
+      },
+      "bagpipes": {
+        "name": "cornemuse"
+      },
+      "drum": {
+        "name": "tambour"
+      },
+      "dulcimer":{
+        "name": "tympanon"
+      },
+      "flute": {
+        "name": "flûte"
+      },
+      "lute":{
+        "name": "luth"
+      },
+      "lyre": {
+        "name": "lyre"
+      },
+      "horn":{
+        "name": "cor"
+      },
+      "pan-flute": {
+        "name": "flûte de Pan"
+      },
+      "shawm": {
+        "name": "chalemie"
+      },
+      "alchemists-supplies": {
+        "name": "Fournitures d'alchimiste"
+      },
+      "brewers-supplies": {
+        "name": "Fournitures de brasseur"
+      },
+      "calligraphers-supplies": {
+        "name": "Fournitures de calligraphe"
+      },
+      "carpenters-tools": {
+        "name": "Outils de charpentier"
+      },
+      "cartographers-tools": {
+        "name": "Outils de cartographe"
+      },
+      "cobblers-tools": {
+        "name": "Outils de cordonnier"
+      },
+      "cooks-utensils": {
+        "name": "Ustensiles de cuisinier"
+      },
+      "glassblowers-tools": {
+        "name": "Outils de souffleur de verre"
+      },
+      "jewelers-tools": {
+        "name": "Outils de joaillier"
+      },
+      "leatherworkers-tools": {
+        "name": "Outils de travailleur du cuir"
+      },
+      "masons-tools": {
+        "name": "Outils de maçon"
+      },
+      "painters-supplies": {
+        "name": "Fournitures de peintre"
+      },
+      "potters-tools": {
+        "name": "Outils de potier"
+      },
+      "smiths-tools": {
+        "name": "Outils de forgeron"
+      },
+      "tinkers-tools": {
+        "name": "Outils de bricoleur"
+      },
+      "weavers-tools": {
+        "name": "Outils de tisserand"
+      },
+      "woodcarvers-tools": {
+        "name": "Outils de sculpteur sur bois"
+      },
+      "disguise-kit": {
+        "name": "Kit de déguisement"
+      },
+      "forgery-kit": {
+        "name": "Kit de contrefaçon"
       }
     },
     "overview": {

@@ -72,7 +72,8 @@ export const mergeAbilityBonuses = (
 
 const calculateModifier = (score: number) => Math.floor((score - 10) / 2);
 
-const getProficiencyBonus = (level: number) => Math.floor((level - 1) / 4) + 2;
+export const getProficiencyBonus = (level: number) =>
+    Math.floor((level - 1) / 4) + 2;
 
 const getSkillModifier = (
     skill: SkillProficiency,

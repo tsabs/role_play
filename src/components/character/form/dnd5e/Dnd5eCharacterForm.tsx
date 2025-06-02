@@ -225,7 +225,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     );
 
     // console.log('select proficiencies : ', selectProficiencies);
-    console.log('race proficiencies : ', raceSelectionOptions);
+    // console.log('race proficiencies : ', raceSelectionOptions);
 
     const selectedClassElements = useMemo(() => {
         return {
@@ -239,7 +239,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         };
     }, [raceSelectionOptions]);
 
-    console.log('selected race proficiencies : ', selectedRaceElements);
+    // console.log('selected race proficiencies : ', selectedRaceElements);
 
     const transformedAbilities = useMemo(
         () => transformRaceAbilities(selectedObjectRace?.ability_bonuses || []),
@@ -255,6 +255,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             ),
         [selectedRaceElements?.raceChoices, transformedAbilities]
     );
+
+    // console.log('backgrounds: ', backgrounds);
 
     const isSaveCharacterDisabled = useMemo(
         () =>
@@ -279,12 +281,16 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             styles={styles(spacer, isKeyboardVisible).container}
         >
             <KeyboardAvoidingView behavior={'padding'} enabled>
-                <CustomSelectionButton
-                    items={maxLevels}
-                    placeHolder={'Choisissez un niveau'}
-                    onSelect={(value) => setLevel(value)}
-                />
                 <VirtualizedScrollView style={scrollViewStyle}>
+                    <CustomSelectionButton
+                        items={maxLevels}
+                        placeHolder={'Choisissez un niveau'}
+                        onSelect={(value) => setLevel(value)}
+                        preSelectedValue={{
+                            label: level.toString(),
+                            value: level,
+                        }}
+                    />
                     {textDisplay.map(({ label, value, setValue }, index) => {
                         return (
                             <Fragment key={`${label}-${index}`}>

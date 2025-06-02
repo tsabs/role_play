@@ -44,7 +44,7 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
 
     const handleRemoveCharacter = useCallback(() => {
         callRemoveCharacter(character.userEmail, character.id, dispatch);
-    }, []);
+    }, [character.userEmail, character.id, dispatch]);
 
     return (
         <Animated.View

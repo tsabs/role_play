@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useCallback, useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 import { theme } from '../../../style/theme';
@@ -33,11 +33,14 @@ const CustomSelectionButton = <T = number,>({
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
 
-    const handleSelect = (item: { label: string; value: T }) => {
-        setSelectedItem(item);
-        onSelect(item.value);
-        closeMenu();
-    };
+    const handleSelect = useCallback(
+        (item: { label: string; value: T }) => {
+            setSelectedItem(item);
+            onSelect(item.value);
+            closeMenu();
+        },
+        [onSelect, closeMenu]
+    );
 
     return (
         <View style={customStyle ? customStyle : styles.container}>

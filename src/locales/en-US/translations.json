@@ -4,6 +4,14 @@
     "titleButtonText": "Create character"
   },
   "character": {
+    "abilities": {
+      "STR": "STR",
+      "DEX": "DEX",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "WIS",
+      "CHA": "CHA"
+    },
     "removeCharacter": "Remove this character: {{name}} ?",
     "removeCharacterDescription": "Are you sure you want to remove this character? This action cannot be undone.",
     "races": {
@@ -436,6 +444,125 @@
       "survival": {
         "index": "survival",
         "name": "Survival"
+      }
+    },
+    "starting_selections": {
+      "draconic-ancestry-black": {
+        "name": "Draconic ancestry (black)"
+      },
+      "draconic-ancestry-blue": {
+        "name": "Draconic ancestry (blue)"
+      },
+      "draconic-ancestry-brass": {
+        "name": "Draconic ancestry (brass)"
+      },
+      "draconic-ancestry-bronze": {
+        "name": "Draconic ancestry (bronze)"
+      },
+      "draconic-ancestry-copper": {
+        "name": "Draconic ancestry (cooper)"
+      },
+      "draconic-ancestry-gold": {
+        "name": "Draconic ancestry (or)"
+      },
+      "draconic-ancestry-green": {
+        "name": "Draconic ancestry (green )"
+      },
+      "draconic-ancestry-red": {
+        "name": "Draconic ancestry (red)"
+      },
+      "draconic-ancestry-silver": {
+        "name": "Draconic ancestry (silver)"
+      },
+      "draconic-ancestry-white": {
+        "name": "Draconic ancestry (white)"
+      },
+      "viol": {
+        "name": "Viol"
+      },
+      "bagpipes": {
+        "name": "Bagpipes"
+      },
+      "drum": {
+        "name": "Drum"
+      },
+      "dulcimer": {
+        "name": "Dulcimer"
+      },
+      "flute": {
+        "name": "Flute"
+      },
+      "lute": {
+        "name": "Lute"
+      },
+      "lyre": {
+        "name": "Lyre"
+      },
+      "horn": {
+        "name": "Horn"
+      },
+      "pan-flute": {
+        "name": "Pan flute"
+      },
+      "shawm": {
+        "name": "Shawm"
+      },
+      "alchemists-supplies": {
+        "name": "Alchemist's Supplies"
+      },
+      "brewers-supplies": {
+        "name": "Brewer's Supplies"
+      },
+      "calligraphers-supplies": {
+        "name": "Calligrapher's Supplies"
+      },
+      "carpenters-tools": {
+        "name": "Carpenter's Tools"
+      },
+      "cartographers-tools": {
+        "name": "Cartographer's Tools"
+      },
+      "cobblers-tools": {
+        "name": "Cobbler's Tools"
+      },
+      "cooks-utensils": {
+        "name": "Cook's utensils"
+      },
+      "glassblowers-tools": {
+        "name": "Glassblower's Tools"
+      },
+      "jewelers-tools": {
+        "name": "Jeweler's Tools"
+      },
+      "leatherworkers-tools": {
+        "name": "Leatherworker's Tools"
+      },
+      "masons-tools": {
+        "name": "Mason's Tools"
+      },
+      "painters-supplies": {
+        "name": "Painter's Supplies"
+      },
+      "potters-tools": {
+        "name": "Potter's Tools"
+      },
+      "smiths-tools": {
+        "name": "Smith's Tools"
+      },
+      "tinkers-tools": {
+        "name": "Tinker's Tools"
+      },
+      "weavers-tools": {
+        "name": "Weaver's Tools"
+      },
+      "woodcarvers-tools": {
+        "name": "Woodcarver's Tools"
+      },
+      "disguise-kit": {
+        "name": "Disguise Kit"
+      },
+      "forgery-kit": {
+        "name": "Forgery Kit"
       }
     },
     "overview": {
