@@ -9,6 +9,7 @@ export const styles = (
     StyleSheet.create({
         container: {
             paddingHorizontal: spacer,
+            pointerEvents: isDisabled ? 'none' : 'auto',
         },
         subTitle: {
             fontSize: theme.fontSize.extraLarge,

@@ -86,6 +86,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         useState<CharacterBackground>(null);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
     const [level, setLevel] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
 
     const callGetBackgrounds = useCallback(async () => {
         const resultBackgrounds = (await getBackgrounds().catch((err) =>
@@ -153,7 +154,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             callGetClasses(),
             callGetRaces(),
             callGetSkills(),
-        ]);
+        ]).finally(() => setIsLoading(false));
     }, [gameType]);
     useEffect(() => {
         const listenerKeyBoardDidShow = Keyboard.addListener(
@@ -273,12 +274,11 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         ]
     );
 
-    // console.log(totalCost);
-
     return (
         <SafeView
             title={'Créez votre personnage'}
-            styles={styles(spacer, isKeyboardVisible).container}
+            isLoading={isLoading}
+            styles={styles(spacer, isKeyboardVisible, isLoading).container}
         >
             <KeyboardAvoidingView behavior={'padding'} enabled>
                 <VirtualizedScrollView style={scrollViewStyle}>

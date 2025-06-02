@@ -11,6 +11,7 @@ const headerHeight = 50;
 
 interface SafeViewProps {
     children: ReactNode;
+    isLoading?: boolean;
     title?: string;
     styles?: StyleProp<ViewStyle>;
     customBackNavigation?: () => void;
@@ -19,6 +20,7 @@ interface SafeViewProps {
 
 const SafeView = ({
     title,
+    isLoading,
     parentStyles,
     customBackNavigation,
     styles,
@@ -33,6 +35,7 @@ const SafeView = ({
                     <IconButton
                         size={30}
                         icon={'keyboard-backspace'}
+                        disabled={isLoading}
                         onPress={() =>
                             customBackNavigation
                                 ? customBackNavigation()
