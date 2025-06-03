@@ -287,7 +287,7 @@
         "name": "Gamekeeper",
         "description": "You are at home in natural environments, chasing prey or directing less skilled hunters in the best ways to track game through the brush. You know the requirements for encouraging a herd to grow, and you know what sustainable harvesting from a herd involves. You can train a hunting beast to recognize an owner and perform a half-dozen commands, given the time. You also know the etiquette for engaging nobility or other members of the upper classes, as they regularly seek your services, and you can carry yourself in a professional manner in such social circles."
       },
-      "guildmember": {
+      "guild-artisan": {
         "name": "Guildmember",
         "description": "It never hurts to be part of a team, and when you're part of a guild opportunities knock at your door.\\n\\nAre you a member of a trade or artisan's guild? Or an order of mages or monster hunters? Or have you found entry into a secretive guild of thieves or assassins?,"
       },
@@ -298,6 +298,9 @@
       "innkeeper": {
         "name": "Inkeeper",
         "description": "You spent some time as an innkeeper, tavern keeper, or perhaps a bartender. It might have been in a small crossroads town, a fishing community, a fine caravanserai, or a large cosmopolitan community. You did it all; preparing food, tracking supplies, tapping kegs, and everything in between. All the while, you listened to the adventurers plan their quests, heard their tales, saw their amazing trophies, marveled at their terrible scars, and eyed their full purses. You watched them come and go, thinking, “one day, I will have my chance.” Your time is now.\n\n***Place of Employment***\nWhere did you work before turning to the adventuring life? Choose an establishment or roll a d6 and consult the table below. Once you have this information, think about who worked with you, what sort of customers you served, and what sort of reputation your establishment had.\n\n| d6 | Establishment                                              |\n|----|------------------------------------------------------------|\n| 1  | Busy crossroads inn                                        |\n| 2  | Disreputable tavern full of scum and villainy              |\n| 3  | Caravanserai on a wide-ranging trade route                 |\n| 4  | Rough seaside pub                                          |\n| 5  | Hostel serving only the wealthiest clientele               |\n| 6  | Saloon catering to expensive and sometimes dangerous tastes |"
+      },
+      "knight": {
+        "name": "Knight"
       },
       "lyceum-student": {
         "name": "Lyceum student",
@@ -323,6 +326,9 @@
         "name": "Mysterious origins",
         "description": "Your origins are a mystery even to you. You might recall fragments of your previous life, or you might dream of events that could be memories, but you can't be sure of what is remembered and what is imagined. You recall practical information and facts about the world and perhaps even your name, but your upbringing and life before you lost your memories now exist only in dreams or sudden flashes of familiarity.\n  You can leave the details of your character's past up to your GM or give the GM a specific backstory that your character can't remember. Were you the victim of a spell gone awry, or did you voluntarily sacrifice your memories in exchange for power? Is your amnesia the result of a natural accident, or did you purposefully have your mind wiped in order to forget a memory you couldn't live with? Perhaps you have family or friends that are searching for you or enemies you can't even remember."
       },
+      "noble": {
+        "name": "Noble"
+      },
       "northern-minstrel": {
         "name": "Northern minstrel",
         "description": "While the tribal warriors residing in other parts of the wintry north consider you to be soft and cowardly, you know the truth: life in northern cities and mead halls is not for the faint of heart. Whether you are a larger-than-life performer hailing from one of the skaldic schools, a contemplative scholar attempting to puzzle out the mysteries of the north, or a doughty warrior hoping to stave off the bleakness of the north, you have successfully navigated alleys and stages as treacherous as any ice-slicked ruin. You adventure for the thrill of adding new songs to your repertoire, adding new lore to your catalog, and proving false the claims of those so-called true northerners.\n\n***Skaldic Specialty***\nEvery minstrel excels at certain types of performance. Choose one specialty or roll a d8 and consult the table below to determine your preferred type of performance.\n\n| d8 | Specialty                       |\n|----|---------------------------------|\n| 1  | Recitation of epic poetry       |\n| 2  | Singing                         |\n| 3  | Tale-telling                    |\n| 4  | Flyting (insult flinging)       |\n| 5  | Yodeling                        |\n| 6  | Axe throwing                    |\n| 7  | Playing an instrument           |\n| 8  | Fire eating or sword swallowing |"
@@ -339,6 +345,9 @@
         "name": "Parfumier",
         "description": "You are educated and ambitious. You spent your youth apprenticed among a city's more reputable greenhouses, laboratories, and perfumeries. There, you studied botany and chemistry and explored properties and interactions with fine crystal, rare metals, and magic. You quickly mastered the skills to identify and process rare and complex botanical and alchemical samples and the proper extractions and infusions of essential oils, pollens, and other fragrant chemical compounds—natural or otherwise.\n  Not all (dramatic) changes to one's lifestyle, calling, or ambitions are a result of social or financial decline. Some are simply decided upon. Regardless of your motivation or incentive for change, you have accepted that a comfortable life of research, science and business is—at least for now—a part of your past."
       },
+      "pirate": {
+        "name": "Pirate"
+      },
       "recovered-cultist": {
         "name": "Recovered cultist",
         "description": "The rise of cults are scattered and separated, with little to no unity between the greater evils. Hidden hierarchies of power-hungry mortals corrupt and seduce, promising a sliver of the same power they had been promised when the time comes to reap their harvest.\nYou once belonged to such a cult. Perhaps it was brief, embracing the rebellious spirit of youth and curious where this path may take you. You also may have felt alone and lost, this community offering a welcome you had been subconsciously seeking. It’s possible you were raised from the beginning to pray to the gods of shadow and death. Then one day the veil was lifted and the cruel truth shook your faith, sending you running from the false promises and seeking redemption.\nYou have been freed from the bindings of these dangerous philosophies, but few secret societies find comfort until those who abandon their way are rotting beneath the soil."
@@ -350,6 +359,9 @@
       "sailor": {
         "name": "Sailor",
         "description": "You're an experienced mariner with a keen weather eye and a favorite tavern in every port. Hard voyages have toughened you and the sea's power has made you humble.\n\nWere you a deckhand, an officer, or the captain of your vessel? Did you crew a naval cutter, a fishing boat, a merchant's barge, a privateering vessel, or a pirate ship?"
+      },
+      "soldier": {
+        "name": "Soldier"
       },
       "scoundrel": {
         "name": "Scoundrel",
@@ -580,9 +592,13 @@
     }
   },
   "characterForm": {
+    "baseBackgroundEquipment": "Background Equipment",
+    "baseClassEquipment": "Base class equipment",
+    "backgroundOptionTitle": "Choose history",
     "listSelectRaces": "Select Races: ",
     "listSelectClasses": "Select Classes: ",
-    "listSelectBackgrounds": "Select Backgrounds: "
+    "listSelectBackgrounds": "Select Backgrounds: ",
+    "selectedClassEquipment": "Selected class equipment"
   },
   "modal": {
   "confirmAction": "Yes",

@@ -91,7 +91,7 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                         <LabeledElement
                             label={'Historique: '}
                             val={t(
-                                `character.backgrounds.${character.background.slug}.name`
+                                `character.backgrounds.${character.background.index}.name`
                             )}
                         />
                         <LabeledElement

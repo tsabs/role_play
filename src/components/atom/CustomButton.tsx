@@ -12,6 +12,7 @@ interface ButtonProps extends TouchableOpacityProps {
     radius?: number;
     buttonColor?: string;
     textColor?: string;
+    textSize?: number;
 }
 
 const CustomButton = ({
@@ -19,6 +20,7 @@ const CustomButton = ({
     radius = theme.radius.md,
     buttonColor = theme?.colors.primary,
     textColor = theme?.colors.white,
+    textSize = theme.fontSize.medium,
     style,
     ...props
 }: ButtonProps) => {
@@ -33,6 +35,7 @@ const CustomButton = ({
                     padding: theme.space.md,
                     textAlign: 'center',
                 }}
+                fontSize={textSize}
                 color={textColor}
                 text={text}
             />

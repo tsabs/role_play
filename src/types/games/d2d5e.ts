@@ -40,6 +40,12 @@ interface OptionChoice {
     item: ElementIdentification;
 }
 
+interface SocialChoice {
+    option_type: string;
+    desc: string;
+    index: string;
+}
+
 interface ProficiencyOption {
     choose: number;
     desc?: string;
@@ -74,6 +80,15 @@ interface LanguageOptions {
     type: string;
 }
 
+interface SocialElementOptions {
+    choose: number;
+    from: {
+        option_set_type: string;
+        options: SocialChoice[];
+    };
+    type: string;
+}
+
 // ----------------------------
 
 interface AbilityBonus {
@@ -84,20 +99,22 @@ interface AbilityBonus {
 // ----------------------------
 
 interface DndBackground {
-    desc: string | null;
-    document__license_url: string | null;
-    document__slug: string | null;
-    document__title: string | null;
-    document__url: string | null;
-    equipment: string | null;
-    feature: string | null;
-    feature_desc: string | null;
-    languages: string | null;
-    name: string | null;
-    skill_proficiencies: string | null;
-    slug: string | null;
-    suggested_characteristics: string | null;
-    tool_proficiencies: string | null;
+    updated_at: string;
+    bonds: SocialElementOptions;
+    flaws: SocialElementOptions;
+    index: string;
+    name: string;
+    starting_proficiencies: ElementIdentification[];
+    starting_equipment: StartingEquipment[];
+    starting_equipment_options?: StartingEquipmentOption[];
+    feature?: {
+        desc: string[];
+        name: string;
+    };
+    tool_proficiencies?: ElementIdentification[];
+    special_options?: SocialElementOptions;
+    language_options?: LanguageOptions;
+    personality_traits?: SocialElementOptions;
 }
 
 interface DndSubRace {
@@ -167,13 +184,13 @@ interface DnDConfig {
     selectedRaceElements: {
         raceChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
     };
-    selectedBackgroundElements?: {
+    background: DndBackground;
+    selectedBackgroundElements: {
         backgroundChoices?: Record<
             string,
             Array<{ index: string; bonus?: number }>
         >;
     };
-    background: DndBackground;
     gameType: GAME_TYPE.DND5E;
 }
 
@@ -187,7 +204,9 @@ export {
     Proficiency,
     ProficiencyOption,
     OptionChoice,
+    SocialChoice,
     SkillProficiency,
+    StartingEquipmentOption,
     AbilityScores,
     DnDAbility,
     DndBackground,

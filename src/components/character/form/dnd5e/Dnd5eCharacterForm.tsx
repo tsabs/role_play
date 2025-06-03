@@ -3,6 +3,7 @@ import {
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
+    View,
     ViewStyle,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -46,6 +47,7 @@ import ProficiencySelector from './proficiencies/ProficiencySelector';
 import VirtualizedScrollView from '../../../library/VirtualizedScrollView';
 import TalentClassForm from './TalentClassForm';
 import CustomButton from '../../../atom/CustomButton';
+import SkillDisplay from './atom/SkillDisplay';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -75,15 +77,16 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         useState<Record<DnDAbility, number>>(ABILITIES);
     const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
     const [selectedClass, setSelectedClass] = useState<string>(null);
-    const [selectProficiencies, setSelectProficiencies] = useState<
+    const [classSelectionOptions, setClassSelectionOptions] = useState<
         Record<string, { index: string; bonus?: number }[]>
     >({});
     const [raceSelectionOptions, setRaceSelectionOptions] = useState<
         Record<string, { index: string; bonus?: number }[]>
     >({});
+    const [backgroundSelectionOptions, setBackgroundSelectionOptions] =
+        useState<Record<string, { index: string; bonus?: number }[]>>({});
     const [selectedRace, setSelectedRace] = useState<string>(null);
-    const [selectedBackground, setSelectedBackground] =
-        useState<CharacterBackground>(null);
+    const [selectedBackground, setSelectedBackground] = useState<string>(null);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
     const [level, setLevel] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
@@ -112,12 +115,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     }, []);
 
     const callGetSkills = async () => {
-        // console.log('skills');
-        await getSkills().then(
-            (res) =>
-                // console.log(res.map((skill) => skill.index))
-                res
-        );
+        await getSkills().then((res) => res);
     };
 
     const handleGroupClassSelectionChange = useCallback(
@@ -125,7 +123,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             groupId: string,
             selectedIndexes: { index: string; bonus?: number }[]
         ) => {
-            setSelectProficiencies((prev) => ({
+            setClassSelectionOptions((prev) => ({
                 ...prev,
                 [groupId]: selectedIndexes,
             }));
@@ -139,6 +137,21 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             selectedIndexes: { index: string; bonus?: number }[]
         ) => {
             setRaceSelectionOptions((prev) => {
+                return {
+                    ...prev,
+                    [groupId]: selectedIndexes,
+                };
+            });
+        },
+        []
+    );
+
+    const handleGroupBackgroundSelectionChange = useCallback(
+        (
+            groupId: string,
+            selectedIndexes: { index: string; bonus?: number }[]
+        ) => {
+            setBackgroundSelectionOptions((prev) => {
                 return {
                     ...prev,
                     [groupId]: selectedIndexes,
@@ -202,19 +215,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         { label: 'Histoire', value: history, setValue: setHistory },
     ];
 
-    // console.log(
-    //     'selectedClass',
-    //     classes.find((item: DndClass) => item.index === selectedClass)
-    // );
-    //
-    // console.log(
-    //     'selectedRace',
-    //     races?.find((race: DndRace) => race.index === selectedRace)
-    // );
-
-    // console.log('selectProficiencies', selectProficiencies);
-    // console.log('selectRaceProficiencies', raceSelectionOptions);
-
     const selectedObjectClass = useMemo(
         () => classes?.find((item: DndClass) => item?.index === selectedClass),
         [classes, selectedClass]
@@ -225,22 +225,30 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
         [races, selectedRace]
     );
 
-    // console.log('select proficiencies : ', selectProficiencies);
-    // console.log('race proficiencies : ', raceSelectionOptions);
+    const selectedObjectBackground = useMemo(
+        () =>
+            backgrounds?.find(
+                (item: DndBackground) => item?.index === selectedBackground
+            ),
+        [backgrounds, selectedBackground]
+    );
 
     const selectedClassElements = useMemo(() => {
         return {
-            classChoices: selectProficiencies,
+            classChoices: classSelectionOptions,
             selected_subclass: '',
         };
-    }, [selectProficiencies]);
+    }, [classSelectionOptions]);
     const selectedRaceElements = useMemo(() => {
         return {
             raceChoices: raceSelectionOptions,
         };
     }, [raceSelectionOptions]);
-
-    // console.log('selected race proficiencies : ', selectedRaceElements);
+    const selectedBackgroundElements = useMemo(() => {
+        return {
+            backgroundChoices: backgroundSelectionOptions,
+        };
+    }, [backgroundSelectionOptions]);
 
     const transformedAbilities = useMemo(
         () => transformRaceAbilities(selectedObjectRace?.ability_bonuses || []),
@@ -256,8 +264,6 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             ),
         [selectedRaceElements?.raceChoices, transformedAbilities]
     );
-
-    // console.log('backgrounds: ', backgrounds);
 
     const isSaveCharacterDisabled = useMemo(
         () =>
@@ -314,8 +320,21 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     <LabeledList
                         name="Races"
                         values={races}
-                        setSelectedValue={setSelectedRace}
+                        setSelectedValue={(newRace) => {
+                            setSelectedRace(newRace);
+                            setRaceSelectionOptions({});
+                        }}
+                        displaySkills={() => {
+                            return (
+                                <SkillDisplay
+                                    proficiencies={
+                                        selectedObjectRace?.starting_proficiencies
+                                    }
+                                />
+                            );
+                        }}
                         selectedName={selectedRace}
+                        itemsPerColumn={2}
                     />
                     {selectedObjectRace?.starting_proficiency_options?.from
                         ?.options && (
@@ -340,8 +359,21 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     <LabeledList
                         name="Classes"
                         values={classes}
-                        setSelectedValue={setSelectedClass}
+                        setSelectedValue={(newClass) => {
+                            setSelectedClass(newClass);
+                            setClassSelectionOptions({});
+                        }}
+                        displaySkills={() => {
+                            return (
+                                <SkillDisplay
+                                    proficiencies={
+                                        selectedObjectClass?.proficiencies
+                                    }
+                                />
+                            );
+                        }}
                         selectedName={selectedClass}
+                        itemsPerColumn={2}
                     />
                     {selectedObjectClass?.proficiency_choices?.length > 0 &&
                         selectedObjectClass.proficiency_choices.map(
@@ -368,10 +400,33 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     <LabeledList
                         name="Backgrounds"
                         values={backgrounds}
-                        setSelectedValue={setSelectedBackground}
-                        selectedName={selectedBackground?.name}
-                        itemsPerColumn={4}
+                        setSelectedValue={(newBackground) => {
+                            setSelectedBackground(newBackground);
+                            setBackgroundSelectionOptions({});
+                        }}
+                        displaySkills={() => {
+                            return (
+                                <SkillDisplay
+                                    proficiencies={
+                                        selectedObjectBackground?.starting_proficiencies
+                                    }
+                                />
+                            );
+                        }}
+                        selectedName={selectedBackground}
+                        itemsPerColumn={2}
                     />
+                    {selectedObjectBackground?.special_options?.from
+                        ?.options && (
+                        <ProficiencySelector
+                            key={`${selectedObjectBackground.index}-background`}
+                            data={
+                                selectedObjectBackground?.special_options as any
+                            }
+                            groupId={`${selectedObjectBackground.index}-background`}
+                            onChange={handleGroupBackgroundSelectionChange}
+                        />
+                    )}
 
                     {selectedObjectRace?.index &&
                         selectedObjectClass?.index && (
@@ -396,9 +451,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                 isSaveCharacterDisabled
                             ).saveButton
                         }
+                        textSize={theme.fontSize.large}
                         text={'Sauvegarder'}
                         onPress={() => {
-                            console.log('add characetr');
                             callAddCharacter(
                                 {
                                     id: uuidv4(),
@@ -421,9 +476,11 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                         selectedClassElements,
                                     background: backgrounds?.find(
                                         (dndBackground: DndBackground) =>
-                                            dndBackground.slug ===
-                                            selectedBackground?.name
+                                            dndBackground.index ===
+                                            selectedBackground
                                     ),
+                                    selectedBackgroundElements:
+                                        selectedBackgroundElements,
                                     gameType: GAME_TYPE.DND5E,
                                 },
                                 dispatch

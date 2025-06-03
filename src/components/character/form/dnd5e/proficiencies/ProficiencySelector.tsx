@@ -1,19 +1,21 @@
 import { FC, Fragment, useCallback, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
     Checkbox,
     HelperText,
     Divider,
     TouchableRipple,
 } from 'react-native-paper';
+
 import {
     ElementIdentification,
     OptionChoice,
     ProficiencyOption,
+    SocialChoice,
 } from '../../../../../types/games/d2d5e';
 import { theme } from '../../../../../../style/theme';
 import CustomText from '../../../../atom/CustomText';
-import { useTranslation } from 'react-i18next';
 
 type AbilityOption = {
     ability_score: ElementIdentification;
@@ -49,7 +51,6 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     const handleToggle = useCallback(
         (index: string, bonus?: number) => {
             let updated = [...selected];
-            // console.log(index);
             const exists = updated.find((item) => item.index === index);
             if (exists) {
                 updated = updated.filter((i) => i.index !== index);
@@ -60,7 +61,6 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                     updated.push({ index });
                 }
             }
-            // console.log('updated', updated, groupId);
             setSelected(updated);
             onChange?.(groupId ?? '', updated);
         },
@@ -76,14 +76,6 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                     : ref.item.index;
 
                 const isChecked = !!selected.find((i) => i.index === refOption);
-                // const isGroupIdAndIsCheck = data.
-
-                if (groupId === 'choice') {
-                    // console.log('cool', ref.item.index);
-                    // console.log('cool', ref.item);
-                    // console.log('data', data);
-                    // console.log('selected', selected);
-                }
 
                 return (
                     <Checkbox.Item
@@ -98,6 +90,21 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                         color={theme.colors.primary}
                         status={isChecked ? 'checked' : 'unchecked'}
                         onPress={() => handleToggle(refOption)}
+                        disabled={!isChecked && selected.length >= data.choose}
+                    />
+                );
+            }
+
+            if (option.option_type === 'string') {
+                const ref = option as SocialChoice;
+                const isChecked = !!selected.find((i) => i.index === ref.index);
+
+                return (
+                    <Checkbox.Item
+                        label={ref.desc}
+                        status={isChecked ? 'checked' : 'unchecked'}
+                        color={theme.colors.primary}
+                        onPress={() => handleToggle(ref.index)}
                         disabled={!isChecked && selected.length >= data.choose}
                     />
                 );
@@ -145,24 +152,29 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
     return (
         <View style={styles.groupContainer}>
-            {data.desc ? (
-                <TouchableRipple onPress={() => setCollapsed(!collapsed)}>
-                    <View style={styles.containerDescription}>
-                        <CustomText
-                            style={{ flexWrap: 'wrap', flex: 1 }}
-                            numberOfLines={3}
-                            fontSize={16}
-                            fontWeight="bold"
-                            text={data?.desc_fr ? data.desc_fr : data.desc}
-                        />
-                        <CustomText
-                            fontSize={16}
-                            fontWeight="bold"
-                            text={collapsed ? '▶ ' : '▼ '}
-                        />
-                    </View>
-                </TouchableRipple>
-            ) : null}
+            <TouchableRipple onPress={() => setCollapsed(!collapsed)}>
+                <View style={styles.containerDescription}>
+                    <CustomText
+                        style={{ flexWrap: 'wrap', flex: 1 }}
+                        numberOfLines={3}
+                        fontSize={16}
+                        fontWeight="bold"
+                        text={
+                            data?.desc_fr
+                                ? data.desc_fr
+                                : data?.desc
+                                  ? data.desc
+                                  : t('characterForm.backgroundOptionTitle')
+                        }
+                    />
+                    <CustomText
+                        fontSize={16}
+                        fontWeight="bold"
+                        text={collapsed ? '▶ ' : '▼ '}
+                    />
+                </View>
+            </TouchableRipple>
+
             {!collapsed && (
                 <Fragment>
                     <FlatList

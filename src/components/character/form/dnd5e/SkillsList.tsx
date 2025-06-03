@@ -1,5 +1,6 @@
 import { FC, useCallback } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AbilityScores, DnDCharacter } from '../../../../types/games/d2d5e';
 import {
@@ -38,11 +39,13 @@ interface SkillsListProps {
 }
 
 const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
+    const { t } = useTranslation();
     const renderItem = useCallback(
         ({ item: [skill, ability] }) => {
             const transformBonuses = transformRaceAbilities(
                 character?.race?.ability_bonuses || []
             );
+            // console.log(transformBonuses);
             const mergeBonuses = mergeAbilityBonuses(
                 character?.selectedRaceElements?.raceChoices?.[
                     `${character?.race?.index}-skills`
@@ -53,15 +56,27 @@ const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
                 mergeBonuses.find(
                     (aBonus) => aBonus.index === ability.toLowerCase()
                 )?.bonus || 0;
-            const proficientSkills =
+            const proficientClassSkills =
                 character?.selectedClassElements?.classChoices?.[
                     `${character?.className?.index}-class-0`
                 ]?.some((proficientSkill) => proficientSkill?.index === skill);
 
+            const proficientBackgroundSkills =
+                character?.background?.starting_proficiencies?.some(
+                    (proficiency) => {
+                        const refOption = proficiency?.index?.includes('skill-')
+                            ? proficiency.index.split('skill-')[1]
+                            : proficiency.index;
+                        return refOption === skill;
+                    }
+                );
+
             const profBonus = getProficiencyBonus(level);
             const mod =
                 calculateModifier(character.abilities[ability] + abilityBonus) +
-                (proficientSkills ? profBonus : 0);
+                (proficientClassSkills || proficientBackgroundSkills
+                    ? profBonus
+                    : 0);
             const sign = mod >= 0 ? '+' : '';
             const displayColor = () => {
                 switch (mod) {
@@ -84,7 +99,7 @@ const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
             return (
                 <View key={skill} style={styles.skillRow}>
                     <CustomText
-                        text={skill.replace(/-/g, ' ')}
+                        text={t(`character.skills.${skill}.name`)}
                         fontSize={16}
                         style={styles.skillName}
                     />

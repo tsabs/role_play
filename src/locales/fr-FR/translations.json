@@ -286,7 +286,7 @@
         "name": "Garde-chasse",
         "description": "Vous êtes chez vous en pleine nature, traquant le gibier ou guidant les chasseurs moins expérimentés dans l'art de la traque. Vous connaissez les exigences nécessaires pour favoriser la croissance d'un troupeau et les règles d'une chasse durable. Vous savez dresser un animal de chasse pour qu'il reconnaisse son maître et obéisse à une demi-douzaine de commandes, avec le temps. Vous connaissez aussi l'étiquette à adopter auprès de la noblesse ou d'autres membres des classes supérieures, qui sollicitent régulièrement vos services, et vous pouvez vous comporter avec aisance dans ces cercles sociaux."
       },
-      "guildmember": {
+      "guild-artisan": {
         "name": "Membre de guilde",
         "description": "Faire partie d'un groupe ouvre bien des portes, et être membre d'une guilde vous apporte de nombreuses opportunités.\n\nFaites-vous partie d'une guilde d'artisans ou de commerçants ? D'un ordre de mages ou de chasseurs de monstres ? Ou avez-vous intégré une guilde secrète de voleurs ou d'assassins ?"
       },
@@ -297,6 +297,9 @@
       "innkeeper": {
         "name": "Aubergiste",
         "description": "Vous avez passé un certain temps en tant qu'aubergiste, tavernier ou peut-être barman. Cela pouvait être dans une petite ville de carrefour, une communauté de pêcheurs, une grande caravansérail ou une métropole cosmopolite. Vous faisiez tout : préparer la nourriture, gérer les stocks, servir les clients, et bien plus encore. Pendant tout ce temps, vous écoutiez les aventuriers planifier leurs quêtes, raconter leurs histoires, exhiber leurs trophées impressionnants et parler de leurs cicatrices terribles. Vous les voyiez partir et revenir, en pensant : \"Un jour, ce sera mon tour.\"\n\nCe jour est arrivé."
+      },
+      "knight": {
+        "name": "Chevalier"
       },
       "lyceum-student": {
         "name": "Étudiant du lycée",
@@ -322,6 +325,9 @@
         "name": "Origines mystérieuses",
         "description": "Vos origines sont un mystère, même pour vous. Vous vous souvenez peut-être de fragments de votre vie passée, ou vous rêvez d’événements qui pourraient être des souvenirs, mais il est difficile de démêler le vrai du faux. Vous connaissez des faits sur le monde, peut-être même votre nom, mais votre passé avant la perte de votre mémoire n’existe plus qu’à travers des visions ou des éclairs de familiarité.\nVous pouvez laisser votre MJ décider des détails de votre passé ou lui donner une histoire que votre personnage a oubliée. Avez-vous été victime d’un sort qui a mal tourné, ou avez-vous volontairement sacrifié votre mémoire en échange d’un pouvoir ? Est-ce un accident naturel ou une volonté délibérée d’effacer un souvenir insoutenable ? Peut-être avez-vous des proches qui vous cherchent, ou des ennemis dont vous ignorez tout."
       },
+      "noble": {
+        "name": "Noble"
+      },
       "northern-minstrel": {
         "name": "Ménestrel du Nord",
         "description": "Tandis que les guerriers tribaux du grand nord vous considèrent comme faible et lâche, vous connaissez la vérité : la vie dans les villes nordiques et les salles de beuverie n'est pas faite pour les âmes fragiles. Que vous soyez un interprète exubérant issu d’une école skaldique, un érudit contemplatif tentant de percer les mystères du Nord, ou un guerrier résolu cherchant à repousser la morosité du froid, vous avez appris à naviguer à travers des ruelles et des scènes aussi traîtresses que les ruines glacées. Vous partez à l’aventure pour enrichir votre répertoire de nouvelles chansons, ajouter du savoir à votre collection et prouver que ceux qui se proclament les véritables Nordiques ont tort.\n\n***Spécialité skaldique***\nChaque ménestrel excelle dans un type de performance. Choisissez-en une ou lancez un d8 pour déterminer votre spécialité.\n\n| d8 | Spécialité |\n|----|---------------------------------|\n| 1  | Récitation de poésie épique |\n| 2  | Chant |\n| 3  | Récit d’histoires |\n| 4  | Flyting (duel d’insultes) |\n| 5  | Yodel |\n| 6  | Lancer de hache |\n| 7  | Jeu d’un instrument |\n| 8  | Cracheur de feu ou avaleur d’épées |"
@@ -338,6 +344,9 @@
         "name": "Parfumeur",
         "description": "Vous êtes érudit et ambitieux. Vous avez passé votre jeunesse en apprentissage dans les serres, laboratoires et parfumeries les plus respectés de la ville. Là, vous avez étudié la botanique et la chimie, exploré les propriétés et interactions des cristaux fins, des métaux rares et de la magie. Vous avez rapidement maîtrisé l’art d’identifier et de transformer des échantillons botaniques et alchimiques rares et complexes, ainsi que les extractions et infusions d’huiles essentielles, de pollens et d’autres composés chimiques parfumés, naturels ou non.\nTous les changements de vie drastiques ne sont pas dus à une chute sociale ou financière. Certains sont simplement des choix. Quelle qu'ait été votre motivation, vous avez accepté qu’une vie confortable de recherche, de science et de commerce appartient – du moins pour l’instant – à votre passé."
       },
+      "pirate": {
+        "name": "Pirate"
+      },
       "recovered-cultist": {
         "name": "Ancien cultiste repenti",
         "description": "Les cultes naissent et se développent dans l’ombre, sans réelle unité entre eux, chacun servant des forces obscures selon ses propres ambitions. Les hiérarchies cachées de mortels avides de pouvoir séduisent et corrompent, promettant une fraction du pouvoir qu’on leur a promis en échange de leur loyauté.\nVous avez autrefois appartenu à l’un de ces cultes. Peut-être n'était-ce qu’une brève rébellion de jeunesse, un élan de curiosité vers une voie interdite. Peut-être vous sentiez-vous seul et perdu, trouvant dans cette communauté l’accueil que vous recherchiez inconsciemment. Il est aussi possible que vous ayez été élevé dès votre naissance dans l’adoration de divinités sombres et impitoyables. Puis, un jour, le voile s’est levé, et la vérité cruelle a ébranlé votre foi, vous poussant à fuir les promesses trompeuses et à rechercher la rédemption.\nVous êtes libéré de l’emprise de ces doctrines dangereuses, mais peu de cultes laissent partir leurs adeptes sans conséquences. Ceux qui renient leur ancienne voie sont rarement en sécurité tant qu’ils respirent encore."
@@ -349,6 +358,9 @@
       "sailor": {
         "name": "Marin",
         "description": "Vous êtes un marin expérimenté avec un œil avisé pour la météo et une taverne préférée dans chaque port. Les voyages difficiles vous ont forgé et le pouvoir de la mer vous a rendu humble.\n\nÉtiez-vous matelot, officier, ou capitaine de votre navire ? Avez-vous navigué sur un bateau de guerre, un bateau de pêche, une barge marchande, un vaisseau corsaire, ou un navire pirate ?"
+      },
+      "soldier": {
+        "name": "Soldat"
       },
       "scoundrel": {
         "name": "Filou",
@@ -580,9 +592,13 @@
 
   },
   "characterForm": {
+    "baseBackgroundEquipment": "Equipement de l'historique",
+    "baseClassEquipment": "Equipement de base",
+    "backgroundOptionTitle": "Choisissez une option d'historique",
     "listSelectRaces": "Race choisie: ",
     "listSelectClasses": "Classe choisie: ",
-    "listSelectBackgrounds": "Historique choisi: "
+    "listSelectBackgrounds": "Historique choisi: ",
+    "selectedClassEquipment": "Equipement de classe selectionné: "
   },
   "modal": {
     "confirmAction": "Oui",

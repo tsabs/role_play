@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, ReactElement, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { styles } from './characterFormStyles';
@@ -28,10 +28,12 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     values,
     setSelectedValue,
     selectedName,
+    displaySkills,
     itemsPerColumn = 1,
 }: {
     name: string;
     values: T[];
+    displaySkills?: () => ReactElement;
     setSelectedValue: (value: any) => void;
     selectedName?: string;
     itemsPerColumn?: number;
@@ -42,12 +44,12 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     const sortedValues = useMemo(
         () =>
             [...values].sort((a: any, b: any) => {
-                const nameA = a?.slug
-                    ? t(`character.backgrounds.${a.slug}.name`)
-                    : t(`character.${name.toLowerCase()}.${a.index}.name`);
-                const nameB = b?.slug
-                    ? t(`character.backgrounds.${b.slug}.name`)
-                    : t(`character.${name.toLowerCase()}.${b.index}.name`);
+                const nameA = t(
+                    `character.${name.toLowerCase()}.${a.index}.name`
+                );
+                const nameB = t(
+                    `character.${name.toLowerCase()}.${b.index}.name`
+                );
                 return nameA.localeCompare(nameB, currentLanguage);
             }),
         [values, currentLanguage]
@@ -78,6 +80,8 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                 )}
             </View>
 
+            {displaySkills?.()}
+
             <FlatList
                 data={groupedValues}
                 horizontal
@@ -87,7 +91,7 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                         entering={FadeInLeft.delay(columnIndex * 100)}
                     >
                         {column.map((item: any) => {
-                            const itemKey = item?.slug || item.index;
+                            const itemKey = item.index;
                             const isSelected = selectedName === itemKey;
 
                             return (
@@ -97,14 +101,7 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                                         styles(spacer).choiceButton,
                                         isSelected && styles(spacer).selected,
                                     ]}
-                                    onPress={() =>
-                                        item.slug
-                                            ? setSelectedValue({
-                                                  name: item.slug,
-                                                  description: item.desc,
-                                              })
-                                            : setSelectedValue(item.index)
-                                    }
+                                    onPress={() => setSelectedValue(item.index)}
                                 >
                                     <Text
                                         style={
@@ -112,15 +109,11 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                                                 .choiceText
                                         }
                                     >
-                                        {item?.slug
-                                            ? t(
-                                                  `character.backgrounds.${item.slug}.name`
-                                              )
-                                            : t(
-                                                  `character.${name.toLowerCase()}.${
-                                                      item.index
-                                                  }.name`
-                                              )}
+                                        {t(
+                                            `character.${name.toLowerCase()}.${
+                                                item.index
+                                            }.name`
+                                        )}
                                     </Text>
                                 </TouchableOpacity>
                             );

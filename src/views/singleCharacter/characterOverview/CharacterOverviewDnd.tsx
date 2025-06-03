@@ -30,6 +30,7 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../../utils/utils';
 import TalentClassForm from '../../../components/character/form/dnd5e/TalentClassForm';
 import SkillsList from '../../../components/character/form/dnd5e/SkillsList';
 import VirtualizedScrollView from '../../../components/library/VirtualizedScrollView';
+import EquipmentList from '../../../components/character/form/EquipmentList';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;
@@ -182,7 +183,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 3,
                 title: 'character.overview.accordion.equipments',
-                content: <CustomText text="Will come soon" />,
+                content: <EquipmentList character={character} />,
             },
             {
                 id: 4,
