@@ -3,12 +3,10 @@ import {
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
-    View,
     ViewStyle,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
-import { useTranslation } from 'react-i18next';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -26,7 +24,6 @@ import {
     DndBackground,
     DndClass,
     DndRace,
-    ElementIdentification,
 } from '../../../../types/games/d2d5e';
 import LabeledList from './LabeledList';
 import Separator from '../../../library/Separator';
@@ -55,15 +52,9 @@ interface Dnd5eCharacterFormProps {
 
 const spacer = 20;
 
-interface CharacterBackground {
-    name: string;
-    description: string;
-}
-
 const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { t } = useTranslation();
     const auth: AuthProps = useAuth();
 
     if (!auth.user) return <Fragment />;

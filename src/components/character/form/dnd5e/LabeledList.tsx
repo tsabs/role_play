@@ -38,7 +38,7 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     selectedName?: string;
     itemsPerColumn?: number;
 }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const currentLanguage = 'fr';
 
     const sortedValues = useMemo(

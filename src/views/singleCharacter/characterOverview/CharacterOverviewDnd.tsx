@@ -94,7 +94,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 : (character.className as any),
             character.level.toString()
         )
-            .then((res) => {
+            .then((_) => {
                 // console.log('talent result : ', res);
             })
             .catch((err) =>
