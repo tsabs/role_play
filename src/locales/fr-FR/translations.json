@@ -1,0 +1,629 @@
+{
+  "characters": {
+    "title": "Liste des personnages",
+    "titleButtonText": "Créer un personnage"
+  },
+  "character": {
+    "abilities": {
+      "STR": "FOR",
+      "DEX": "DEX",
+      "CON": "CON",
+      "INT": "INT",
+      "WIS": "SAG",
+      "CHA": "CHA"
+    },
+    "removeCharacter": "Supprmier ce personnage: {{name}} ?",
+    "removeCharacterDescription": "Êtes-vous sûr de vouloir supprimer ce personnage ? Cette action est irréversible.",
+    "races": {
+      "dragonborn": {
+        "name": "Drakéide"
+      },
+      "dwarf": {
+        "name":  "Nain"
+      },
+      "elf": {
+        "name":  "Elfe"
+      },
+      "gnome": {
+        "name":  "Gnome"
+      },
+      "half-elf": {
+        "name":  "Demi-Elfe"
+      },
+      "half-orc": {
+        "name":  "Demi-Orc"
+      },
+      "halfling": {
+        "name":  "Halfelin"
+      },
+      "human": {
+        "name":  "Humain"
+      },
+      "tiefling": {
+        "name":  "Tieffelin"
+      },
+      "high-elf": {
+        "name":  "Haut Elfe"
+      },
+      "dark-elf": {
+        "name": "Elfe Noir"
+      },
+      "wood-elf": {
+        "name":  "Elfe des Bois"
+      },
+      "hill-dwarf": {
+        "name":  "Nain des Collines"
+      },
+      "mountain-dwarf": {
+        "name": "Nain des Montagnes"
+      },
+      "lightfoot-halfling": {
+        "name":  "Halfelin Pied-Léger"
+      },
+      "stout-halfling": {
+        "name": "Halfelin robuste"
+      },
+      "rock-gnome": {
+        "name":  "Gnome des Roches"
+      },
+      "forest-gnome": {
+        "name": "Gnome des Forêts"
+      }
+    },
+    "classes": {
+      "barbarian": {
+        "name": "Barbare",
+        "talents": {
+          "rageTitle": "🪓 Rage",
+          "ragesPerLongRest": "Rages par repos long : {{rageUses}}",
+          "bonusDamageWhileRaging": "Bonus de dégâts en rageant : +{{rageBonus}}",
+          "resistanceToPhysicalDamage": "Résistance aux dégâts physiques en rageant.",
+          "unarmoredDefenseTitle": "🛡️ Défense sans Armure",
+          "unarmoredAC": "Votre CA = 10 + DEX ({{dexMod}}) + CON ({{conMod}}) = {{unarmoredAC}}",
+          "recklessAttackTitle": "⚔️ Attaque Imprudente",
+          "recklessAttackDescription": "Obtenez un avantage sur les attaques au corps à corps utilisant la FOR. Les jets d'attaque contre vous ont un avantage.",
+          "dangerSenseTitle": "⚠️ Sens du Danger",
+          "dangerSenseDescription": "Avantage sur les jets de sauvegarde de DEX contre les effets que vous pouvez voir."
+        },
+        "subclasses": {
+          "berserker": {
+            "title": "Berserker"
+          },
+          "totem": {
+            "title": "Guerrier totem"
+          }
+        }
+      },
+      "bard": {
+        "name": "Barde",
+        "talents":  {
+          "bardicInspirationTitle": "🎵 Inspiration Bardique",
+          "bardicInspirationDescription": "Vous pouvez utiliser l'Inspiration Bardique {{uses}} fois par repos long.",
+          "inspirationDice": "Dé : {{inspirationDie}} (basé sur le niveau {{level}})",
+          "bonusActionDescription": "Action bonus pour inspirer un allié dans un rayon de 60 pieds.",
+          "songOfRestTitle": "🎶 Chant de Repos",
+          "songOfRestDescription": "Pendant un repos court, les alliés obtiennent des soins supplémentaires.",
+          "jackOfAllTradesTitle": "🎭 Touche-à-Tout",
+          "jackOfAllTradesDescription": "Ajoutez la moitié du bonus de maîtrise à tous les jets de compétence non maîtrisés."
+        },
+        "subclasses": {
+          "lore": {
+            "title": "Collège du savoir",
+            "description": "Un Barde du Savoir enchante par le savoir et les récits oubliés.",
+            "cuttingWordsDescription": "Mots singlants",
+            "additionalMasteryDescription": "Maîtrises supplémentaires"
+          },
+          "valor": {
+            "title": "Collège de vaillance",
+            "description": "Un Barde de la Vaillance inspire le courage avec chanson et épée.",
+            "combatInspirationDescription": "Inspiration de combat",
+            "extraAttackDescription": "Attaque supplémentaire"
+          }
+        }
+      },
+      "cleric": {
+        "name": "Clerc",
+        "talents":  {
+          "spellcastingTitle": "🛐 Incantation",
+          "preparedSpellsDescription": "Vous pouvez préparer {{preparedSpells}} sorts de clerc (mod SAG + niveau).",
+          "spellcastingAccessDescription": "Vous avez accès à tous les sorts de clerc, mais vous n'en préparez qu'un sous-ensemble chaque jour.",
+          "channelDivinityTitle": "🙏 Canalisation de la Divinité",
+          "channelDivinityUnlocked": "Déverrouillé au niveau 2.",
+          "channelDivinityDescription": "Utilisez l'énergie divine pour alimenter les capacités de sous-classe.",
+          "channelDivinityUses": "1 utilisation par repos (2 au niveau 6, 3 au niveau 18).",
+          "divineInterventionTitle": "✨ Intervention Divine",
+          "divineInterventionDescription": "Faites appel à votre divinité pour un miracle. Chance basée sur votre niveau (pourcentage)."
+        }
+      },
+      "druid": {
+        "name":"Druide",
+        "talents":  {
+
+        }
+      },
+      "fighter": {
+        "name":  "Guerrier",
+        "talents":  {
+          "secondWindTitle": "💪 Second Souffle",
+          "secondWindDescription": "En tant qu'action bonus, soignez {{healAmount}} une fois par repos court.",
+          "actionSurgeTitle": "⚡ Surgissement d'Action",
+          "actionSurgeDescription": "Effectuez une action supplémentaire lors de votre tour. Une fois par repos court.",
+          "fightingStyleTitle": "🛡 Style de Combat",
+          "fightingStyleDescription": "Choisissez un style de combat : Défense, Duel, Combat à Armes Lourdes, etc.",
+          "extraAttackTitle": "⚔ Attaque Supplémentaire",
+          "extraAttackDescription": "Vous pouvez attaquer deux fois, au lieu d'une, lorsque vous prenez l'action d'attaquer.",
+          "martialArchetypeTitle": "🧠 Archétype Martial",
+          "martialArchetypeDescription": "Choisissez un archétype : Champion, Maître de Bataille, Chevalier Eldritch, etc."
+        }
+      },
+      "monk": {
+        "name": "Moine",
+        "talents":  {
+
+        }
+      },
+      "paladin": {
+        "name": "Paladin",
+        "talents":  {
+          "layOnHandsTitle": "🛡 Imposition des Mains",
+          "layOnHandsDescription": "Vous pouvez restaurer {{layOnHands}} PV par repos long.",
+          "layOnHandsUsage": "Vous pouvez dépenser 5 PV pour guérir une maladie ou un poison.",
+          "divineSmiteTitle": "💥 Châtiment Divin",
+          "divineSmiteDescription": "Lorsque vous touchez, dépensez un emplacement de sort pour infliger des dégâts radiants.",
+          "divineHealthTitle": "🏰 Santé Divine",
+          "divineHealthDescription": "Vous êtes immunisé contre les maladies.",
+          "sacredOathTitle": "🕊 Serment Sacré",
+          "sacredOathDescription": "Choisissez une sous-classe de Serment au niveau 3.",
+          "spellcastingTitle": "✨ Incantation",
+          "spellcastingDescription": "Vous pouvez préparer mod CHA ({{chaMod}}) + la moitié de votre niveau en sorts de Paladin."
+        }
+      },
+      "ranger": {
+        "name": "Rôdeur",
+        "talents":  {
+          "favoredEnemyTitle": "🏹 Ennemi Privilégié",
+          "favoredEnemyDescription": "Choisissez {{count}} type(s) d'ennemi privilégié. Obtenez des bonus pour le pistage, la langue et les dégâts.",
+          "naturalExplorerTitle": "🌲 Explorateur Naturel",
+          "naturalExplorerDescription": "Choisissez {{count}} type(s) de terrain privilégié. Obtenez des bonus dans ce terrain.",
+          "fightingStyleTitle": "🛡 Style de Combat",
+          "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
+          "spellcastingTitle": "✨ Incantation",
+          "spellcastingDescription": "Vous pouvez lancer des sorts de rôdeur. Vous préparez un nombre égal au modificateur de SAG + la moitié de votre niveau."
+        }
+      },
+      "rogue": {
+        "name": "Voleur",
+        "talents":  {
+
+        }
+      },
+      "sorcerer": {
+        "name": "Ensorceleur",
+        "talents":  {
+          "spellcastingTitle": "✨ Incantation",
+          "spellsKnownDescription": "Vous connaissez jusqu'à {{maxSpellsKnown}} sorts de ensorceleur (niveau + mod CHA).",
+          "spellcastingAccessDescription": "Vous pouvez lancer et surlancer des sorts en utilisant des emplacements de sorts.",
+          "sorceryPointsTitle": "🔮 Points de Sorcellerie",
+          "sorceryPointsDescription": "Vous avez {{sorceryPoints}} point(s) de sorcellerie (égal à votre niveau).",
+          "sorceryPointsUsage": "Utilisez pour la Métamagie ou convertissez en emplacements de sorts.",
+          "metamagicTitle": "🌀 Métamagie",
+          "metamagicDescription": "Choisissez 2 options de Métamagie (3 au niveau 10)."
+        }
+      },
+      "warlock": {
+        "name": "Occultiste",
+        "talents":  {
+
+        }
+      },
+      "wizard": {
+        "name":"Magicien",
+        "talents":  {
+
+        }
+      }
+    },
+    "backgrounds": {
+      "acolyte": {
+        "name": "Acolyte",
+        "description": "Vous avez passé votre vie au service d'un temple dédié à un dieu ou à un panthéon de dieux. Vous agissez comme un intermédiaire entre le domaine du sacré et le monde des mortels, accomplissant des rites sacrés et offrant des sacrifices pour guider les fidèles vers le divin. Vous n'êtes pas nécessairement un clerc – accomplir des rites sacrés ne signifie pas forcément canaliser un pouvoir divin.\n\nChoisissez un dieu, un panthéon ou une autre entité quasi-divine parmi ceux listés dans \"Panthéons Fantastiques-Historiques\" ou proposés par votre MJ, et définissez avec lui la nature de votre service religieux. Étiez-vous un simple serviteur du temple, élevé depuis l'enfance pour assister les prêtres dans les rites sacrés ? Ou étiez-vous un grand prêtre ayant soudainement reçu un appel pour servir votre dieu d'une manière différente ? Peut-être dirigiez-vous un petit culte en dehors de toute structure officielle, voire un groupe occulte servant un maître démoniaque que vous reniez aujourd'hui."
+      },
+      "artisan": {
+        "name": "Artisan",
+        "description": "Vous maîtrisez un métier suffisamment bien pour en vivre confortablement et aspirer à la maîtrise de votre art. Pourtant, vous voilà prêt à affronter la boue, le sang et le danger.\n\nPourquoi êtes-vous devenu aventurier ? Avez-vous fui un maître cruel ? Étiez-vous lassé de votre vie monotone ? Ou êtes-vous un artisan respectable cherchant de nouveaux matériaux et de nouveaux marchés ?"
+      },
+      "charlatan": {
+        "name": "Charlatan",
+        "description": "Les gens vous traitent d'escroc, mais vous êtes avant tout un artiste. Vous rendez les gens heureux – séparer les sots et les scélérats de leur argent n'est qu'un effet secondaire plaisant.\n\nQuel est votre arnaque préférée ? Vendre des objets magiques factices ? Parler aux esprits ? Vous faire passer pour un parent disparu depuis longtemps ? Ou laissez-vous simplement les gens malhonnêtes croire qu'ils sont en train de vous escroquer ?"
+      },
+      "con-artist": {
+        "name": "Escroc",
+        "description": "Vous avez toujours eu un don pour faire voir aux gens les choses sous votre angle, souvent à leur détriment. Vous savez comment ils pensent, ce qu'ils veulent, et comment en tirer parti.\n\nLes gens devraient savoir qu'il ne faut pas vous faire confiance lorsque vous leur proposez exactement ce dont ils ont besoin, pour précisément la somme qu'ils possèdent. Mais chez les désespérés, la prudence est une denrée rare. Vos fioles mystérieuses, rumeurs improbables et cartes secrètes leur promettent le salut. Lorsqu'ils réalisent qu'ils ont été dupés, vous avez déjà disparu."
+      },
+      "court-servant": {
+        "name": "Serviteur de Cour",
+        "description": "Bien que vous soyez indépendant aujourd'hui, vous avez autrefois servi un marchand, un noble, un régent ou une autre personne de haut rang. Vous êtes un expert des dynamiques sociales complexes et connaissez l'histoire et les coutumes de la vie de cour.\n\nDiscutez avec votre MJ pour déterminer qui vous serviez et pourquoi vous ne l'êtes plus : votre maître a-t-il pris sa retraite ? Avez-vous quitté le service d'un maître cruel ? La cour où vous travailliez a-t-elle été conquise par un empire voisin ? Ou y a-t-il une autre raison ?"
+      },
+      "crime-syndicate-member": {
+        "name": "Membre d'un Syndicat du Crime",
+        "description": "Que vous ayez grandi dans des ruelles malfamées en dépouillant les joueurs imprudents ou passé votre jeunesse à détrousser les voyageurs inattentifs, votre mode de vie basé sur la tromperie pour survivre a fini par attirer l'attention d'un puissant syndicat du crime.\n\nOffrant protection, camaraderie et de précieuses ressources pour perfectionner votre art criminel, le syndicat vous a marqué de son emblème et vous a accueilli dans ses rangs. Peut-être avez-vous commencé comme simple coupe-bourse, errant dans les ruelles pour remplir les coffres du syndicat, jusqu'à gravir les échelons. Ou alors, votre talent pour le déguisement et le mensonge a fait de vous un agent indispensable dans la collecte d’informations. Peut-être encore que votre habileté à manier les armes vous a transformé en tueur à gages redouté, accomplissant les basses besognes d’un chef du syndicat.\n\nQuoi qu'il en soit, la menace de la loi plane sur vous, mais les avantages d’avoir un pied dans un cartel puissant surpassent largement la paranoïa qui vous guette."
+      },
+      "criminal": {
+        "name": "Criminel",
+        "description": "En tant que criminel aguerri, vous avez côtoyé des assassins, des voleurs et ceux qui les traquent. Votre nouvelle carrière d’aventurier est, en comparaison, un métier plutôt honnête.\n\nÉtiez-vous un pickpocket ? Un assassin ? Un agresseur de ruelles ? L’êtes-vous toujours ?"
+      },
+      "desert-runner": {
+        "name": "Coureur du désert",
+        "description": "Vous avez grandi dans le désert. En tant que nomade, vous avez voyagé de lieu en lieu, suivant les routes caravanières. Votre éducation ne vous a pas seulement habitué à la vie dans le désert – vous y prospérez. Votre famille y vit depuis des siècles, et vous en savez plus sur la survie en milieu aride que sur la vie en ville."
+      },
+      "destined": {
+        "name": "Destiné",
+        "description": "Le devoir est une affaire complexe et embrouillée, qu'il soit familial, politique ou civil. Parfois, il s'accompagne de richesse et d'intrigues, mais bien souvent, il implique aussi des obligations et des responsabilités. Vous portez un tel fardeau. Cela peut être un titre de noblesse, un mariage arrangé, une entreprise familiale à gérer ou une charge civile héritée. Peut-être avez-vous promis d'accomplir ce devoir, tentez désespérément d’y échapper, ou cherchez la personne qui doit vous accompagner dans cette destinée. Quelles que soient les raisons, vous êtes en route, avançant vers ou fuyant votre destin.\n\n***Destinée***\nVous fuyez quelque chose ou vous vous y précipitez tête baissée. Cette responsabilité ou cet événement est-il une bénédiction ou une malédiction ? Quoi qu’il en soit, vous êtes engagé sur cette voie. Choisissez un destin ou lancez un d8 et consultez la table ci-dessous.\n\n| d8 | Destinée                                                                                                                  |\n|----|---------------------------------------------------------------------------------------------------------------------------|\n| 1  | Vous fuyez un mariage arrangé.                                                                                            |\n| 2  | Vous recherchez votre fiancé(e) en fuite.                                                                                 |\n| 3  | Vous ne voulez pas reprendre l’entreprise familiale renommée.                                                             |\n| 4  | Vous devez arriver à un lieu sacré à un moment précis pour accomplir une prophétie.                                      |\n| 5  | Un parent noble est mort, et vous devez prendre sa place.                                                                 |\n| 6  | Vous êtes la réincarnation d’une figure célèbre et êtes destiné(e) à vivre isolé(e) dans un temple.                      |\n| 7  | Vous deviez occuper une charge militaire honorifique mais périlleuse.                                                     |\n| 8  | Votre famille occupe une charge civile (scribe royal, shérif, recenseur, etc.) depuis des générations.                    |"
+      },
+      "diplomat": {
+        "name": "Diplomate",
+        "description": "Vous avez toujours su trouver des solutions harmonieuses aux conflits. Peut-être avez-vous commencé en arbitrant les disputes familiales dès votre enfance. En grandissant, vous avez cherché à désamorcer l’agression lorsque vous la perceviez. Vous êtes souvent intervenu pour résoudre des querelles de voisinage, trouvant un terrain d’entente acceptable pour toutes les parties."
+      },
+      "elemental-warden": {
+        "name": "Gardien Élémentaire",
+        "description": "Loin des intrigues politiques des grandes cités, vous avez grandi en vénérant et protégeant la nature, tout en surveillant, manipulant et guidant les forces élémentaires qui nourrissent la vie ou la détruisent. Ayant vécu parmi de petites communautés tribales, vous entretenez des liens plus forts que la plupart avec vos voisins, et la préservation de votre mode de vie est une priorité absolue.\n\nChaque gardien élémentaire est lié à l'une des quatre tribus élémentaires et leurs villages. Vous devez en choisir une : Feu, Eau, Terre ou Air.\n\nVotre éducation vous a peut-être préparé à être un féroce guerrier, entraîné au combat pour défendre votre culture et les failles élémentaires. Il se peut que votre méditation sur l’équilibre des éléments vous ait offert force et sérénité en tant que moine. Peut-être avez-vous appris à maîtriser les éléments vous-même, rejoignant les puissants druides élémentaires. Quoi qu’il en soit, votre loyauté va avant tout à la protection de votre tribu. Vous êtes parti en quête d’alliés et de nouvelles connaissances sur le monde."
+      },
+      "entertainer": {
+        "name": "Artiste",
+        "description": "Vous êtes un artiste capable de captiver une foule, un interprète mais aussi un professionnel : vous n'oubliez jamais de faire passer le chapeau après un spectacle.\n\nÊtes-vous un chanteur grattant son luth ? Un acteur ? Un poète ou un écrivain ? Un acrobate ou un jongleur ? Êtes-vous un talent en devenir ou une étoile déjà établie ?"
+      },
+      "exile": {
+        "name": "Exilé",
+        "description": "Votre patrie vous est interdite et vous errez en terres étrangères. On ne vous prendra jamais pour un natif, mais les aventuriers, souvent aussi déracinés que vous, vous acceptent facilement.\n\nÊtes-vous un noble banni ? Un réfugié fuyant la guerre ou une invasion de morts-vivants ? Un dissident politique ou un criminel en cavale ? Ou bien un voyageur perdu, venu d'un pays inaccessible ?"
+      },
+      "farmer": {
+        "name": "Fermier",
+        "description": "Vous avez grandi comme fermier, un métier où l'argent manque et où les journées sont longues. Vous êtes désormais aventurier, un métier où l’or abonde mais où, si vous n’êtes pas prudent, vos journées risquent d’être bien trop courtes.\n\nPourquoi avez-vous troqué votre charrue contre une épée ? Cherchez-vous l'aventure, l'excitation ou la vengeance ? Avez-vous laissé derrière vous une ferme prospère ou un champ de ruines fumantes ?"
+      },
+      "fate-touched": {
+        "name": "Touché par le Destin",
+        "description": "De nombreuses âmes suivent leur destinée, inconscientes de leur rôle dans la grande tapisserie du destin. Mais certaines âmes, elles, influencent les fils du destin autour d’elles, tissant l’histoire selon leur passage, qu’elles en aient conscience ou non. Ces individus, qu'on appelle les Touchés par le Destin, attirent des événements grandioses et terribles. Ils deviennent souvent de grands souverains, de redoutables tyrans, de puissants mages, des guides spirituels ou des héros de légende.\n\nPeu de Touchés par le Destin prennent conscience de leur nature. Hormis les puissants sorts de divination, il est extrêmement difficile d’en identifier un. Certaines communautés les voient comme des présages funestes, les traitant avec crainte et méfiance. D'autres les considèrent comme une bénédiction, se rassemblant autour d’eux en quête de guidance. Certains envieux tentent de les asservir, tandis que d’anciens récits parlent de mages cherchant à extraire ou transférer cette essence unique.\n\nLes joueurs ne sont pas censés choisir cet historique. Il est conçu pour les maîtres du jeu souhaitant intégrer un personnage clé dans leur campagne, qu’il s’agisse d’un PJ central à l’intrigue ou d’un PNJ nécessitant protection. Un antagoniste pourrait même découvrir sa nature et l’utiliser pour semer le chaos. Ce concept n'offre que peu d'avantages mécaniques, mais il ajoute une dimension de mystère et d'importance à un personnage."
+      },
+      "folk-hero": {
+        "name": "Héros du peuple",
+        "description": "Vous êtes né dans une famille de gens du peuple, mais un événement vous a valu la célébrité. Vous êtes admiré localement, et les récits de vos exploits se sont répandus jusqu'aux confins du monde.\n\nAvez-vous gagné votre renommée en combattant un tyran oppressif ? En sauvant votre village d'un monstre ? Ou par quelque chose de plus banal, comme remporter un concours de lutte ou un concours de mangeur de tartes ?"
+      },
+      "forest-dweller": {
+        "name": "Habitant de la forêt",
+        "description": "Vous êtes une créature de la forêt, né et élevé sous un couvert de verdure. Vous pensiez vivre toute votre vie dans la forêt, en harmonie avec la nature, jusqu'à ce qu'un événement imprévu, traumatisant ou transformateur, vous pousse à quitter votre foyer familier pour découvrir le vaste monde. La civilisation vous est étrangère, le ciel ouvert vous semble inconnu, et les coutumes de ce que l'on appelle le monde civilisé vont à l'encontre des vérités de la nature."
+      },
+      "former-adventurer": {
+        "name": "Ancien aventurier",
+        "description": "Lorsque vous avez enfilé votre équipement et hissé votre sac sur votre dos, vous ne pensiez pas redevenir un aventurier. Mais l'appel du héros ne pouvait être ignoré. Vous avez déjà essayé cette vie auparavant — peut-être a-t-elle été couronnée de richesses et de gloire, ou peut-être s'est-elle soldée par du chagrin et des regrets. Nul n'a jamais dit que l'aventure garantissait le succès.\n\nAujourd'hui, il est temps de repartir vers le danger. Les raisons de cette reprise varient : une menace calamiteuse pèse-t-elle sur votre ville, votre région, ou même le monde ? La vie sédentaire n'était-elle pas ce que vous espériez ? Ou bien votre passé vous a-t-il finalement rattrapé ? Peu importe la raison, vous plongez à nouveau dans le danger. Et il est temps de montrer à ces jeunes aventuriers comment on fait."
+      },
+      "freebooter": {
+        "name": "Flibustier",
+        "description": "Vous avez navigué sur les mers en tant que flibustier, membre d'un équipage de pirates. Vous devriez inventer un nom pour votre ancien navire et son capitaine, ainsi que pour votre zone de chasse et le type de navires que vous pilliez. Avez-vous navigué sous les ordres d'un capitaine sanguinaire, attaquant les communautés côtières et massacrant tous ceux qui s'y trouvaient ? Ou faisiez-vous partie d'un groupe d'anciens esclaves devenus pirates, luttant pour mettre fin au commerce des esclaves ? Quel que soit votre passé, vous vous sentez chez vous à bord d'un navire, et vous avez du mal à vous adapter aux longues périodes passées sur la terre ferme."
+      },
+      "gambler": {
+        "name": "Joueur",
+        "description": "Vous n'avez jamais rencontré votre égal aux dés ou aux cartes. Une carrière de paris à haut risque et d'aventures audacieuses vous a appris quand il faut jouer prudemment et quand il faut tout risquer — mais vous n'avez pas encore appris quand il faut s'arrêter.\n\nÊtes-vous un brillant stratège du jeu, un maître du bluff et de la contre-attaque, ou un tricheur aux mains agiles ? Qu'est-ce qui vous a poussé vers une vie d'aventure : une série de malchances ou une soif insatiable de risque ?"
+      },
+      "gamekeeper": {
+        "name": "Garde-chasse",
+        "description": "Vous êtes chez vous en pleine nature, traquant le gibier ou guidant les chasseurs moins expérimentés dans l'art de la traque. Vous connaissez les exigences nécessaires pour favoriser la croissance d'un troupeau et les règles d'une chasse durable. Vous savez dresser un animal de chasse pour qu'il reconnaisse son maître et obéisse à une demi-douzaine de commandes, avec le temps. Vous connaissez aussi l'étiquette à adopter auprès de la noblesse ou d'autres membres des classes supérieures, qui sollicitent régulièrement vos services, et vous pouvez vous comporter avec aisance dans ces cercles sociaux."
+      },
+      "guild-artisan": {
+        "name": "Membre de guilde",
+        "description": "Faire partie d'un groupe ouvre bien des portes, et être membre d'une guilde vous apporte de nombreuses opportunités.\n\nFaites-vous partie d'une guilde d'artisans ou de commerçants ? D'un ordre de mages ou de chasseurs de monstres ? Ou avez-vous intégré une guilde secrète de voleurs ou d'assassins ?"
+      },
+      "hermit": {
+        "name": "Ermite",
+        "description": "Vous avez vécu des années seul dans un sanctuaire isolé, une grotte, un monastère, ou ailleurs, loin du monde. Parmi vos tâches quotidiennes, vous aviez beaucoup de temps pour l'introspection.\n\nPourquoi viviez-vous en solitaire ? Étiez-vous en pénitence ? En exil ou en fuite ? Veilliez-vous sur un sanctuaire ou un lieu sacré ? Étiez-vous en deuil ?"
+      },
+      "innkeeper": {
+        "name": "Aubergiste",
+        "description": "Vous avez passé un certain temps en tant qu'aubergiste, tavernier ou peut-être barman. Cela pouvait être dans une petite ville de carrefour, une communauté de pêcheurs, une grande caravansérail ou une métropole cosmopolite. Vous faisiez tout : préparer la nourriture, gérer les stocks, servir les clients, et bien plus encore. Pendant tout ce temps, vous écoutiez les aventuriers planifier leurs quêtes, raconter leurs histoires, exhiber leurs trophées impressionnants et parler de leurs cicatrices terribles. Vous les voyiez partir et revenir, en pensant : \"Un jour, ce sera mon tour.\"\n\nCe jour est arrivé."
+      },
+      "knight": {
+        "name": "Chevalier"
+      },
+      "lyceum-student": {
+        "name": "Étudiant du lycée",
+        "description": "Vous êtes probablement issu d'une famille aisée ou de prestige social, car les frais de scolarité d'un lycée ne sont pas bon marché. Vos intérêts et vos ambitions vous ont mené dans les couloirs scintillants de ce lieu d’apprentissage, absorbant chaque leçon pour mieux laisser votre empreinte sur le monde (ou du moins, vous devriez, mais chaque classe a ses élèves paresseux). Cependant, l’appel de l’aventure menace de vous arracher à vos études, et le défi de concilier votre éducation avec le tourbillon du destin se profile désormais.\nVous êtes peut-être venu approfondir vos recherches sur l’histoire et le folklore des terres que vous appelez maintenant votre foyer, avec l’espoir d’y faire carrière comme professeur. Peut-être étiez-vous attiré par la promesse de prospérité en politique, apprenant les rouages du gouvernement et des alliances pour mieux vous positionner comme un futur acteur de l’histoire. Ou bien, vous avez découvert un talent pour l’arcane et êtes venu ici pour perfectionner votre maîtrise des sorts en suivant les traces des plus grands mages d’antan."
+      },
+      "marauder": {
+        "name": "Maraudeur",
+        "description": "Vous étiez membre d’un groupe de hors-la-loi. Peut-être faisiez-vous partie d’une bande de bandits sanguinaires, d’un mouvement de résistance contre un tyran, ou d’une flotte de pirates. Vous viviez en dehors des terres civilisées, et votre nom inspirait la terreur chez les riches voyageurs.\n\nComment avez-vous rejoint votre bande de hors-la-loi ? Pourquoi l’avez-vous quittée — ou l’avez-vous vraiment quittée ?"
+      },
+      "mercenary-company-scion": {
+        "name": "Héritier d’une compagnie de mercenaires",
+        "description": "Vous descendez d’une lignée célèbre de vétérans de compagnies libres, et vos premiers souvenirs sont ceux de camps de guerre, de terrains d’entraînement et de salles stratégiques. Chéri ou ignoré par vos parents, vous avez passé vos jeunes années à apprendre le maniement des armes et des armures auprès de capitaines courageux, la discipline du camp auprès de sergents robustes, et une foule de vertus et de vices auprès des simples soldats. On vous a toujours dit que vous étiez spécial et destiné à la gloire. Le poids de l'héritage, de l'honneur ou de la réputation de votre famille peut être une source d'inspiration pour de grands exploits ou un fardeau dont vous essayez de vous affranchir.\n\n***Réputation de la Compagnie de Mercenaires***\nVotre famille est liée à une compagnie de mercenaires ayant une certaine réputation qui peut encore affecter votre vie. Lancez un d8 ou choisissez parmi les options du tableau ci-dessous pour déterminer la réputation de cette compagnie libre.\n\n| d8 | Réputation de la Compagnie de Mercenaires |\n|----|-------------------------------------------|\n| 1  | Infâme. Les méfaits de la compagnie poursuivent quiconque est associé à elle. |\n| 2  | Honnête. Une compagnie respectable dont la parole et les serments sont de confiance. |\n| 3  | Inconnue. Peu de gens connaissent cette compagnie, ses exploits restent à écrire. |\n| 4  | Craint. Pour le meilleur ou pour le pire, cette compagnie inspire la peur sur le champ de bataille. |\n| 5  | Moquée. Malgré ses efforts, cette compagnie est la risée des mercenaires. |\n| 6  | Spécialisée. Cette compagnie est reconnue pour une compétence spécifique sur ou hors du champ de bataille. |\n| 7  | Mal vue. Pour des raisons bien connues, cette compagnie traîne une mauvaise réputation. |\n| 8  | Célèbre. Les exploits et les hauts faits de la compagnie sont connus à travers le monde. |"
+      },
+      "mercenary-recruit": {
+        "name": "Recrue mercenaire",
+        "description": "Chaque année, de nombreux aspirants tentent de gagner une place dans l’une des grandes compagnies de mercenaires. Certains d’entre eux ont reçu une formation mais ne sont pas encore prêts à être pleinement intégrés. D’autres sont déjà membres mais ont été envoyés à l’étranger pour acquérir de l’expérience avant d’obtenir un rang. Vous faites partie de ces guerriers ambitieux, prêt à forger votre destin avec votre lame, votre magie ou vos compétences."
+      },
+      "monstrous-adoptee": {
+        "name": "Adopté par des monstres",
+        "description": "Les chants et sagas racontent l’histoire de héros élevés par des créatures que la plupart considèrent comme des monstres. Vous êtes l’un de ces enfants. Trouvé, enlevé, abandonné ou confié à vos parents monstrueux, vous avez grandi parmi eux comme l’un des leurs. La vie avec votre famille adoptive n’a pas été facile, mais les épreuves que vous avez surmontées vous ont rendu plus fort. Peut-être avez-vous été \"sauvé\" après seulement quelques années passées parmi eux, ou peut-être ne réalisez-vous que maintenant la vérité sur vos origines. À mesure que vous explorez le monde, le temps passé avec vos parents adoptifs continue de façonner votre présent et votre avenir.\n\n***Parents adoptifs***\nAvant de devenir aventurier, votre histoire était définie par les créatures qui vous ont élevé. Choisissez une espèce ou lancez un d10 pour en déterminer l’origine.\n\n| d10 | Type de créature adoptive |\n|-----|-----------------------------|\n| 1   | Humanoïde (gnoll, gobelin, kobold, ou triton) |\n| 2   | Aberration (aboleth, chuul, mantoptère, ou otyugh) |\n| 3   | Bête (singe, ours, tyrannosaure, ou loup) |\n| 4   | Céleste ou fiélon (balor, diable barbu, couatl, deva, ou licorne) |\n| 5   | Dragon (tortue-dragon, pseudodragon, dragon rouge, ou vouivre) |\n| 6   | Élémentaire (éffrit, gargouille, salamandre, ou élémentaire d’eau) |\n| 7   | Féérique (dryade, hag verte, satyre, ou sprite) |\n| 8   | Géant (ettin, géant du feu, ogre, ou troll) |\n| 9   | Plante ou ooze (buisson animé, vase grise, monstre végétal, ou tréant) |\n| 10  | Monstruosité (béhir, chimère, griffon, mimique, ou minotaure) |"
+      },
+      "mysterious-origins": {
+        "name": "Origines mystérieuses",
+        "description": "Vos origines sont un mystère, même pour vous. Vous vous souvenez peut-être de fragments de votre vie passée, ou vous rêvez d’événements qui pourraient être des souvenirs, mais il est difficile de démêler le vrai du faux. Vous connaissez des faits sur le monde, peut-être même votre nom, mais votre passé avant la perte de votre mémoire n’existe plus qu’à travers des visions ou des éclairs de familiarité.\nVous pouvez laisser votre MJ décider des détails de votre passé ou lui donner une histoire que votre personnage a oubliée. Avez-vous été victime d’un sort qui a mal tourné, ou avez-vous volontairement sacrifié votre mémoire en échange d’un pouvoir ? Est-ce un accident naturel ou une volonté délibérée d’effacer un souvenir insoutenable ? Peut-être avez-vous des proches qui vous cherchent, ou des ennemis dont vous ignorez tout."
+      },
+      "noble": {
+        "name": "Noble"
+      },
+      "northern-minstrel": {
+        "name": "Ménestrel du Nord",
+        "description": "Tandis que les guerriers tribaux du grand nord vous considèrent comme faible et lâche, vous connaissez la vérité : la vie dans les villes nordiques et les salles de beuverie n'est pas faite pour les âmes fragiles. Que vous soyez un interprète exubérant issu d’une école skaldique, un érudit contemplatif tentant de percer les mystères du Nord, ou un guerrier résolu cherchant à repousser la morosité du froid, vous avez appris à naviguer à travers des ruelles et des scènes aussi traîtresses que les ruines glacées. Vous partez à l’aventure pour enrichir votre répertoire de nouvelles chansons, ajouter du savoir à votre collection et prouver que ceux qui se proclament les véritables Nordiques ont tort.\n\n***Spécialité skaldique***\nChaque ménestrel excelle dans un type de performance. Choisissez-en une ou lancez un d8 pour déterminer votre spécialité.\n\n| d8 | Spécialité |\n|----|---------------------------------|\n| 1  | Récitation de poésie épique |\n| 2  | Chant |\n| 3  | Récit d’histoires |\n| 4  | Flyting (duel d’insultes) |\n| 5  | Yodel |\n| 6  | Lancer de hache |\n| 7  | Jeu d’un instrument |\n| 8  | Cracheur de feu ou avaleur d’épées |"
+      },
+      "occultist": {
+        "name": "Occultiste",
+        "description": "Au plus profond de vous, vous croyez en des choses que d’autres rejettent. Les signes sont partout, pour peu qu’on sache où regarder. Chaque question appelle une réponse, qui elle-même soulève de nouvelles interrogations. Le cycle est sans fin, révélant couche après couche de mystères et de secrets.\nLever le voile de la réalité pour en voir au-delà est une tentation irrésistible qui vous pousse à explorer des lieux oubliés et dangereux. Peut-être avez-vous toujours été attiré par l’occulte, ou peut-être avez-vous rencontré quelque chose ou quelqu’un qui vous a ouvert les yeux sur un monde insoupçonné. Vous pouvez appartenir à une organisation ésotérique déterminée à percer les mystères, à une secte cherchant à exploiter ces secrets à des fins sombres, ou bien être un solitaire traquant les réponses par vous-même. En tant qu’occultiste, vous posez les questions que la réalité ne veut pas entendre."
+      },
+      "outlander": {
+        "name": "Étranger",
+        "description": "Vous avez vécu loin des fermes et des villes civilisées. Vous connaissez à la fois la beauté et les dangers de la nature sauvage.\n\nFaisiez-vous partie d'une tribu nomade ? Étiez-vous un chasseur ou un guide ? Un vagabond solitaire ou un explorateur ? Un protecteur de la civilisation contre les monstres, ou un gardien des traditions anciennes contre l’avancée de la civilisation ?"
+      },
+      "parfumier": {
+        "name": "Parfumeur",
+        "description": "Vous êtes érudit et ambitieux. Vous avez passé votre jeunesse en apprentissage dans les serres, laboratoires et parfumeries les plus respectés de la ville. Là, vous avez étudié la botanique et la chimie, exploré les propriétés et interactions des cristaux fins, des métaux rares et de la magie. Vous avez rapidement maîtrisé l’art d’identifier et de transformer des échantillons botaniques et alchimiques rares et complexes, ainsi que les extractions et infusions d’huiles essentielles, de pollens et d’autres composés chimiques parfumés, naturels ou non.\nTous les changements de vie drastiques ne sont pas dus à une chute sociale ou financière. Certains sont simplement des choix. Quelle qu'ait été votre motivation, vous avez accepté qu’une vie confortable de recherche, de science et de commerce appartient – du moins pour l’instant – à votre passé."
+      },
+      "pirate": {
+        "name": "Pirate"
+      },
+      "recovered-cultist": {
+        "name": "Ancien cultiste repenti",
+        "description": "Les cultes naissent et se développent dans l’ombre, sans réelle unité entre eux, chacun servant des forces obscures selon ses propres ambitions. Les hiérarchies cachées de mortels avides de pouvoir séduisent et corrompent, promettant une fraction du pouvoir qu’on leur a promis en échange de leur loyauté.\nVous avez autrefois appartenu à l’un de ces cultes. Peut-être n'était-ce qu’une brève rébellion de jeunesse, un élan de curiosité vers une voie interdite. Peut-être vous sentiez-vous seul et perdu, trouvant dans cette communauté l’accueil que vous recherchiez inconsciemment. Il est aussi possible que vous ayez été élevé dès votre naissance dans l’adoration de divinités sombres et impitoyables. Puis, un jour, le voile s’est levé, et la vérité cruelle a ébranlé votre foi, vous poussant à fuir les promesses trompeuses et à rechercher la rédemption.\nVous êtes libéré de l’emprise de ces doctrines dangereuses, mais peu de cultes laissent partir leurs adeptes sans conséquences. Ceux qui renient leur ancienne voie sont rarement en sécurité tant qu’ils respirent encore."
+      },
+      "sage": {
+        "name": "Sage",
+        "description": "Vous êtes un chercheur des vérités du monde et un expert dans votre domaine choisi, avec une connaissance ésotérique à portée de main, ou au pire, dans un livre dont vous vous souvenez vaguement.\n\nPourquoi avez-vous quitté les murs de la bibliothèque pour explorer le monde ? Cherchez-vous une sagesse ancienne ? Du pouvoir ? La réponse à une question spécifique ? Un retour dans votre ancienne institution ?"
+      },
+      "sailor": {
+        "name": "Marin",
+        "description": "Vous êtes un marin expérimenté avec un œil avisé pour la météo et une taverne préférée dans chaque port. Les voyages difficiles vous ont forgé et le pouvoir de la mer vous a rendu humble.\n\nÉtiez-vous matelot, officier, ou capitaine de votre navire ? Avez-vous navigué sur un bateau de guerre, un bateau de pêche, une barge marchande, un vaisseau corsaire, ou un navire pirate ?"
+      },
+      "soldier": {
+        "name": "Soldat"
+      },
+      "scoundrel": {
+        "name": "Filou",
+        "description": "Vous avez grandi dans un quartier pauvre d’une ville ou d’une grande agglomération. Vous avez peut-être eu la chance d’avoir un toit, même fuyant, au-dessus de votre tête, ou peut-être avez-vous grandi à dormir dans les portes ou sur les toits. Quoi qu'il en soit, vous n’avez pas eu la vie facile et vous avez dû compter sur votre intelligence. Bien que vous n’ayez jamais été un criminel endurci, vous êtes tombé dans de mauvais plis, ou vous vous êtes retrouvé dans des ennuis pour avoir volé de la nourriture sur un chariot d’oranges ou des vêtements propres sur une corde à linge. Vous n'êtes pas étranger à la surveillance de la ville dans votre ville natale, et vous les avez souvent déjoués ou échappés."
+      },
+      "sentry": {
+        "name": "Sentinelle",
+        "description": "Dans votre jeunesse, la défense de la ville, de la communauté, de la caravane, ou de votre patron était la façon dont vous gagniez votre pain. Vous avez peut-être été formé par un vieux gardien de la ville, ou peut-être avez-vous été recruté par le magistrat local en raison de vos compétences, de votre taille, ou de votre intellect. Quelle que soit la manière dont vous avez accédé à ce rôle, vous excellez à défendre les autres.\n  Vous avez un flair pour le danger, un œil aiguisé pour repérer les menaces, un bras fort pour vous soutenir, et vous êtes assez malin pour savoir quand agir. Mais avant tout, vous étiez un agent de la paix ou un protecteur, pas un membre d’une armée prête à partir en guerre.\n\n***Spécialisation***\nChaque employeur ou endroit qui engage une sentinelle a des besoins uniques. En tant que sentinelle, vous avez rempli l'un de ces rôles uniques. Choisissez une spécialisation ou lancez un d6 pour déterminer votre domaine d'expertise.\n\n| d6 | Spécialisation |\n|----|--------------------------------|\n| 1  | Garde de la ville ou des portes |\n| 2  | Corps de garde ou geôlier |\n| 3  | Garde de caravane |\n| 4  | Sentinelle de palais ou judiciaire |\n| 5  | Gardien de boutique |\n| 6  | Gardien ecclésiastique ou de temple |"
+      },
+      "trader": {
+        "name": "Commerçant",
+        "description": "Vous avez fait votre apprentissage parmi les marchands et les commerçants. Vous avez parcouru des kilomètres poussiéreux et marchandé sous des cieux lointains.\n\nPourquoi vivez-vous une vie d’aventure ? Travaillez-vous pour rembourser votre dette envers le magasin de la compagnie ? Escortez-vous une caravane à travers des contrées dangereuses ?\n\nLevez-vous-vous des fonds pour créer votre propre entreprise, ou tentez-vous de restaurer la fortune d'une famille commerçante ruinée ? Ou êtes-vous un contrebandier, suivant des routes commerciales secrètes inconnues des autorités ?"
+      },
+      "trophy-hunter": {
+        "name": "Chasseur de trophées",
+        "description": "Vous chassez les bêtes les plus puissantes dans les environnements les plus rudes, réclamant leurs fourrures en tant que trophées et les rapportant dans les terres civilisées pour en tirer profit ou décorer votre demeure. Vous avez probablement été orienté sur cette voie dès votre naissance, suivant vos parents lors de safaris et apprenant de leurs actions, mais vous avez peut-être emprunté ce chemin à l’âge adulte, emporté par l'excitation de dominer le monde naturel.\n  Beaucoup de chasseurs de gros gibier poursuivent leur proie uniquement pour le plaisir, comme un loisir apaisant, mais d'autres vendent leurs compétences au plus offrant pour amasser richesse et réputation en tant que chasseur de trophées."
+      },
+      "urchin": {
+        "name": "Gosse des rues",
+        "description": "Vous avez grandi dans les rues. Vous savez où vous cacher et quand vos yeux de chien battu vous permettront de décrocher un bon repas.\n\nPourquoi étiez-vous dans les rues ? Étiez-vous un fugueur ? Un orphelin ? Ou juste un enfant aventurier qui traînait tard ?"
+      }
+},
+    "skills": {
+      "acrobatics": {
+        "index": "acrobatics",
+        "name": "Acrobaties"
+      },
+      "animal-handling": {
+        "index": "animal-handling",
+        "name": "Dressage"
+      },
+      "arcana": {
+        "index": "arcana",
+        "name": "Arcanes"
+      },
+      "athletics": {
+        "index": "athletics",
+        "name": "Athlétisme"
+      },
+      "deception": {
+        "index": "deception",
+        "name": "Tromperie"
+      },
+      "history": {
+        "index": "history",
+        "name": "Histoire"
+      },
+      "insight": {
+        "index": "insight",
+        "name": "Psychologie"
+      },
+      "intimidation": {
+        "index": "intimidation",
+        "name": "Intimidation"
+      },
+      "investigation": {
+        "index": "investigation",
+        "name": "Investigation"
+      },
+      "medicine": {
+        "index": "medicine",
+        "name": "Médecine"
+      },
+      "nature": {
+        "index": "nature",
+        "name": "Nature"
+      },
+      "perception": {
+        "index": "perception",
+        "name": "Perception"
+      },
+      "performance": {
+        "index": "performance",
+        "name": "Représentation"
+      },
+      "persuasion": {
+        "index": "persuasion",
+        "name": "Persuasion"
+      },
+      "religion": {
+        "index": "religion",
+        "name": "Religion"
+      },
+      "sleight-of-hand": {
+        "index": "sleight-of-hand",
+        "name": "Escamotage"
+      },
+      "stealth": {
+        "index": "stealth",
+        "name": "Discrétion"
+      },
+      "survival": {
+        "index": "survival",
+        "name": "Survie"
+      }
+    },
+    "starting_selections": {
+      "draconic-ancestry-black": {
+        "name": "Ancetre draconique (noir)"
+      },
+      "draconic-ancestry-blue": {
+          "name": "Ancetre draconique (bleu)"
+      },
+      "draconic-ancestry-brass": {
+        "name": "Ancetre draconique (laiton)"
+      },
+      "draconic-ancestry-bronze": {
+        "name": "Ancetre draconique (bronze)"
+      },
+      "draconic-ancestry-copper": {
+        "name": "Ancetre draconique (cuivre)"
+      },
+      "draconic-ancestry-gold": {
+        "name": "Ancetre draconique (or)"
+      },
+      "draconic-ancestry-green": {
+        "name": "Ancetre draconique (vert)"
+      },
+      "draconic-ancestry-red": {
+        "name": "Ancetre draconique (rouge)"
+      },
+      "draconic-ancestry-silver": {
+        "name": "Ancetre draconique (argent)"
+      },
+      "draconic-ancestry-white": {
+        "name": "Ancetre draconique (blanc)"
+      },
+      "viol": {
+        "name": "viole"
+      },
+      "bagpipes": {
+        "name": "cornemuse"
+      },
+      "drum": {
+        "name": "tambour"
+      },
+      "dulcimer":{
+        "name": "tympanon"
+      },
+      "flute": {
+        "name": "flûte"
+      },
+      "lute":{
+        "name": "luth"
+      },
+      "lyre": {
+        "name": "lyre"
+      },
+      "horn":{
+        "name": "cor"
+      },
+      "pan-flute": {
+        "name": "flûte de Pan"
+      },
+      "shawm": {
+        "name": "chalemie"
+      },
+      "alchemists-supplies": {
+        "name": "Fournitures d'alchimiste"
+      },
+      "brewers-supplies": {
+        "name": "Fournitures de brasseur"
+      },
+      "calligraphers-supplies": {
+        "name": "Fournitures de calligraphe"
+      },
+      "carpenters-tools": {
+        "name": "Outils de charpentier"
+      },
+      "cartographers-tools": {
+        "name": "Outils de cartographe"
+      },
+      "cobblers-tools": {
+        "name": "Outils de cordonnier"
+      },
+      "cooks-utensils": {
+        "name": "Ustensiles de cuisinier"
+      },
+      "glassblowers-tools": {
+        "name": "Outils de souffleur de verre"
+      },
+      "jewelers-tools": {
+        "name": "Outils de joaillier"
+      },
+      "leatherworkers-tools": {
+        "name": "Outils de travailleur du cuir"
+      },
+      "masons-tools": {
+        "name": "Outils de maçon"
+      },
+      "painters-supplies": {
+        "name": "Fournitures de peintre"
+      },
+      "potters-tools": {
+        "name": "Outils de potier"
+      },
+      "smiths-tools": {
+        "name": "Outils de forgeron"
+      },
+      "tinkers-tools": {
+        "name": "Outils de bricoleur"
+      },
+      "weavers-tools": {
+        "name": "Outils de tisserand"
+      },
+      "woodcarvers-tools": {
+        "name": "Outils de sculpteur sur bois"
+      },
+      "disguise-kit": {
+        "name": "Kit de déguisement"
+      },
+      "forgery-kit": {
+        "name": "Kit de contrefaçon"
+      }
+    },
+    "overview": {
+      "accordion": {
+        "label": {
+          "charInformation": "Description du personnage: ",
+          "additionalBackground": "Informations supplémentaires: "
+        },
+        "charcacterInformations": "Information du personnage",
+        "equipments": "Equipements",
+        "characteristics": "Caractéristiques",
+        "skills": "Compétences",
+        "spells": "Sorts"
+      }
+    }
+
+  },
+  "characterForm": {
+    "baseBackgroundEquipment": "Equipement de l'historique",
+    "baseClassEquipment": "Equipement de base",
+    "backgroundOptionTitle": "Choisissez une option d'historique",
+    "listSelectRaces": "Race choisie: ",
+    "listSelectClasses": "Classe choisie: ",
+    "listSelectBackgrounds": "Historique choisi: ",
+    "selectedClassEquipment": "Equipement de classe selectionné: "
+  },
+  "modal": {
+    "confirmAction": "Oui",
+    "cancelAction": "Non"
+  }
+}
