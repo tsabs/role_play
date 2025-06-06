@@ -84,8 +84,15 @@
           "recklessAttackDescription": "Gain advantage on melee attacks using STR. Attack rolls against you have advantage.",
           "dangerSenseTitle": "⚠️ Danger Sense",
           "dangerSenseDescription": "Advantage on DEX saves against effects you can see."
+        },
+        "subclasses": {
+          "berserker": {
+            "title": "Berserker"
+          },
+          "totem": {
+            "title": "Totem warrior"
+          }
         }
-
       },
       "bard": {
         "name": "Bard",
@@ -98,6 +105,20 @@
           "songOfRestDescription": "While taking a short rest, allies gain extra healing.",
           "jackOfAllTradesTitle": "🎭 Jack of All Trades",
           "jackOfAllTradesDescription": "Add half proficiency bonus to all ability checks not already proficient."
+        },
+        "subclasses": {
+          "lore": {
+            "title": "College of lore",
+            "description": "A Bard of Lore enchants with ancient knowledge and forgotten tales.",
+            "cuttingWordsDescription": "Cutting words",
+            "additionalMasteryDescription": "Additional mastery"
+          },
+          "valor": {
+            "title": "College of valor",
+            "description": "A Bard of Valor inspires courage with song and sword",
+            "combatInspirationDescription": "Combat Inspiration",
+            "extraAttackDescription": "Additional attack"
+          }
         }
       },
       "cleric": {
@@ -605,7 +626,3 @@
   "cancelAction": "No"
   }
 }
-
-
-
-

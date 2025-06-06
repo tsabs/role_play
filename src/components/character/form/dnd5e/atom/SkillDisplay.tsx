@@ -13,7 +13,10 @@ interface SkillsDisplayProps {
 const SkillDisplay = ({ proficiencies }: SkillsDisplayProps) => {
     const { t } = useTranslation();
     return (
-        proficiencies?.length > 0 && (
+        proficiencies?.length > 0 &&
+        proficiencies?.some((proficiency) =>
+            proficiency.index.includes('skill')
+        ) && (
             <View
                 style={{
                     flexDirection: 'row',

@@ -2,13 +2,29 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import CustomText from '../../../atom/CustomText';
-import { calculateModifier } from '../../../../utils/d2d5';
-import { genericClassFormStyles } from './genericStyle';
+import CustomText from '../../../../../atom/CustomText';
+import {
+    calculateModifier,
+    ExtractedProficiencies,
+} from '../../../../../../utils/d2d5';
+import { genericClassFormStyles } from '../genericStyle';
+
+import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
+import BardSubclass from '../../subclassSpecifics/BardSubclass';
 
 interface BardTalentFormProps {
     level: number;
     abilities: Record<string, number>;
+    proficienciesExtracted: ExtractedProficiencies;
+    isOnEdit: boolean;
+    handleSubclassChoices: (
+        subclassChoices: Record<
+            string,
+            Array<{ index: string; bonus?: number }>
+        >
+    ) => void;
+    selectedClassElements?: SelectedClassElementsProps;
+    subclass?: string;
 }
 
 const getInspirationDie = (level: number) => {
@@ -20,7 +36,15 @@ const getInspirationDie = (level: number) => {
 
 const titleTextSize = 16;
 
-const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
+const BardTalentForm = ({
+    level,
+    abilities,
+    proficienciesExtracted,
+    isOnEdit,
+    handleSubclassChoices,
+    selectedClassElements,
+    subclass,
+}: BardTalentFormProps) => {
     const { t } = useTranslation();
     const chaMod = useMemo(
         () => calculateModifier(abilities['CHA'] || 10),
@@ -92,6 +116,17 @@ const BardTalentForm = ({ level, abilities }: BardTalentFormProps) => {
                         )}
                     />
                 </>
+            )}
+
+            {level >= 3 && (
+                <BardSubclass
+                    subclass={subclass}
+                    proficienciesExtracted={proficienciesExtracted}
+                    selectedClassElements={selectedClassElements}
+                    handleSubclassChoices={handleSubclassChoices}
+                    isOnEdit={isOnEdit}
+                    level={level}
+                />
             )}
         </View>
     );

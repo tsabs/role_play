@@ -1,4 +1,9 @@
-import { DnDAbility, SkillProficiency } from '../types/games/d2d5e';
+import {
+    DnDAbility,
+    DnDCharacter,
+    ProficiencyOption,
+    SkillProficiency,
+} from '../types/games/d2d5e';
 import { Ability } from '../types/generic';
 
 export const maxLevels = Array.from({ length: 20 }, (_, i) => {
@@ -87,4 +92,108 @@ const getSkillModifier = (
     return mod;
 };
 
-export { calculateModifier, getSkillModifier };
+const subclassLevelByClass: Record<string, number> = {
+    barbarian: 3,
+    bard: 3,
+    cleric: 1,
+    fighter: 3,
+    paladin: 3,
+    ranger: 3,
+    sorcerer: 1,
+    // ...others
+};
+
+const shouldChooseSubclass = (
+    characterClass: string,
+    level: number
+): boolean => {
+    const requiredLevel = subclassLevelByClass[characterClass];
+    return requiredLevel !== undefined && level >= requiredLevel;
+};
+
+type ProficiencyCategory = 'race' | 'class' | 'background';
+
+export interface ExtractedProficiencies {
+    fromRace: string[];
+    fromClass: string[];
+    fromBackground: string[];
+    fromSubclass: string[];
+    all: string[]; // flat list, unique
+}
+
+/**
+ * Extracts all proficiencies (mainly skill-*) selected or granted from character data.
+ */
+const extractCharacterProficiencies = (character: DnDCharacter) => {
+    const fromBackground =
+        character.background?.starting_proficiencies?.flatMap((prof) => {
+            if (prof.index?.includes('skill-')) {
+                return [prof.index.split('skill-')[1]];
+            }
+            return [];
+        }) || [];
+
+    const fromRace =
+        character.selectedRaceElements?.raceChoices?.[
+            `${character.race?.index}-race-proficiencies`
+        ]?.map((prof) => prof.index) || [];
+
+    const fromClass =
+        character.selectedClassElements?.classChoices?.[
+            `${character.className?.index}-class-0`
+        ]?.map((prof) => prof.index) || [];
+
+    const fromSubclass =
+        character.selectedClassElements?.classChoices?.[
+            `${character.selectedClassElements?.selected_subclass}-extra-proficiencies`
+        ]?.map((prof) => prof.index) || [];
+
+    return {
+        fromBackground,
+        fromRace,
+        fromClass,
+        fromSubclass,
+        all: [...fromBackground, ...fromRace, ...fromClass, ...fromSubclass],
+    };
+};
+
+const getAvailableProficiencies = (
+    data: ProficiencyOption,
+    extractedProficiencies: ExtractedProficiencies
+): ProficiencyOption => {
+    const ownedSkills = new Set(extractedProficiencies.all);
+
+    const filteredOptions = data.from.options.filter((option) => {
+        if (option.option_type === 'reference') {
+            const skillIndex = option.item.index.includes('skill-')
+                ? option.item.index.split('skill-')[1]
+                : option.item.index;
+            return !ownedSkills.has(skillIndex);
+        }
+
+        if (option.option_type === 'string') {
+            console.log('string', option);
+            const optionSelect = option as any;
+            return !ownedSkills.has(optionSelect.index);
+        }
+
+        // Keep other types (like nested choices or bonuses) by default
+        return true;
+    });
+
+    return {
+        ...data,
+        from: {
+            ...data.from,
+            options: filteredOptions,
+        },
+    };
+};
+
+export {
+    calculateModifier,
+    getSkillModifier,
+    shouldChooseSubclass,
+    extractCharacterProficiencies,
+    getAvailableProficiencies,
+};

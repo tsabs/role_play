@@ -27,7 +27,10 @@ import {
 } from '../../../../types/games/d2d5e';
 import LabeledList from './LabeledList';
 import Separator from '../../../library/Separator';
-import { callAddCharacter } from '../../../../store/character/slice';
+import {
+    callAddCharacter,
+    callUpdateCharacter,
+} from '../../../../store/character/slice';
 import { useDispatch } from 'react-redux';
 import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
 import AbilityForm from '../generic/AbilityForm';
@@ -381,13 +384,16 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                 );
                             }
                         )}
-                    {selectedObjectClass && (
-                        <TalentClassForm
-                            abilities={selectedAbility}
-                            level={level}
-                            characterClass={selectedObjectClass.index}
-                        />
-                    )}
+                    {/* TODO: Need to be added properly later on */}
+                    {/*{selectedObjectClass && (*/}
+                    {/*    <TalentClassForm*/}
+                    {/*        abilities={selectedAbility}*/}
+                    {/*        level={level}*/}
+                    {/*        characterClass={selectedObjectClass.index}*/}
+                    {/*        selectedClassElements={selectedClassElements}*/}
+                    {/*        isEditModeEnabled={false}*/}
+                    {/*    />*/}
+                    {/*)}*/}
                     <LabeledList
                         name="Backgrounds"
                         values={backgrounds}

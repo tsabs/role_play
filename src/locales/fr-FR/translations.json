@@ -84,6 +84,14 @@
           "recklessAttackDescription": "Obtenez un avantage sur les attaques au corps à corps utilisant la FOR. Les jets d'attaque contre vous ont un avantage.",
           "dangerSenseTitle": "⚠️ Sens du Danger",
           "dangerSenseDescription": "Avantage sur les jets de sauvegarde de DEX contre les effets que vous pouvez voir."
+        },
+        "subclasses": {
+          "berserker": {
+            "title": "Berserker"
+          },
+          "totem": {
+            "title": "Guerrier totem"
+          }
         }
       },
       "bard": {
@@ -97,6 +105,20 @@
           "songOfRestDescription": "Pendant un repos court, les alliés obtiennent des soins supplémentaires.",
           "jackOfAllTradesTitle": "🎭 Touche-à-Tout",
           "jackOfAllTradesDescription": "Ajoutez la moitié du bonus de maîtrise à tous les jets de compétence non maîtrisés."
+        },
+        "subclasses": {
+          "lore": {
+            "title": "Collège du savoir",
+            "description": "Un Barde du Savoir enchante par le savoir et les récits oubliés.",
+            "cuttingWordsDescription": "Mots singlants",
+            "additionalMasteryDescription": "Maîtrises supplémentaires"
+          },
+          "valor": {
+            "title": "Collège de vaillance",
+            "description": "Un Barde de la Vaillance inspire le courage avec chanson et épée.",
+            "combatInspirationDescription": "Inspiration de combat",
+            "extraAttackDescription": "Attaque supplémentaire"
+          }
         }
       },
       "cleric": {

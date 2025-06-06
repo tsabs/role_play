@@ -4,9 +4,10 @@ import { Divider } from 'react-native-paper';
 import {
     DnDCharacter,
     ElementIdentification,
-} from '../../../types/games/d2d5e';
-import CustomText from '../../atom/CustomText';
+} from '../../../../types/games/d2d5e';
+import CustomText from '../../../atom/CustomText';
 import { useTranslation } from 'react-i18next';
+import { theme } from '../../../../../style/theme';
 
 interface EquipmentListProps {
     character: DnDCharacter;
@@ -22,6 +23,14 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
     const backgroundEquipments = useMemo(
         () => character.background?.starting_equipment ?? [],
         [character.background]
+    );
+
+    const selectedRaceOptions = useMemo(
+        () =>
+            character?.selectedRaceElements?.raceChoices?.[
+                `${character.race.index}-race-proficiencies`
+            ],
+        [character?.selectedRaceElements?.raceChoices]
     );
 
     const selectedClassOptions = useMemo(
@@ -49,34 +58,25 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
     );
 
     const renderEquipment = (
-        equipments: { equipment: ElementIdentification; quantity: number }[],
-        title: string
-    ) => (
-        <>
-            <CustomText
-                fontWeight="bold"
-                text={title}
-                style={styles.sectionTitle}
-            />
-            {equipments.map((eq, index) => (
-                <CustomText
-                    key={`${eq.equipment.index}-${index}`}
-                    text={`• ${eq.equipment.name} x${eq.quantity}`}
-                />
-            ))}
-            <Divider style={styles.divider} />
-        </>
-    );
-
-    const renderOptions = (options: any, title: string) =>
-        selectedClassOptions?.length > 0 && (
+        equipments: { equipment: ElementIdentification; quantity: number }[]
+    ) =>
+        equipments?.length > 0 && (
             <Fragment>
-                <CustomText
-                    fontWeight="bold"
-                    text={title}
-                    style={styles.sectionTitle}
-                />
-                {selectedClassOptions?.map((option, index) => (
+                {equipments.map((eq, index) => (
+                    <CustomText
+                        key={`${eq.equipment.index}-${index}`}
+                        text={`• ${eq.equipment.name} x${eq.quantity}`}
+                    />
+                ))}
+
+                <Divider style={styles.divider} />
+            </Fragment>
+        );
+
+    const renderOptions = (options: any) =>
+        options?.length > 0 && (
+            <Fragment>
+                {options?.map((option, index) => (
                     <CustomText
                         key={`option-${index}`}
                         text={`• ${t(
@@ -84,25 +84,40 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
                         )}`}
                     />
                 ))}
+
                 <Divider style={styles.divider} />
             </Fragment>
         );
 
     return (
         <View style={styles.container}>
-            {renderEquipment(
-                classEquipments,
-                t('characterForm.baseClassEquipment')
-            )}
-            {renderOptions(
-                selectedClassOptions,
-                t('characterForm.selectedClassEquipment')
-            )}
+            <View>
+                <CustomText
+                    fontWeight="bold"
+                    text={t('characterForm.baseClassEquipment')}
+                    style={styles.sectionTitle}
+                />
+                {/*{renderEquipment(classEquipments)}*/}
+                {renderOptions(
+                    selectedRaceOptions
+                    // t('characterForm.selectedClassEquipment')
+                )}
+                {renderOptions(
+                    selectedClassOptions
+                    // t('characterForm.selectedClassEquipment')
+                )}
+            </View>
 
-            {renderEquipment(
-                backgroundEquipments,
-                t('characterForm.baseBackgroundEquipment')
-            )}
+            <View>
+                <CustomText
+                    fontWeight="bold"
+                    text={t('characterForm.baseBackgroundEquipment')}
+                    style={styles.sectionTitle}
+                />
+                {renderEquipment(classEquipments)}
+                {renderEquipment(backgroundEquipments)}
+            </View>
+
             {/*{renderOptions(backgroundOptions, 'Background Equipment Options')}*/}
 
             {/* If race equipment is to be used in future, you can extend here */}
@@ -112,14 +127,14 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 4,
+        paddingHorizontal: theme.space.xs,
     },
     sectionTitle: {
-        marginTop: 12,
-        marginBottom: 6,
+        marginTop: theme.space.xl,
+        marginBottom: theme.space.sm,
     },
     divider: {
-        marginVertical: 12,
+        marginVertical: theme.space.xl,
     },
 });
 

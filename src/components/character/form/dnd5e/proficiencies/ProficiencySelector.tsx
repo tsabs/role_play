@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
@@ -35,18 +35,26 @@ type ProficiencySelectorProps = {
         selectedIndexes: { index: string; bonus?: number }[]
     ) => void;
     groupId?: string;
+    defaultValue?: { index: string; bonus?: number }[];
 };
 
 const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     data,
     onChange,
     groupId,
+    defaultValue,
 }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState<
         { index: string; bonus?: number }[]
-    >([]);
+    >(defaultValue ?? []);
     const [collapsed, setCollapsed] = useState(false);
+
+    useEffect(() => {
+        if (defaultValue) {
+            onChange?.(groupId ?? '', defaultValue);
+        }
+    }, []);
 
     const handleToggle = useCallback(
         (index: string, bonus?: number) => {

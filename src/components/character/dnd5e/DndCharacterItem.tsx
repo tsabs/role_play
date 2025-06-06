@@ -15,6 +15,7 @@ import Separator from '../../library/Separator';
 import CustomDialog from '../../library/CustomDialog';
 import { DnDCharacter } from '../../../types/games/d2d5e';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../utils/utils';
+import CustomText from '../../atom/CustomText';
 
 interface DndCharacterItemProps {
     character: DnDCharacter;
@@ -99,12 +100,34 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                             val={character.gameType}
                         />
                         <Separator margin={theme.space.md} horizontal />
-                        <Text style={styles.description}>
-                            {character.description}
-                        </Text>
-                        <Text style={styles.description}>
-                            {character.additionalBackground}
-                        </Text>
+                        <View
+                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
+                        >
+                            <CustomText
+                                fontSize={theme.fontSize.large}
+                                text="Description: "
+                            />
+                            <CustomText
+                                fontSize={theme.fontSize.large}
+                                color={theme.colors.textSecondary}
+                                text={character.description}
+                            />
+                        </View>
+
+                        <Separator spacer={{ size: 10 }} horizontal />
+                        <View
+                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
+                        >
+                            <CustomText
+                                fontSize={theme.fontSize.large}
+                                text="Histoire: "
+                            />
+                            <CustomText
+                                fontSize={theme.fontSize.large}
+                                color={theme.colors.textSecondary}
+                                text={character.additionalBackground}
+                            />
+                        </View>
                     </Card.Content>
                 </Card>
                 <View style={styles.progressiveBlurContainer}>
@@ -176,10 +199,6 @@ const styles = StyleSheet.create({
     },
     info: {
         fontSize: theme.fontSize.extraLarge,
-        color: theme.colors.textSecondary,
-    },
-    description: {
-        fontSize: theme.fontSize.large,
         color: theme.colors.textSecondary,
     },
     progressiveBlurContainer: {

@@ -21,6 +21,7 @@ import { ABILITIES } from '../../../components/character/form/dnd5e/constants';
 import { useAppDispatch } from '../../../store';
 import CustomSelectionButton from '../../../components/atom/CustomSelectionButton';
 import {
+    extractCharacterProficiencies,
     maxLevels,
     mergeAbilityBonuses,
     remainingPoints,
@@ -30,7 +31,7 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../../utils/utils';
 import TalentClassForm from '../../../components/character/form/dnd5e/TalentClassForm';
 import SkillsList from '../../../components/character/form/dnd5e/SkillsList';
 import VirtualizedScrollView from '../../../components/library/VirtualizedScrollView';
-import EquipmentList from '../../../components/character/form/EquipmentList';
+import EquipmentList from '../../../components/character/form/dnd5e/EquipmentList';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;
@@ -55,6 +56,12 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const [selectedAbilities, setSelectedAbilities] = useState<
         Record<Ability, number> | undefined
     >(undefined);
+    // const [selectedSubClass, setSelectedSubClass] = useState(
+    //     character.selectedClassElements?.selected_subclass
+    // );
+    // const [selectedSubClassChoices, setSelectedSubClassChoices] = useState<
+    //     Record<string, Array<{ index: string; bonus?: number }>>
+    // >(character.selectedClassElements?.classChoices);
 
     const handleEditMode = useCallback(() => {
         setIsEditMode((previousState) => {
@@ -124,6 +131,28 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         [character, callUpdateCharacter, dispatch]
     );
 
+    const handleSubclassChange = useCallback(
+        async (
+            selected: string,
+            selectedClassChoices: Record<
+                string,
+                Array<{ index: string; bonus?: number }>
+            >
+        ) => {
+            // setSelectedSubClass(selected);
+            // setSelectedSubClassChoices(selectedClassChoices);
+            const updatedCharacter = {
+                ...character,
+                selectedClassElements: {
+                    classChoices: selectedClassChoices,
+                    selected_subclass: selected,
+                },
+            };
+            await callUpdateCharacter(updatedCharacter, dispatch);
+        },
+        [character, callUpdateCharacter, dispatch]
+    );
+
     const transformedAbilities = useMemo(
         () => transformRaceAbilities(character?.race?.ability_bonuses),
         [character?.race?.ability_bonuses]
@@ -140,8 +169,10 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         [character?.selectedRaceElements?.raceChoices, transformedAbilities]
     );
 
-    const accordions = useMemo(
-        () => [
+    const accordions = useMemo(() => {
+        const proficienciesExtracted = extractCharacterProficiencies(character);
+
+        return [
             {
                 id: 1,
                 title: 'character.overview.accordion.charcacterInformations',
@@ -177,6 +208,10 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                         abilities={selectedAbilities}
                         level={level}
                         characterClass={character.className.index}
+                        isEditModeEnabled={true}
+                        selectedClassElements={character?.selectedClassElements}
+                        onSubclassSelect={handleSubclassChange}
+                        proficienciesExtracted={proficienciesExtracted}
                     />
                 ),
             },
@@ -216,18 +251,18 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 title: 'character.overview.accordion.spells',
                 content: <CustomText text="Will come soon" />,
             },
-        ],
-        [
-            character,
-            level,
-            selectedAbilities,
-            handleUpdateCharacter,
-            handleSaveEdit,
-            handleEditMode,
-            isEditMode,
-            mergeAbilities,
-        ]
-    );
+        ];
+    }, [
+        character,
+        level,
+        selectedAbilities,
+        handleUpdateCharacter,
+        handleSaveEdit,
+        handleEditMode,
+        handleSubclassChange,
+        isEditMode,
+        mergeAbilities,
+    ]);
 
     const totalHp = useMemo(
         () =>

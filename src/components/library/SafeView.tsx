@@ -29,7 +29,10 @@ const SafeView = ({
     const navigation = useNavigation();
     return (
         <View style={[SafeViewStyle.container, parentStyles]}>
-            <StatusBar translucent={false} />
+            <StatusBar
+                backgroundColor={theme.colors.primary}
+                translucent={false}
+            />
             {title && (
                 <View style={SafeViewStyle.header}>
                     <IconButton
