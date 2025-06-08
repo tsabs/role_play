@@ -5,33 +5,34 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
-import SafeView from '../../../components/library/SafeView';
-import { DND_CHARACTER_DEFAULT } from '../../../../assets';
-import { theme } from '../../../../style/theme';
-import CustomText from '../../../components/atom/CustomText';
-import { Ability } from '../../../types/generic';
-import AbilityForm from '../../../components/character/form/generic/AbilityForm';
-import { DnDAbility, DnDCharacter } from '../../../types/games/d2d5e';
+import CustomText from '@components/atom/CustomText';
+import CustomSelectionButton from '@components/atom/CustomSelectionButton';
+import { ABILITIES } from '@components/character/form/dnd5e/constants';
+import AbilityForm from '@components/character/form/generic/AbilityForm';
+import TalentClassForm from '@components/character/form/dnd5e/TalentClassForm';
+import SkillsList from '@components/character/form/dnd5e/SkillsList';
+import VirtualizedScrollView from '@components/library/VirtualizedScrollView';
+import EquipmentList from '@components/character/form/dnd5e/EquipmentList';
+import SafeView from '@components/library/SafeView';
 import {
     callUpdateCharacter,
     loadClassData,
     loadSpecificTalentClassPerLevel,
-} from '../../../store/character/slice';
-import { ABILITIES } from '../../../components/character/form/dnd5e/constants';
-import { useAppDispatch } from '../../../store';
-import CustomSelectionButton from '../../../components/atom/CustomSelectionButton';
+} from '@store/character/slice';
+import { useAppDispatch } from '@store/index';
 import {
     extractCharacterProficiencies,
     maxLevels,
     mergeAbilityBonuses,
     remainingPoints,
     transformRaceAbilities,
-} from '../../../utils/d2d5';
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../../utils/utils';
-import TalentClassForm from '../../../components/character/form/dnd5e/TalentClassForm';
-import SkillsList from '../../../components/character/form/dnd5e/SkillsList';
-import VirtualizedScrollView from '../../../components/library/VirtualizedScrollView';
-import EquipmentList from '../../../components/character/form/dnd5e/EquipmentList';
+} from '@utils/d2d5';
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '@utils/utils';
+
+import { DND_CHARACTER_DEFAULT } from '../../../../assets';
+import { theme } from '../../../../style/theme';
+import { Ability } from '../../../types/generic.ts';
+import { DnDAbility, DnDCharacter } from '../../../types/games/d2d5e';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;

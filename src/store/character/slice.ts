@@ -11,11 +11,11 @@ import {
     setDoc,
     updateDoc,
 } from '@react-native-firebase/firestore';
+import { Note } from 'types/note';
+import { Character, GAME_TYPE } from 'types/generic';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
-import { Note } from '../../types/note';
-import { Character, GAME_TYPE } from '../../types/generic';
 
 interface CharactersState {
     characters: Character[];

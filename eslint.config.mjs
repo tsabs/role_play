@@ -71,6 +71,23 @@ export default defineConfig([
             // 'no-console': 'warn',
             'no-debugger': 'error',
         },
+        settings: {
+            'import/resolver': {
+                alias: {
+                    map: [
+                        ['@components', './src/components'],
+                        ['@views', './src/views'],
+                        ['@store', './src/store'],
+                        ['@utils', './src/utils'],
+                        ['@types', './src/types'],
+                        ['@navigation', './src/navigation'],
+                        ['@style', './src/style'],
+                        ['@locales', './src/locales'],
+                    ],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+                },
+            },
+        },
     },
     // // Base config
     // js.configs.recommended,

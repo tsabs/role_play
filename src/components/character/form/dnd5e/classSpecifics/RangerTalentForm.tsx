@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import CustomText from '../../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
 
 import { genericClassFormStyles } from './genericStyle';
 

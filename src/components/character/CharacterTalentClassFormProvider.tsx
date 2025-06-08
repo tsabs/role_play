@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
+import { GAME_TYPE } from 'types/generic';
 
-import { GAME_TYPE } from '../../types/generic';
 import CustomText from '../atom/CustomText';
 
 import TalentClassForm from './form/dnd5e/TalentClassForm';

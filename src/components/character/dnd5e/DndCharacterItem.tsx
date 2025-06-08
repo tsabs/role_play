@@ -7,15 +7,16 @@ import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 
-import { callRemoveCharacter } from '../../../store/character/slice';
-import { theme } from '../../../../style/theme';
+import CustomText from '@components/atom/CustomText';
+import Separator from '@components/library/Separator';
+import CustomDialog from '@components/library/CustomDialog';
+import { callRemoveCharacter } from '@store/character/slice';
+import { useAppDispatch } from '@store/index';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
+
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
-import { useAppDispatch } from '../../../store';
-import Separator from '../../library/Separator';
-import CustomDialog from '../../library/CustomDialog';
+import { theme } from '../../../../style/theme';
 import { DnDCharacter } from '../../../types/games/d2d5e';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../utils/utils';
-import CustomText from '../../atom/CustomText';
 
 interface DndCharacterItemProps {
     character: DnDCharacter;

@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useMemo, useState } from 'react';
+import { SelectedClassElementsProps } from 'types/games/d2d5e';
 
-import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
-import CustomText from '../../../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+import CustomSelectionButton from '@components/atom/CustomSelectionButton';
+
 import { genericClassFormStyles } from '../../classSpecifics/genericStyle';
-import CustomSelectionButton from '../../../../../atom/CustomSelectionButton';
 import { theme } from '../../../../../../../style/theme';
 
 import { barbarianSubclasses, totemAnimalData } from './barbarianSubclasses';

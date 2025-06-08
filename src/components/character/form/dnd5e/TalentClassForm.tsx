@@ -1,26 +1,21 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { DnDAbility, SelectedClassElementsProps } from 'types/games/d2d5e';
 
-import CustomText from '../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+import CustomSelectionButton from '@components/atom/CustomSelectionButton';
+import EditMode from '@components/library/EditMode';
+import { ExtractedProficiencies, shouldChooseSubclass } from '@utils/d2d5';
+
 import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
 import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
-import RangerTalentForm from '../dnd5e/classSpecifics/RangerTalentForm';
-import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
 import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
-import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
+import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
+import RangerTalentForm from '../dnd5e/classSpecifics/RangerTalentForm';
 import PaladinTalentForm from '../dnd5e/classSpecifics/PaladinTalentForm';
-import {
-    DnDAbility,
-    SelectedClassElementsProps,
-} from '../../../../types/games/d2d5e';
-import {
-    ExtractedProficiencies,
-    shouldChooseSubclass,
-} from '../../../../utils/d2d5';
-import CustomSelectionButton from '../../../atom/CustomSelectionButton';
+import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
 import { theme } from '../../../../../style/theme';
-import EditMode from '../../../library/EditMode';
 
 interface TalentClassFormProps {
     characterClass: string;

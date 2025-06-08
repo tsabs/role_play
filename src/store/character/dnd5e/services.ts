@@ -1,7 +1,8 @@
 import { collection, getDocs } from '@react-native-firebase/firestore';
 
+import { removeDuplicate } from '@utils/utils';
+
 import { db } from '../../../../firebaseConfig';
-import { removeDuplicate } from '../../../utils/utils';
 
 const getBackgrounds = async () => {
     try {

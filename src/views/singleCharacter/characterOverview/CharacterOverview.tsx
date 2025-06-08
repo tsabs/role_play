@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { View } from 'react-native';
-
-import { Character, GAME_TYPE } from '../../../types/generic';
+import { Character, GAME_TYPE } from 'types/generic';
 
 import CharacterOverviewDnd from './CharacterOverviewDnd';
 

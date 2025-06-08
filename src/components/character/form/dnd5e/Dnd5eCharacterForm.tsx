@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     Dimensions,
     Keyboard,
@@ -9,46 +10,46 @@ import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch } from 'react-redux';
-
-import Separator from '../../../library/Separator';
-import {
-    callAddCharacter,
-    // callUpdateCharacter,
-} from '../../../../store/character/slice';
+import { Ability, GAME_TYPE } from 'types/generic';
 import {
     DnDAbility,
     DndBackground,
     DndClass,
     DndRace,
-} from '../../../../types/games/d2d5e';
-import { theme } from '../../../../../style/theme';
-import SafeView from '../../../library/SafeView';
+} from 'types/games/d2d5e';
+
+import Separator from '@components/library/Separator';
+import {
+    callAddCharacter,
+    // callUpdateCharacter,
+} from '@store/character/slice';
+import SafeView from '@components/library/SafeView';
 import {
     getBackgrounds,
     getClasses,
     getRaces,
     getSkills,
-} from '../../../../store/character/dnd5e/services';
-import { AuthProps, useAuth } from '../../../../navigation/hook/useAuth';
-import AbilityForm from '../generic/AbilityForm';
-import { Ability, GAME_TYPE } from '../../../../types/generic';
-import CustomSelectionButton from '../../../atom/CustomSelectionButton';
+} from '@store/character/dnd5e/services';
+import CustomSelectionButton from '@components/atom/CustomSelectionButton';
 import {
     maxLevels,
     mergeAbilityBonuses,
     remainingPoints,
     transformRaceAbilities,
-} from '../../../../utils/d2d5';
-import VirtualizedScrollView from '../../../library/VirtualizedScrollView';
-// import TalentClassForm from './TalentClassForm';
-import CustomButton from '../../../atom/CustomButton';
+} from '@utils/d2d5';
+import VirtualizedScrollView from '@components/library/VirtualizedScrollView';
+import CustomButton from '@components/atom/CustomButton';
+import { AuthProps, useAuth } from '@navigation/hook/useAuth';
 
-import LabeledList from './LabeledList';
-import { styles } from './characterFormStyles';
-import ProficiencySelector from './proficiencies/ProficiencySelector';
-import { ABILITIES } from './constants';
+import { theme } from '../../../../../style/theme';
+import AbilityForm from '../generic/AbilityForm';
+
 import SkillDisplay from './atom/SkillDisplay';
+import { styles } from './characterFormStyles';
+import { ABILITIES } from './constants';
+import LabeledList from './LabeledList';
+import ProficiencySelector from './proficiencies/ProficiencySelector';
+// import TalentClassForm from './TalentClassForm';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;

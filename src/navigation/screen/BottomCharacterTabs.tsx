@@ -2,8 +2,9 @@ import { useCallback } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import BottomBar from '../../components/library/BottomBar';
-import CharacterOverview from '../../views/singleCharacter/characterOverview/CharacterOverview';
+import BottomBar from '@components/library/BottomBar';
+import CharacterOverview from '@views/singleCharacter/characterOverview/CharacterOverview';
+
 import { RootStackParamList } from '../RootNavigation';
 
 import CharacterNotesScreen from './CharacterNotesScreen';

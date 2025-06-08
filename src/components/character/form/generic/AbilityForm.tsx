@@ -2,10 +2,11 @@ import { Fragment, useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { IconButton, TextInput } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { Ability } from 'types/generic';
 
-import CustomText from '../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../style/theme';
-import { Ability } from '../../../../types/generic';
 import { ABILITIES } from '../dnd5e/constants';
 
 interface OnSaveAbilities<T extends Ability> {

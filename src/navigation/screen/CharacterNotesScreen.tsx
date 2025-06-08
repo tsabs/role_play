@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+import CharacterNotes from '@views/singleCharacter/CharacterNotes';
+import CharacterHistoryNotes from '@views/singleCharacter/CharacterHistoryNotes';
+
 import TopBar from '../../components/library/TopBar';
-import CharacterNotes from '../../views/singleCharacter/CharacterNotes';
-import CharacterHistoryNotes from '../../views/singleCharacter/CharacterHistoryNotes';
 
 const Tab = createMaterialTopTabNavigator();
 

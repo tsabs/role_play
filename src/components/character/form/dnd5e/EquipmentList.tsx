@@ -2,12 +2,10 @@ import { FC, Fragment, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { DnDCharacter, ElementIdentification } from 'types/games/d2d5e';
 
-import {
-    DnDCharacter,
-    ElementIdentification,
-} from '../../../../types/games/d2d5e';
-import CustomText from '../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../style/theme';
 
 interface EquipmentListProps {

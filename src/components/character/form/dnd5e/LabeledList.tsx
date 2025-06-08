@@ -3,13 +3,10 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native-paper';
 import Animated, { FadeInLeft } from 'react-native-reanimated';
+import { DndBackground, DndClass, DndRace } from 'types/games/d2d5e';
 
-import {
-    DndBackground,
-    DndClass,
-    DndRace,
-} from '../../../../types/games/d2d5e';
-import CustomText from '../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../style/theme';
 
 import { styles } from './characterFormStyles';

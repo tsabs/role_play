@@ -1,4 +1,3 @@
-// barbarianSubclasses.ts
 export const barbarianSubclasses = {
     berserker: {
         nameKey: 'character.classes.barbarian.subclasses.berserker.title',

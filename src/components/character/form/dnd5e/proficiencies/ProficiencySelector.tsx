@@ -7,15 +7,16 @@ import {
     Divider,
     TouchableRipple,
 } from 'react-native-paper';
-
 import {
     ElementIdentification,
     OptionChoice,
     ProficiencyOption,
     SocialChoice,
-} from '../../../../../types/games/d2d5e';
+} from 'types/games/d2d5e';
+
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../../style/theme';
-import CustomText from '../../../../atom/CustomText';
 
 type AbilityOption = {
     ability_score: ElementIdentification;

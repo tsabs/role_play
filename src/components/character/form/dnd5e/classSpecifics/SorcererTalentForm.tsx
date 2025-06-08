@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { calculateModifier } from '../../../../../utils/d2d5';
+import { calculateModifier } from '@utils/d2d5';
 import CustomText from '../../../../atom/CustomText';
 
 import { genericClassFormStyles } from './genericStyle';

@@ -4,9 +4,24 @@
     "jsx": "react-native",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "baseUrl": "./src",
     "paths": {
-      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
-    },
+      "@components/*": ["components/*"],
+      "@views/*": ["views/*"],
+      "@store/*": ["store/*"],
+      "@utils/*": ["utils/*"],
+      "@types/*": ["types/*"],
+      "@navigation/*": ["navigation/*"],
+      "@style/*": ["style/*"],
+      "@locales/*": ["locales/*"]
+    }
+//    "paths": {
+//      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
+//    },
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }
