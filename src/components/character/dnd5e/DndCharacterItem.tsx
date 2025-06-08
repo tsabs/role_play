@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         height: FLATLIST_HEIGHT,
         borderRadius: 20,
         paddingBottom: theme.space.md,
-        shadowColor: '#000',
+        shadowColor: theme.colors.black,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 10,

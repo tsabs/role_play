@@ -366,6 +366,7 @@ const styles = StyleSheet.create({
     accordionContent: {
         padding: theme.space.md,
     },
+    // eslint-disable-next-line react-native/no-color-literals
     levelBadge: {
         position: 'absolute',
         left: theme.space.md,
@@ -375,6 +376,7 @@ const styles = StyleSheet.create({
         paddingVertical: theme.space.sm,
         borderRadius: theme.radius.md,
     },
+    // eslint-disable-next-line react-native/no-color-literals
     lifePointsBadge: {
         position: 'absolute',
         top: theme.space.md,

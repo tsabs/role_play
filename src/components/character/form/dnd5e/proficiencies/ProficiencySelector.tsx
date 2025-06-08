@@ -206,7 +206,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
 const styles = StyleSheet.create({
     groupContainer: {
-        paddingVertical: 8,
+        paddingVertical: theme.space.md,
     },
     containerDescription: {
         gap: theme.space.sm,
@@ -215,10 +215,10 @@ const styles = StyleSheet.create({
         marginHorizontal: theme.space.sm,
     },
     nested: {
-        marginTop: 8,
-        paddingLeft: 8,
+        marginTop: theme.space.md,
+        paddingLeft: theme.space.md,
         borderLeftWidth: 1,
-        borderColor: '#ccc',
+        borderColor: theme.colors.white,
     },
     divider: {
         marginVertical: 8,

@@ -31,7 +31,7 @@ export default defineConfig([
             // js,
             '@typescript-eslint': tseslint.plugin,
             react: pluginReact,
-            // 'react-native': pluginReactNative,
+            'react-native': pluginReactNative,
             'react-hooks': pluginReactHooks,
             import: pluginImport,
             // 'unused-imports': pluginUnusedImports,
@@ -51,8 +51,8 @@ export default defineConfig([
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'warn',
             // 'react-native/no-inline-styles': 'warn',
-            // 'react-native/split-platform-components': 'warn',
-            // 'react-native/no-color-literals': 'warn',
+            'react-native/split-platform-components': 'warn',
+            'react-native/no-color-literals': 'warn',
             'import/order': [
                 'warn',
                 {

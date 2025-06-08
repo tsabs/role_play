@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         borderRadius: theme.radius.md,
         top: 0,
         bottom: 0,
-        backgroundColor: 'transparent',
+        backgroundColor: theme.colors.transparent,
     },
 });
 
