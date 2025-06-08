@@ -1,13 +1,13 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useTranslation } from 'react-i18next';
 
 import SafeView from '../../../components/library/SafeView';
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
-import Animated, { FadeIn } from 'react-native-reanimated';
 import { theme } from '../../../../style/theme';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useTranslation } from 'react-i18next';
 import CustomText from '../../../components/atom/CustomText';
 import { Ability } from '../../../types/generic';
 import AbilityForm from '../../../components/character/form/generic/AbilityForm';
@@ -81,7 +81,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             const updatedCharacter = { ...character, ...abilities };
             await callUpdateCharacter(updatedCharacter, dispatch);
         },
-        [character]
+        [character, dispatch]
     );
 
     const handleClassData = useCallback(async () => {
@@ -119,7 +119,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 character?.abilities as Record<Ability, number>
             );
         }
-    }, [character?.abilities]);
+    }, [character?.abilities, selectedAbilities]);
 
     const handleSelectLevel = useCallback(
         async (value: string | number) => {
@@ -128,7 +128,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             const updatedCharacter = { ...character, level: newLevel };
             await callUpdateCharacter(updatedCharacter, dispatch);
         },
-        [character, callUpdateCharacter, dispatch]
+        [character, dispatch]
     );
 
     const handleSubclassChange = useCallback(
@@ -150,7 +150,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             };
             await callUpdateCharacter(updatedCharacter, dispatch);
         },
-        [character, callUpdateCharacter, dispatch]
+        [character, dispatch]
     );
 
     const transformedAbilities = useMemo(
@@ -166,7 +166,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 ] || [],
                 transformedAbilities
             ),
-        [character?.selectedRaceElements?.raceChoices, transformedAbilities]
+        [
+            character?.race?.index,
+            character?.selectedRaceElements?.raceChoices,
+            transformedAbilities,
+        ]
     );
 
     const accordions = useMemo(() => {
@@ -208,7 +212,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                         abilities={selectedAbilities}
                         level={level}
                         characterClass={character.className.index}
-                        isEditModeEnabled={true}
+                        isEditModeEnabled
                         selectedClassElements={character?.selectedClassElements}
                         onSubclassSelect={handleSubclassChange}
                         proficienciesExtracted={proficienciesExtracted}
@@ -231,7 +235,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                         }
                         onChange={handleUpdateCharacter}
                         onSaveEdit={handleSaveEdit}
-                        isEditModeEnabled={true}
+                        isEditModeEnabled
                         onEditMode={handleEditMode}
                         isEditMode={isEditMode}
                         abilityBonuses={mergeAbilities}
@@ -262,6 +266,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         handleSubclassChange,
         isEditMode,
         mergeAbilities,
+        t,
     ]);
 
     const totalHp = useMemo(
@@ -280,7 +285,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     return (
         <SafeView parentStyles={{ flex: 1, padding: 0 }} title={character.name}>
             <VirtualizedScrollView
-                scrollEnabled={true}
+                scrollEnabled
                 contentContainerStyle={{ paddingBottom: tabBarHeight }}
             >
                 <Animated.View entering={FadeIn.duration(750).delay(100)}>

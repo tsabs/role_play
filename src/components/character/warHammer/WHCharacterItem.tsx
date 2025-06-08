@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+
 import { WarHammerCharacter } from '../../../types/games/warHammer';
 
 interface WHCharacterItemProps {

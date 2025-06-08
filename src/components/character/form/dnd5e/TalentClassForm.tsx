@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 
 import CustomText from '../../../atom/CustomText';
 import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
-import BarbarianTalentForm from '../dnd5e/classSpecifics/BarbarianTalentForm';
+import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
 import RangerTalentForm from '../dnd5e/classSpecifics/RangerTalentForm';
 import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
 import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
@@ -12,12 +14,10 @@ import {
     DnDAbility,
     SelectedClassElementsProps,
 } from '../../../../types/games/d2d5e';
-import { useTranslation } from 'react-i18next';
 import {
     ExtractedProficiencies,
     shouldChooseSubclass,
 } from '../../../../utils/d2d5';
-import { View } from 'react-native';
 import CustomSelectionButton from '../../../atom/CustomSelectionButton';
 import { theme } from '../../../../../style/theme';
 import EditMode from '../../../library/EditMode';
@@ -45,7 +45,7 @@ const TalentClassForm = ({
     proficienciesExtracted,
     selectedClassElements,
     isEditModeEnabled,
-    onSubclassSelect, // optional callback to persist
+    onSubclassSelect,
 }: TalentClassFormProps) => {
     const { t } = useTranslation();
     const [subclass, setSubclass] = useState(
@@ -101,7 +101,6 @@ const TalentClassForm = ({
 
     const handleSubclassChange = useCallback((selected: string) => {
         setSubclass(selected);
-        // onSubclassSelect?.(selected);
     }, []);
 
     const handleSubclassChoices = useCallback(
@@ -121,7 +120,6 @@ const TalentClassForm = ({
     }, [isOnEdit]);
 
     const handleSave = useCallback(() => {
-        //
         onSubclassSelect(subclass, subclassChoices);
         setIsOnEdit(false);
     }, [onSubclassSelect, subclass, subclassChoices]);
@@ -144,7 +142,14 @@ const TalentClassForm = ({
                 );
             case 'barbarian':
                 return (
-                    <BarbarianTalentForm level={level} abilities={abilities} />
+                    <BarbarianTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
                 );
             case 'ranger':
                 return <RangerTalentForm level={level} />;
@@ -168,12 +173,28 @@ const TalentClassForm = ({
             default:
                 return <CustomText text="Class not yet supported." />;
         }
-    }, [level, abilities, isOnEdit, characterClass]);
+    }, [
+        characterClass,
+        level,
+        abilities,
+        subclass,
+        proficienciesExtracted,
+        selectedClassElements,
+        handleSubclassChoices,
+        isOnEdit,
+    ]);
 
     return (
         <View>
             {showSubclassSelector && (
-                <View style={{ marginBottom: theme.space.md }}>
+                <View
+                    style={{
+                        marginBottom: theme.space.md,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: theme.space.md,
+                    }}
+                >
                     <EditMode
                         isEditModeEnabled={isEditModeEnabled}
                         handleChange={handleChangeEditMode}
@@ -190,15 +211,14 @@ const TalentClassForm = ({
                                     borderRadius: theme.radius.sm,
                                     borderColor: theme.colors.primary,
                                 }}
-                                // value={subclass}
                                 preSelectedValue={{
                                     label: t(
-                                        `character.classes.bard.subclasses.${subclass}.title`
+                                        `character.classes.${characterClass}.subclasses.${subclass}.title`
                                     ),
                                     value: subclass,
                                 }}
                                 displayValue={t(
-                                    `character.classes.bard.subclasses.${subclass}.title`
+                                    `character.classes.${characterClass}.subclasses.${subclass}.title`
                                 )}
                                 onSelect={handleSubclassChange}
                             />

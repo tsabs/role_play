@@ -114,10 +114,11 @@ const shouldChooseSubclass = (
 type ProficiencyCategory = 'race' | 'class' | 'background';
 
 export interface ExtractedProficiencies {
-    fromRace: string[];
-    fromClass: string[];
     fromBackground: string[];
-    fromSubclass: string[];
+    fromRace: string[];
+    fromSelectedRace: string[];
+    fromSelectedClass: string[];
+    fromSelectedSubclass: string[];
     all: string[]; // flat list, unique
 }
 
@@ -134,16 +135,24 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
         }) || [];
 
     const fromRace =
+        character.race?.starting_proficiencies?.flatMap((prof) => {
+            if (prof.index?.includes('skill-')) {
+                return [prof.index.split('skill-')[1]];
+            }
+            return [];
+        }) || [];
+
+    const fromSelectedRace =
         character.selectedRaceElements?.raceChoices?.[
             `${character.race?.index}-race-proficiencies`
         ]?.map((prof) => prof.index) || [];
 
-    const fromClass =
+    const fromSelectedClass =
         character.selectedClassElements?.classChoices?.[
             `${character.className?.index}-class-0`
         ]?.map((prof) => prof.index) || [];
 
-    const fromSubclass =
+    const fromSelectedSubclass =
         character.selectedClassElements?.classChoices?.[
             `${character.selectedClassElements?.selected_subclass}-extra-proficiencies`
         ]?.map((prof) => prof.index) || [];
@@ -151,9 +160,16 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
     return {
         fromBackground,
         fromRace,
-        fromClass,
-        fromSubclass,
-        all: [...fromBackground, ...fromRace, ...fromClass, ...fromSubclass],
+        fromSelectedRace,
+        fromSelectedClass,
+        fromSelectedSubclass,
+        all: [
+            ...fromBackground,
+            ...fromRace,
+            ...fromSelectedRace,
+            ...fromSelectedClass,
+            // ...fromSelectedSubclass
+        ],
     };
 };
 

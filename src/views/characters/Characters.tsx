@@ -23,7 +23,7 @@ const CharactersScreen = () => {
     const auth = useAuth();
     const callCharacters = useCallback(async () => {
         await loadCharacters(auth.user.email, dispatch);
-    }, []);
+    }, [auth.user.email, dispatch]);
     const characters = useAppSelector(selectAllCharacters);
     const [mounted, setMounted] = useState(false);
 

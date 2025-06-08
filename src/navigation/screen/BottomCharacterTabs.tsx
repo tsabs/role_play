@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import BottomBar from '../../components/library/BottomBar';
 import CharacterOverview from '../../views/singleCharacter/characterOverview/CharacterOverview';
 import { RootStackParamList } from '../RootNavigation';
+
 import CharacterNotesScreen from './CharacterNotesScreen';
 
 const BottomNavigator = createBottomTabNavigator();
@@ -17,12 +18,12 @@ type BottomCharacterTabsProps = NativeStackScreenProps<
 const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
     const renderOverviewComponent = useCallback(
         () => CharacterOverview({ character: route.params.character }),
-        []
+        [route.params.character]
     );
 
     const renderNotesComponent = useCallback(
         () => CharacterNotesScreen({ characterId: route.params.character.id }),
-        []
+        [route.params.character.id]
     );
 
     return (

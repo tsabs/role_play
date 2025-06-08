@@ -1,7 +1,9 @@
 import { FC, Fragment, useCallback, useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
+
 import { theme } from '../../../style/theme';
+
 import CustomText from './CustomText';
 
 type SelectionButtonProps<T = number> = {
@@ -30,8 +32,8 @@ const CustomSelectionButton = <T = number,>({
         | undefined
     >(preSelectedValue);
 
-    const openMenu = () => setVisible(true);
-    const closeMenu = () => setVisible(false);
+    const openMenu = useCallback(() => setVisible(true), []);
+    const closeMenu = useCallback(() => setVisible(false), []);
 
     const handleSelect = useCallback(
         (item: { label: string; value: T }) => {

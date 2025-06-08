@@ -124,12 +124,13 @@ const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
             );
         },
         [
-            level,
-            character.race,
-            character.selectedRaceElements,
-            character.className,
-            character.selectedClassElements,
+            character?.race?.ability_bonuses,
+            character?.race?.index,
+            character?.selectedRaceElements?.raceChoices,
             character.abilities,
+            level,
+            proficiencies.all,
+            t,
         ]
     );
 

@@ -1,12 +1,12 @@
 import { Fragment, useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { IconButton, TextInput } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../atom/CustomText';
 import { theme } from '../../../../../style/theme';
 import { Ability } from '../../../../types/generic';
 import { ABILITIES } from '../dnd5e/constants';
-import { useTranslation } from 'react-i18next';
 
 interface OnSaveAbilities<T extends Ability> {
     [key: string]: Record<T, number>;
@@ -121,7 +121,7 @@ const AbilityForm = <T extends Ability>({
                                         <TextInput
                                             mode="outlined"
                                             keyboardType="numeric"
-                                            disabled={true}
+                                            disabled
                                             label={t(
                                                 `character.abilities.${abilityKey}`
                                             )}

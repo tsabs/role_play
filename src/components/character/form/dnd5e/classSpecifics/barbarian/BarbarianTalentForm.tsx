@@ -2,12 +2,23 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import CustomText from '../../../../atom/CustomText';
-import { genericClassFormStyles } from './genericStyle';
+import CustomText from '../../../../../atom/CustomText';
+import { genericClassFormStyles } from '../genericStyle';
+import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
+import BarbarianSubclass from '../../subclassSpecifics/barbarian/BarbarianSubclass';
 
 interface BarbarianTalentFormProps {
     level: number;
     abilities: Record<string, number>;
+    isOnEdit: boolean;
+    subclass?: string;
+    handleSubclassChoices: (
+        subclassChoices: Record<
+            string,
+            Array<{ index: string; bonus?: number }>
+        >
+    ) => void;
+    selectedClassElements?: SelectedClassElementsProps;
 }
 
 const getRageUses = (level: number): number => {
@@ -29,6 +40,10 @@ const titleTextSize = 16;
 const BarbarianTalentForm = ({
     level,
     abilities,
+    isOnEdit,
+    subclass,
+    handleSubclassChoices,
+    selectedClassElements,
 }: BarbarianTalentFormProps) => {
     const { t } = useTranslation();
     const rageUses = useMemo(() => getRageUses(level), [level]);
@@ -119,6 +134,16 @@ const BarbarianTalentForm = ({
                         )}
                     />
                 </>
+            )}
+
+            {level >= 3 && (
+                <BarbarianSubclass
+                    subclass={subclass}
+                    selectedClassElements={selectedClassElements}
+                    isOnEdit={isOnEdit}
+                    handleSubclassChoices={handleSubclassChoices}
+                    level={level}
+                />
             )}
         </View>
     );

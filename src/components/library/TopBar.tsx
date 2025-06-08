@@ -6,11 +6,11 @@ import {
     useWindowDimensions,
 } from 'react-native';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
-
 import { Text } from 'react-native-paper';
 
-import SafeView from './SafeView';
 import { theme } from '../../../style/theme';
+
+import SafeView from './SafeView';
 
 interface TopBarProps {
     elements: Array<{ text: string; screenName: string }>;

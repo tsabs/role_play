@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { calculateModifier } from '../../../../../utils/d2d5';
 import CustomText from '../../../../atom/CustomText';
+
 import { genericClassFormStyles } from './genericStyle';
 
 interface PaladinTalentFormProps {

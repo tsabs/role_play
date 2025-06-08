@@ -87,10 +87,16 @@
         },
         "subclasses": {
           "berserker": {
-            "title": "Berserker"
+            "title": "Berserker",
+            "description": "Berserkers are warriors who channel fury into combat.",
+            "frenzy": "Frenzy: You can go into a frenzy when you rage.",
+            "mindlessRage": "Mindless Rage: You can’t be charmed or frightened while raging."
           },
           "totem": {
-            "title": "Totem warrior"
+            "title": "Totem warrior",
+            "description": "Totem Warriors draw on spiritual animal power.",
+            "spiritAnimal": "Spirit Animal: Choose a totem animal for magical effects.",
+            "aspectOfTheBeast": "Aspect of the Beast: You gain a magical benefit based on your totem."
           }
         }
       },

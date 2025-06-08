@@ -2,10 +2,6 @@ import { Dispatch } from 'react';
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-
-import { CHARACTER_MODULE_KEY } from '../constants';
-import { db } from '../../../firebaseConfig';
-import { Note } from '../../types/note';
 import {
     collection,
     deleteDoc,
@@ -15,8 +11,11 @@ import {
     setDoc,
     updateDoc,
 } from '@react-native-firebase/firestore';
+
+import { CHARACTER_MODULE_KEY } from '../constants';
+import { db } from '../../../firebaseConfig';
+import { Note } from '../../types/note';
 import { Character, GAME_TYPE } from '../../types/generic';
-import { gameType } from '../game/types';
 
 interface CharactersState {
     characters: Character[];
@@ -40,8 +39,8 @@ export const loadCharactersFromFirebase = async (
     const docSnapshot = await getDocs(docRef);
 
     // Extract data from each document
-    const characters: Character[] = docSnapshot.docs.map((doc) => ({
-        ...(doc.data() as any),
+    const characters: Character[] = docSnapshot.docs.map((d) => ({
+        ...(d.data() as any),
     }));
 
     if (characters && characters.length > 0) {
@@ -57,7 +56,7 @@ export const loadCharactersFromFirebase = async (
     }
 };
 
-export const loadClassData = async (gameType, gameClass) => {
+export const loadClassData = async (gameType: GAME_TYPE, gameClass) => {
     const docRef = doc(db, 'games', gameType, 'classes', gameClass);
     const docSnapshot = await getDoc(docRef);
 

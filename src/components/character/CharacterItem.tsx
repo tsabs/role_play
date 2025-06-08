@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { Character, GAME_TYPE } from '../../types/generic';
+
 import DndCharacterItem from './dnd5e/DndCharacterItem';
 import WHCharacterItem from './warHammer/WHCharacterItem';
 

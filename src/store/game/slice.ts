@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Game, GamesState } from './types';
+
 import { ROLE_GAMES_MODULE_KEY } from '../constants';
+
+import { Game, GamesState } from './types';
 
 declare global {
     interface AppState {

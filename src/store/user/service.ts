@@ -1,11 +1,13 @@
-import { auth, db } from '../../../firebaseConfig';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
+import { doc, setDoc } from '@react-native-firebase/firestore';
+
+import { auth, db } from '../../../firebaseConfig';
 
 import { LoginUserType, SignUpUserType } from './types';
-import { doc, setDoc } from '@react-native-firebase/firestore';
+
 
 export const signUpUser = async ({ email, password }: SignUpUserType) => {
     try {

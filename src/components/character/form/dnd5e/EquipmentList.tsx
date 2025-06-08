@@ -1,12 +1,13 @@
 import { FC, Fragment, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
+
 import {
     DnDCharacter,
     ElementIdentification,
 } from '../../../../types/games/d2d5e';
 import CustomText from '../../../atom/CustomText';
-import { useTranslation } from 'react-i18next';
 import { theme } from '../../../../../style/theme';
 
 interface EquipmentListProps {
@@ -30,7 +31,7 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
             character?.selectedRaceElements?.raceChoices?.[
                 `${character.race.index}-race-proficiencies`
             ],
-        [character?.selectedRaceElements?.raceChoices]
+        [character?.selectedRaceElements?.raceChoices, character.race.index]
     );
 
     const selectedClassOptions = useMemo(
@@ -44,18 +45,18 @@ const EquipmentList: FC<EquipmentListProps> = ({ character }) => {
         ]
     );
 
-    const backgroundOptions = useMemo(
-        () => character.background?.starting_equipment_options ?? [],
-        [character.background]
-    );
-
-    const selectedBackgroundOptions = useMemo(
-        () =>
-            character?.selectedBackgroundElements?.backgroundChoices?.[
-                `${character.className.index}-class-1`
-            ],
-        []
-    );
+    // const backgroundOptions = useMemo(
+    //     () => character.background?.starting_equipment_options ?? [],
+    //     [character.background]
+    // );
+    //
+    // const selectedBackgroundOptions = useMemo(
+    //     () =>
+    //         character?.selectedBackgroundElements?.backgroundChoices?.[
+    //             `${character.className.index}-class-1`
+    //         ],
+    //     []
+    // );
 
     const renderEquipment = (
         equipments: { equipment: ElementIdentification; quantity: number }[]

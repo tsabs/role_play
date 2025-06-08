@@ -1,8 +1,9 @@
 import { Dialog, Portal, Text } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useCallback } from 'react';
-import { theme } from '../../../style/theme';
 import { useTranslation } from 'react-i18next';
+
+import { theme } from '../../../style/theme';
 
 const CustomDialog = ({
     title,
@@ -23,7 +24,7 @@ const CustomDialog = ({
             triggerAction();
         }
         setIsVisible(false);
-    }, []);
+    }, [setIsVisible, triggerAction]);
     return (
         <Portal>
             <Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>

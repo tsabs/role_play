@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+
 import { AppState } from '../index';
 import { CHARACTER_MODULE_KEY } from '../constants';
 

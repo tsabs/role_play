@@ -87,10 +87,28 @@
         },
         "subclasses": {
           "berserker": {
-            "title": "Berserker"
+            "title": "Berserker",
+            "description": "Un barbare qui donne libre cours à une fureur sans retenue dans la bataille.",
+            "frenzy": "Lorsque vous entrez en rage, vous pouvez choisir de vous déchaîner. Si vous le faites, pendant la rage, vous pouvez effectuer une attaque avec une arme de mêlée comme action bonus à chaque tour. Lorsque la rage se termine, vous subissez un niveau d'épuisement."
           },
           "totem": {
-            "title": "Guerrier totem"
+            "title": "Guerrier totem",
+            "description": "Un barbare qui canalise les esprits animaux pour obtenir une force mystique.",
+            "spiritAnimal": "Animal Spirituel: Choisir un animal totem pour un effect magique spécifique.",
+            "spiritAnimalFeatures": {
+              "bear": {
+                "index": "Esprit Totem: Ours",
+                "description": "Ours: Vous avez une résistance à tous les types de dégâts sauf psychiques pendant la rage."
+              },
+              "wolf": {
+                "index": "Esprit Totem: Loup",
+                "description": "Loup: Vos alliés proches gagnent un avantage aux attaques contre les créatures que vous attaquez."
+              },
+              "eagle": {
+                "index": "Esprit Totem: Aigle",
+                "description": "Aigle: Pendant la rage, d'autres créatures ont un désavantage aux attaques d'opportunité contre vous, et vous pouvez vous déplacer entre les ennemis sans difficulté."
+              }
+            }
           }
         }
       },
@@ -111,7 +129,8 @@
             "title": "Collège du savoir",
             "description": "Un Barde du Savoir enchante par le savoir et les récits oubliés.",
             "cuttingWordsDescription": "Mots singlants",
-            "additionalMasteryDescription": "Maîtrises supplémentaires"
+            "additionalMasteryDescription": "Maîtrises supplémentaires",
+            "additionalProficienciesDescription": "Choisir 3 maîtrises supplémentaires"
           },
           "valor": {
             "title": "Collège de vaillance",
@@ -189,6 +208,24 @@
           "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
           "spellcastingTitle": "✨ Incantation",
           "spellcastingDescription": "Vous pouvez lancer des sorts de rôdeur. Vous préparez un nombre égal au modificateur de SAG + la moitié de votre niveau."
+        },
+        "subclasses": {
+          "hunter": {
+            "name": "Chasseur",
+            "description": "Un maître des tactiques de chasse, traquant des proies surnaturelles ou mortelles.",
+            "features": {
+              "colossusSlayer": "Vous infligez des dégâts supplémentaires à une créature déjà blessée.",
+              "defensiveTactics": "Vous obtenez une tactique défensive comme Évasion ou Riposte."
+            }
+          },
+          "beastMaster": {
+            "name": "Maître des bêtes",
+            "description": "Vous combattez aux côtés d’un compagnon animal loyal.",
+            "features": {
+              "rangerCompanion": "Vous gagnez un compagnon animal pour vous aider au combat.",
+              "exceptionalTraining": "Votre compagnon peut attaquer en même temps que vous."
+            }
+          }
         }
       },
       "rogue": {

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { List, Text } from 'react-native-paper';
@@ -22,7 +22,7 @@ const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
         }
     }, [notesFromSelector, notes]);
 
-    if (!isFocused) return <Fragment />;
+    if (!isFocused) return null;
 
     const renderItem = ({ item, index }: { item: Note; index: number }) => {
         return (

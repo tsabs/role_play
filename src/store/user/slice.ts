@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { LOGIN_MODULE_KEY } from '../constants';
+
 import { UserState } from './types';
 
 declare global {

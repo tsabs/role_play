@@ -1,8 +1,9 @@
 import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+
 import { userSlice } from './user/slice';
 import { characterSlice } from './character/slice';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { CHARACTER_MODULE_KEY, LOGIN_MODULE_KEY } from './constants';
 // ...
 

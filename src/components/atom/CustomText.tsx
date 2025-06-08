@@ -1,5 +1,6 @@
 import { Text, TextProps } from 'react-native';
 import { TextStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
 import { theme } from '../../../style/theme';
 
 interface CustomTextProps extends TextProps {

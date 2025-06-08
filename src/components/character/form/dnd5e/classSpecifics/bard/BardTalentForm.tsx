@@ -8,7 +8,6 @@ import {
     ExtractedProficiencies,
 } from '../../../../../../utils/d2d5';
 import { genericClassFormStyles } from '../genericStyle';
-
 import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
 import BardSubclass from '../../subclassSpecifics/BardSubclass';
 

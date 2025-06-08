@@ -1,5 +1,6 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 
 import {
     bardSubclasses,
@@ -13,7 +14,6 @@ import CustomText from '../../../../atom/CustomText';
 import { genericClassFormStyles } from '../classSpecifics/genericStyle';
 import ProficiencySelector from '../proficiencies/ProficiencySelector';
 import { SelectedClassElementsProps } from '../../../../../types/games/d2d5e';
-import { View } from 'react-native';
 
 interface BardSubclassProps {
     subclass: string;
@@ -38,9 +38,17 @@ const BardSubclass = ({
     level,
 }: BardSubclassProps) => {
     const { t } = useTranslation();
-    if (!subclass || !(subclass in bardSubclasses)) return null;
 
     const data = bardSubclasses[subclass as keyof typeof bardSubclasses];
+
+    const loreProficienciesSelected = useMemo(
+        () => selectedClassElements?.classChoices?.['lore-extra-proficiencies'],
+        [selectedClassElements?.classChoices]
+    );
+
+    const [proficienciesSelected, setProficienciesSelected] = useState(
+        loreProficienciesSelected
+    );
 
     const selectableProficiencies = useMemo(
         () =>
@@ -48,16 +56,30 @@ const BardSubclass = ({
                 loreProficiencyData,
                 proficienciesExtracted
             ),
-        [loreProficiencyData, proficienciesExtracted]
+        [proficienciesExtracted]
     );
 
-    const loreProficienciesSelected = useMemo(
-        () => selectedClassElements?.classChoices?.['lore-extra-proficiencies'],
-        [selectedClassElements?.classChoices]
+    const handleChange = useCallback(
+        (
+            groupId: string,
+            selected: Array<{ index: string; bonus?: number }>
+        ) => {
+            const result: Record<
+                string,
+                Array<{ index: string; bonus?: number }>
+            > = {
+                ...selectedClassElements.classChoices,
+                [groupId]: selected,
+            };
+            setProficienciesSelected(selected);
+            handleSubclassChoices(result);
+        },
+        [handleSubclassChoices, selectedClassElements.classChoices]
     );
+
+    if (!subclass || !(subclass in bardSubclasses)) return null;
 
     console.log(selectedClassElements);
-    // console.log(isOnEdit);
 
     return (
         <Fragment>
@@ -82,25 +104,14 @@ const BardSubclass = ({
                     <ProficiencySelector
                         data={selectableProficiencies}
                         groupId={`lore-extra-proficiencies`}
-                        defaultValue={loreProficienciesSelected}
-                        onChange={(groupId, selected) => {
-                            const result: Record<
-                                string,
-                                Array<{ index: string; bonus?: number }>
-                            > = {
-                                ...selectedClassElements.classChoices,
-                                [groupId]: selected,
-                            };
-                            handleSubclassChoices(result);
-                        }}
+                        defaultValue={proficienciesSelected}
+                        onChange={handleChange}
                     />
                 )
-            ) : !loreProficienciesSelected ? (
-                <CustomText text="Selectionner trois maitrises supplémentaires" />
-            ) : (
+            ) : !!proficienciesSelected ? (
                 <View style={{ flexDirection: 'row', gap: 6 }}>
                     <CustomText text="Selection: " />
-                    {loreProficienciesSelected.map((proficiency) => (
+                    {proficienciesSelected.map((proficiency) => (
                         <CustomText
                             fontWeight="bold"
                             key={proficiency.index}
@@ -110,6 +121,8 @@ const BardSubclass = ({
                         />
                     ))}
                 </View>
+            ) : (
+                <CustomText text="Selectionner trois maitrises supplémentaires" />
             )}
         </Fragment>
     );

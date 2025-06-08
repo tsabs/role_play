@@ -15,11 +15,11 @@ export const CharacterNotesScreen = ({
     console.log('ID', characterId);
     const renderNotesComponent = useCallback(
         () => CharacterNotes({ characterId }),
-        []
+        [characterId]
     );
     const renderHistoryNotesComponent = useCallback(
         () => CharacterHistoryNotes({ characterId }),
-        []
+        [characterId]
     );
     return (
         <Tab.Navigator
@@ -30,7 +30,6 @@ export const CharacterNotesScreen = ({
                 tabBarLabelStyle: { fontSize: 12 },
                 tabBarStyle: { backgroundColor: 'powderblue' },
             }}
-            // lazy={true}
             tabBar={(props) =>
                 TopBar({
                     elements: [

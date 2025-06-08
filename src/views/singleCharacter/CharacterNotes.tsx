@@ -45,7 +45,7 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
         setTitle('');
         editorContentRef.current?.setContentHTML('');
         editorTitleRef.current?.setContentHTML('');
-    }, [characterId, content, title]);
+    }, [auth.user.email, characterId, content, dispatch, title]);
 
     return (
         <KeyboardAvoidingView
@@ -76,7 +76,7 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
                         }
                         onChangeText={setContent}
                         value={content}
-                        multiline={true}
+                        multiline
                         placeholder="Ecrivez votre note ici..."
                         style={styles.editor}
                         inputAccessoryViewID={inputAccessoryViewID}

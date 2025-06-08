@@ -51,10 +51,12 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
-        if (defaultValue) {
-            onChange?.(groupId ?? '', defaultValue);
+        if (selected) {
+            console.log('changed');
+            onChange?.(groupId ?? '', selected);
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selected]);
 
     const handleToggle = useCallback(
         (index: string, bonus?: number) => {
@@ -72,7 +74,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
             setSelected(updated);
             onChange?.(groupId ?? '', updated);
         },
-        [selected, groupId, onChange]
+        [selected, data.choose, groupId, onChange]
     );
 
     const renderItem = useCallback(
@@ -155,8 +157,10 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
             return null;
         },
-        [data.choose, selected, handleToggle]
+        [selected, t, data.choose, handleToggle, onChange]
     );
+
+    // console.log(data);
 
     return (
         <View style={styles.groupContainer}>

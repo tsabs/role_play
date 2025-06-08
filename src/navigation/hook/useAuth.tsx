@@ -22,9 +22,9 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 // Refresh token and keep user logged in
-                const token = await currentUser.getIdToken(true);
+                const t = await currentUser.getIdToken(true);
                 setUser(currentUser);
-                setToken(token);
+                setToken(t);
 
                 // Refresh token periodically
                 const refreshTokenInterval = setInterval(
