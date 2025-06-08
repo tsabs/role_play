@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import {
+    SelectedClassElementsProps,
+    SelectedRaceElementsProps,
+} from 'types/games/d2d5e';
 
-import CustomText from '../../../../../atom/CustomText';
-import { genericClassFormStyles } from '../genericStyle';
-import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
+import CustomText from '@components/atom/CustomText';
+
 import BarbarianSubclass from '../../subclassSpecifics/barbarian/BarbarianSubclass';
+import { genericClassFormStyles } from '../genericStyle';
 
 interface BarbarianTalentFormProps {
     level: number;
@@ -18,6 +22,7 @@ interface BarbarianTalentFormProps {
             Array<{ index: string; bonus?: number }>
         >
     ) => void;
+    selectedRaceElements?: SelectedRaceElementsProps;
     selectedClassElements?: SelectedClassElementsProps;
 }
 
@@ -43,6 +48,7 @@ const BarbarianTalentForm = ({
     isOnEdit,
     subclass,
     handleSubclassChoices,
+    selectedRaceElements,
     selectedClassElements,
 }: BarbarianTalentFormProps) => {
     const { t } = useTranslation();
@@ -56,6 +62,7 @@ const BarbarianTalentForm = ({
         () => Math.floor(((abilities['CON'] || 10) - 10) / 2),
         [abilities]
     );
+
     const unarmoredAC = useMemo(
         () => Math.max(10 + dexMod + conMod, 10),
         [dexMod, conMod]

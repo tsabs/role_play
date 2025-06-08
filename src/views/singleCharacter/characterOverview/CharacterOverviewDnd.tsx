@@ -4,6 +4,8 @@ import { Divider, List } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
+import { Ability } from 'types/generic';
+import { DnDAbility, DnDCharacter } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
@@ -31,8 +33,6 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '@utils/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
-import { Ability } from '../../../types/generic.ts';
-import { DnDAbility, DnDCharacter } from '../../../types/games/d2d5e';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;
@@ -174,6 +174,17 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         ]
     );
 
+    const getAbilitiesFinalScore = useCallback(() => {
+        const result = { ...selectedAbilities };
+        mergeAbilities.forEach(({ index, bonus }) => {
+            const key = index.toUpperCase();
+            if (result && result?.[key] !== undefined) {
+                result[key] += bonus;
+            }
+        });
+        return result;
+    }, [selectedAbilities, mergeAbilities]);
+
     const accordions = useMemo(() => {
         const proficienciesExtracted = extractCharacterProficiencies(character);
 
@@ -210,10 +221,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 title: `character.classes.${character.className.index}.name`,
                 content: (
                     <TalentClassForm
-                        abilities={selectedAbilities}
+                        abilities={getAbilitiesFinalScore()}
                         level={level}
                         characterClass={character.className.index}
                         isEditModeEnabled
+                        selectedRaceElements={character?.selectedRaceElements}
                         selectedClassElements={character?.selectedClassElements}
                         onSubclassSelect={handleSubclassChange}
                         proficienciesExtracted={proficienciesExtracted}
@@ -267,6 +279,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         handleSubclassChange,
         isEditMode,
         mergeAbilities,
+        getAbilitiesFinalScore,
         t,
     ]);
 

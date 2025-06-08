@@ -1,7 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { DnDAbility, SelectedClassElementsProps } from 'types/games/d2d5e';
+import {
+    DnDAbility,
+    SelectedClassElementsProps,
+    SelectedRaceElementsProps,
+} from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
@@ -21,7 +25,8 @@ interface TalentClassFormProps {
     characterClass: string;
     level: number;
     abilities: Record<DnDAbility, number>;
-    proficienciesExtracted: ExtractedProficiencies;
+    proficienciesExtracted?: ExtractedProficiencies;
+    selectedRaceElements?: SelectedRaceElementsProps;
     selectedClassElements?: SelectedClassElementsProps;
     isEditModeEnabled?: boolean;
     onSubclassSelect?: (
@@ -38,6 +43,7 @@ const TalentClassForm = ({
     level,
     abilities,
     proficienciesExtracted,
+    selectedRaceElements,
     selectedClassElements,
     isEditModeEnabled,
     onSubclassSelect,
@@ -141,6 +147,7 @@ const TalentClassForm = ({
                         level={level}
                         abilities={abilities}
                         subclass={subclass}
+                        selectedRaceElements={selectedRaceElements}
                         selectedClassElements={selectedClassElements}
                         isOnEdit={isOnEdit}
                         handleSubclassChoices={handleSubclassChoices}

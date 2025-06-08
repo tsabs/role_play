@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
+import { DnDCharacter } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
 import Separator from '@components/library/Separator';
@@ -16,7 +17,6 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
-import { DnDCharacter } from '../../../types/games/d2d5e';
 
 interface DndCharacterItemProps {
     character: DnDCharacter;
