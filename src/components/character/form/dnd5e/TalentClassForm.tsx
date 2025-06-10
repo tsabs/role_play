@@ -17,7 +17,7 @@ import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTale
 import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
 import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
 import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
-import PaladinTalentForm from '../dnd5e/classSpecifics/PaladinTalentForm';
+import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentForm';
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
 import { theme } from '../../../../../style/theme';
 
@@ -101,6 +101,27 @@ const TalentClassForm = ({
                             'character.classes.ranger.subclasses.beastMaster.title'
                         ),
                         value: 'beastMaster',
+                    },
+                ];
+            case 'paladin':
+                return [
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.devotion.title'
+                        ),
+                        value: 'devotion',
+                    },
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.ancients.title'
+                        ),
+                        value: 'ancients',
+                    },
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.vengeance.title'
+                        ),
+                        value: 'vengeance',
                     },
                 ];
             default:
@@ -195,7 +216,14 @@ const TalentClassForm = ({
                 );
             case 'paladin':
                 return (
-                    <PaladinTalentForm level={level} abilities={abilities} />
+                    <PaladinTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
                 );
             default:
                 return <CustomText text="Class not yet supported." />;

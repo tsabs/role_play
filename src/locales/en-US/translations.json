@@ -783,5 +783,18 @@
   "modal": {
   "confirmAction": "Yes",
   "cancelAction": "No"
+  },
+  "spells": {
+    "protection-from-evil-and-good": "Protection contre le Bien et le Mal",
+    "sanctuary": "Sanctuaire",
+    "lesser-restoration": "Restauration partielle",
+    "zone-of-truth": "Zone de vérité",
+    "bane": "Fléau",
+    "hunter’s-mark": "Marque du chasseur",
+    "hold-person": "Immobilisation de personne",
+    "misty-step": "Pas brumeux",
+    "ensnaring-strike": "Frappe entravante",
+    "speak-with-animals": "Parler aux animaux",
+    "moonbeam": "Rayon de lune"
   }
 }

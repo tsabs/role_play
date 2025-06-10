@@ -184,18 +184,84 @@
       },
       "paladin": {
         "name": "Paladin",
+        "channelDivinityTitle": "Canalisation d'énergie divine",
+        "oathSpellsAtLevel": "Sorts du serment – Niveau {{level}}",
         "talents":  {
           "layOnHandsTitle": "🛡 Imposition des Mains",
           "layOnHandsDescription": "Vous pouvez restaurer {{layOnHands}} PV par repos long.",
           "layOnHandsUsage": "Vous pouvez dépenser 5 PV pour guérir une maladie ou un poison.",
           "divineSmiteTitle": "💥 Châtiment Divin",
           "divineSmiteDescription": "Lorsque vous touchez, dépensez un emplacement de sort pour infliger des dégâts radiants.",
+          "fightingStyleTitle": "🛡️ Style de Combat",
+          "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
           "divineHealthTitle": "🏰 Santé Divine",
           "divineHealthDescription": "Vous êtes immunisé contre les maladies.",
           "sacredOathTitle": "🕊 Serment Sacré",
           "sacredOathDescription": "Choisissez une sous-classe de Serment au niveau 3.",
           "spellcastingTitle": "✨ Incantation",
           "spellcastingDescription": "Vous pouvez préparer mod CHA ({{chaMod}}) + la moitié de votre niveau en sorts de Paladin."
+        },
+        "combatsStyle": {
+          "archery": {
+            "index": "Archerie",
+            "description": "+2 aux jets d'attaque avec une arme à distance."
+          },
+          "defense": {
+            "index": "Défense",
+            "description": "Si on porte une armure, +1 à la CA."
+          },
+          "dueling": {
+            "index": "Duel",
+            "description": "Si on tient seulement une arme de corps à corps dans une main, +2 aux dégâts."
+          },
+          "twoWeapon": {
+            "index": "Combat à deux armes",
+            "description": "Si on combat avec deux armes, ajoute le modificateur de caractéristique aux dégâts de la seconde attaque."
+          },
+          "thrownWeapon": {
+            "index": "Armes de lancer",
+            "description": "Dégaine une arme de lancer dans la même action que l'attaque et +2 aux dégâts avec une arme de lancer."
+          },
+          "blind": {
+            "index": "Combat en aveugle",
+            "description": "Voit dans un rayon de 3 m tout ce qui n'a pas un abri total, et les créatures invisibles non cachées."
+          },
+          "druidicWarrior": {
+            "index": "Combattant druidique",
+            "description": "Apprend 2 sorts mineurs de druide avec la Sagesse comme caractéristique d'incantation."
+          }
+        },
+        "subclasses": {
+          "devotion": {
+            "title": "Dévotion",
+            "description": "Vous avez juré de défendre l'honneur, la compassion, la justice et la vertu. Vous êtes un bouclier contre les ténèbres.",
+            "channelDivinity": {
+              "sacredWeapon": "Arme sacrée",
+              "turnUnholy": "Repousser les profanes"
+            },
+            "feature1": "Canalisation d’énergie divine : Repousser le mal.",
+            "feature2": "Aura de protection contre la magie noire."
+          },
+          "ancients": {
+            "title": "Anciens",
+            "description": "Vous êtes lié aux forces de la nature et à la lumière primordiale, protégeant la vie contre la corruption.",
+            "channelDivinity": {
+              "natureWrath": "Courroux de la nature",
+              "turnFey": "Repousser les fées"
+            },
+            "feature1": "Énergie féerique : Immobiliser les ennemis.",
+            "feature2": "Aura de réconfort : Régénération naturelle."
+          },
+          "vengeance": {
+            "title": "Vengeance",
+            "description": "Votre serment est une croisade impitoyable contre le mal. Vous êtes la punition incarnée.",
+            "channelDivinity": {
+              "abjureEnemy": "Éloigner l'ennemi",
+              "vowOfEnmity": "Vœu d’inimitié"
+            },
+            "feature1": "Marque de vengeance : Traque infaillible.",
+            "feature2": "Relâche de la colère divine."
+          }
         }
       },
       "ranger": {
@@ -799,5 +865,18 @@
   "modal": {
     "confirmAction": "Oui",
     "cancelAction": "Non"
+  },
+  "spells": {
+    "protection-from-evil-and-good": "Protection contre le Bien et le Mal",
+    "sanctuary": "Sanctuaire",
+    "lesser-restoration": "Restauration partielle",
+    "zone-of-truth": "Zone de vérité",
+    "bane": "Fléau",
+    "hunter’s-mark": "Marque du chasseur",
+    "hold-person": "Immobilisation de personne",
+    "misty-step": "Pas brumeux",
+    "ensnaring-strike": "Frappe entravante",
+    "speak-with-animals": "Parler aux animaux",
+    "moonbeam": "Rayon de lune"
   }
 }

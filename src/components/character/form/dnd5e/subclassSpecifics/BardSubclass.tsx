@@ -10,7 +10,7 @@ import {
     bardSubclasses,
     loreProficiencyData,
 } from '../classSpecifics/bard/bardSubclasses';
-import { genericClassFormStyles } from '../classSpecifics/genericStyle';
+import { genericClassFormStyles } from '../genericStyle';
 import ProficiencySelector from '../proficiencies/ProficiencySelector';
 
 interface BardSubclassProps {
@@ -118,8 +118,6 @@ const BardSubclass = ({
     ]);
 
     if (!subclass || !(subclass in bardSubclasses)) return null;
-
-    console.log(selectedClassElements);
 
     return (
         <Fragment>

@@ -6,7 +6,7 @@ import { SelectedClassElementsProps } from 'types/games/d2d5e';
 import CustomText from '@components/atom/CustomText';
 
 import DisplaySelection from '../../atom/DisplaySelection.tsx';
-import { genericClassFormStyles } from '../../classSpecifics/genericStyle';
+import { genericClassFormStyles } from '../../genericStyle';
 
 import { rangerSubclasses } from './rangerSubclasses';
 

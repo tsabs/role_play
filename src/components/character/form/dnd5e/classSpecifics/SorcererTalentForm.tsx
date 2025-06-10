@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import CustomText from '@components/atom/CustomText';
 import { calculateModifier } from '@utils/d2d5';
 
-import { genericClassFormStyles } from './genericStyle';
+import { genericClassFormStyles } from '../genericStyle';
 
 interface SorcererTalentFormProps {
     level: number;

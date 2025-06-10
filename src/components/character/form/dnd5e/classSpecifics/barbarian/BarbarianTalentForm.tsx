@@ -9,7 +9,7 @@ import {
 import CustomText from '@components/atom/CustomText';
 
 import BarbarianSubclass from '../../subclassSpecifics/barbarian/BarbarianSubclass';
-import { genericClassFormStyles } from '../genericStyle';
+import { genericClassFormStyles } from '../../genericStyle';
 
 interface BarbarianTalentFormProps {
     level: number;

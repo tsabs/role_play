@@ -39,4 +39,42 @@ const generateAndDownloadImage = async (prompt: string) => {
     }
 };
 
-export { generateAndDownloadImage };
+const combatsStyle = (className: string) => [
+    {
+        value: 'archery',
+        label: `character.classes.${className}.combatsStyle.archery.index`,
+        description: `character.classes.${className}.combatsStyle.archery.character`,
+    },
+    {
+        value: 'defense',
+        label: `character.classes.${className}.combatsStyle.defense.index`,
+        description: `character.classes.${className}.combatsStyle.defense.character`,
+    },
+    {
+        value: 'dueling',
+        label: `character.classes.${className}.combatsStyle.dueling.index`,
+        description: `character.classes.${className}.combatsStyle.dueling.character`,
+    },
+    {
+        value: 'twoWeapon',
+        label: `character.classes.${className}.combatsStyle.twoWeapon.index`,
+        description: `character.classes.${className}.combatsStyle.twoWeapon.character`,
+    },
+    {
+        value: 'blind',
+        label: `character.classes.${className}.combatsStyle.blind.index`,
+        description: `character.classes.${className}.combatsStyle.blind.character`,
+    },
+    {
+        value: 'druidicWarrior',
+        label: `character.classes.${className}.combatsStyle.druidicWarrior.index`,
+        description: `character.classes.${className}.combatsStyle.druidicWarrior.character`,
+    },
+    {
+        value: 'thrownWeapon',
+        label: `character.classes.${className}.combatsStyle.thrownWeapon.index`,
+        description: `character.classes.${className}.combatsStyle.thrownWeapon.character`,
+    },
+];
+
+export { generateAndDownloadImage, combatsStyle };

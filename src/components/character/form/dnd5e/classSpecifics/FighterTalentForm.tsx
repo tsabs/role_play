@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import CustomText from '@components/atom/CustomText';
 
-import { genericClassFormStyles } from './genericStyle';
+import { genericClassFormStyles } from '../genericStyle';
 
 interface FighterTalentFormProps {
     level: number;

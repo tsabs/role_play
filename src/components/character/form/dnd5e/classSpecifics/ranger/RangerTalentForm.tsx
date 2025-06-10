@@ -8,9 +8,9 @@ import {
 
 import CustomText from '@components/atom/CustomText';
 
-import { genericClassFormStyles } from '../genericStyle';
+import { genericClassFormStyles } from '../../genericStyle';
 import RangerSubclass from '../../subclassSpecifics/ranger/RangerSubclass';
-import DisplaySelection from '@components/character/form/dnd5e/atom/DisplaySelection.tsx';
+import DisplaySelection from '../../atom/DisplaySelection.tsx';
 
 interface RangerTalentFormProps {
     level: number;

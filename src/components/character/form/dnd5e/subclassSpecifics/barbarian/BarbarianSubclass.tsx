@@ -5,10 +5,10 @@ import { SelectedClassElementsProps } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
 
-import { genericClassFormStyles } from '../../classSpecifics/genericStyle';
+import { genericClassFormStyles } from '../../genericStyle';
 import DisplaySelection from '../../atom/DisplaySelection.tsx';
 
-import { barbarianSubclasses, totemAnimalData } from './barbarianSubclasses';
+import { barbarianSubclasses } from './barbarianSubclasses';
 
 interface BarbarianSubclassProps {
     subclass: string;
@@ -43,15 +43,6 @@ const BarbarianSubclass = ({
     );
 
     const [totem, setTotem] = useState(selectedTotem);
-
-    const totemOptions = useMemo(
-        () =>
-            totemAnimalData.map((animal) => ({
-                label: t(animal.label),
-                value: animal.value,
-            })),
-        [t]
-    );
 
     const handleChange = useCallback(
         (value: string) => {

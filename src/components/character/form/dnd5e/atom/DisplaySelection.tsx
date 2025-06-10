@@ -4,15 +4,16 @@ import { useTranslation } from 'react-i18next';
 
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
 import CustomText from '@components/atom/CustomText';
+import { combatsStyle } from '@components/character/form/dnd5e/utils.ts';
 
 import {
-    combatsStyle,
+    // combatsStyle,
     favoredEnemyData,
     favoredTerrainData,
 } from '../classSpecifics/ranger/rangerClass';
 import { theme } from '../../../../../../style/theme';
-import { totemAnimalData } from '@components/character/form/dnd5e/subclassSpecifics/barbarian/barbarianSubclasses.ts';
-import { huntersPrey } from '@components/character/form/dnd5e/subclassSpecifics/ranger/rangerSubclasses.ts';
+import { totemAnimalData } from '../../dnd5e/subclassSpecifics/barbarian/barbarianSubclasses.ts';
+import { huntersPrey } from '../../dnd5e/subclassSpecifics/ranger/rangerSubclasses.ts';
 
 interface DisplaySelectionProps {
     isOnEdit: boolean;
@@ -55,7 +56,7 @@ const DisplaySelection = ({
                     value: enemy.value,
                 }));
             case 'combatsStyle':
-                return combatsStyle.map((combat) => ({
+                return combatsStyle(className).map((combat) => ({
                     label: t(combat.label),
                     value: combat.value,
                 }));
@@ -68,7 +69,7 @@ const DisplaySelection = ({
             default:
                 return [];
         }
-    }, [t, type]);
+    }, [className, t, type]);
 
     const label = subclass
         ? t(

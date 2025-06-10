@@ -1,4 +1,4 @@
-import { ProficiencyOption } from '../../../../../../types/games/d2d5e';
+import { ProficiencyOption } from 'types/games/d2d5e';
 
 export type BardSubclassKey = 'lore' | 'valor';
 
