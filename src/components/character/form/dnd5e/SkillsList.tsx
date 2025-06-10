@@ -7,7 +7,7 @@ import { AbilityScores, DnDCharacter } from 'types/games/d2d5e';
 import CustomText from '@components/atom/CustomText';
 import {
     calculateModifier,
-    extractCharacterProficiencies,
+    ExtractedProficiencies,
     getProficiencyBonus,
     mergeAbilityBonuses,
     transformRaceAbilities,
@@ -39,11 +39,15 @@ const SKILLS: { [key: string]: keyof AbilityScores } = {
 interface SkillsListProps {
     character: DnDCharacter;
     level: number;
+    proficiencies: ExtractedProficiencies;
 }
 
-const SkillsList: FC<SkillsListProps> = ({ character, level }) => {
+const SkillsList: FC<SkillsListProps> = ({
+    character,
+    level,
+    proficiencies,
+}) => {
     const { t } = useTranslation();
-    const proficiencies = extractCharacterProficiencies(character);
     const renderItem = useCallback(
         ({ item: [skill, ability] }) => {
             const transformBonuses = transformRaceAbilities(

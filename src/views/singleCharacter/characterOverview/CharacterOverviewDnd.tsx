@@ -57,12 +57,10 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const [selectedAbilities, setSelectedAbilities] = useState<
         Record<Ability, number> | undefined
     >(undefined);
-    // const [selectedSubClass, setSelectedSubClass] = useState(
-    //     character.selectedClassElements?.selected_subclass
-    // );
-    // const [selectedSubClassChoices, setSelectedSubClassChoices] = useState<
-    //     Record<string, Array<{ index: string; bonus?: number }>>
-    // >(character.selectedClassElements?.classChoices);
+    const [selectedClassElements, setSelectedClassElements] = useState<{
+        selected_subclass?: string;
+        classChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
+    }>(character.selectedClassElements);
 
     const handleEditMode = useCallback(() => {
         setIsEditMode((previousState) => {
@@ -89,7 +87,6 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         await loadClassData(character.gameType, character.className.index)
             .then((res) => {
                 setClassData(res);
-                // console.log('class data : ', res);
             })
             .catch((err) => console.log('error getting class data', err));
     }, [character.gameType, character.className]);
@@ -102,8 +99,8 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 : (character.className as any),
             character.level.toString()
         )
-            .then((_) => {
-                // console.log('talent result : ', res);
+            .then((res) => {
+                console.log('talent result : ', res);
             })
             .catch((err) =>
                 console.log('error getting level specific class talent', err)
@@ -135,17 +132,19 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const handleSubclassChange = useCallback(
         async (
             selected: string,
-            selectedClassChoices: Record<
+            seClassChoices: Record<
                 string,
                 Array<{ index: string; bonus?: number }>
             >
         ) => {
-            // setSelectedSubClass(selected);
-            // setSelectedSubClassChoices(selectedClassChoices);
+            setSelectedClassElements({
+                selected_subclass: selected,
+                classChoices: seClassChoices,
+            });
             const updatedCharacter = {
                 ...character,
                 selectedClassElements: {
-                    classChoices: selectedClassChoices,
+                    classChoices: seClassChoices,
                     selected_subclass: selected,
                 },
             };
@@ -186,7 +185,10 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     }, [selectedAbilities, mergeAbilities]);
 
     const accordions = useMemo(() => {
-        const proficienciesExtracted = extractCharacterProficiencies(character);
+        const proficienciesExtracted = extractCharacterProficiencies({
+            ...character,
+            selectedClassElements,
+        });
 
         return [
             {
@@ -226,7 +228,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                         characterClass={character.className.index}
                         isEditModeEnabled
                         selectedRaceElements={character?.selectedRaceElements}
-                        selectedClassElements={character?.selectedClassElements}
+                        selectedClassElements={selectedClassElements}
                         onSubclassSelect={handleSubclassChange}
                         proficienciesExtracted={proficienciesExtracted}
                     />
@@ -261,7 +263,13 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 5,
                 title: 'character.overview.accordion.skills',
-                content: <SkillsList character={character} level={level} />,
+                content: (
+                    <SkillsList
+                        character={character}
+                        level={level}
+                        proficiencies={proficienciesExtracted}
+                    />
+                ),
             },
             {
                 id: 6,
@@ -276,6 +284,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         handleUpdateCharacter,
         handleSaveEdit,
         handleEditMode,
+        selectedClassElements,
         handleSubclassChange,
         isEditMode,
         mergeAbilities,

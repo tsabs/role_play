@@ -1,6 +1,6 @@
 export const rangerSubclasses = {
     hunter: {
-        nameKey: 'character.classes.ranger.subclasses.hunter.name',
+        nameKey: 'character.classes.ranger.subclasses.hunter.title',
         descriptionKey:
             'character.classes.ranger.subclasses.hunter.description',
         features: [
@@ -18,7 +18,7 @@ export const rangerSubclasses = {
         ],
     },
     beastMaster: {
-        nameKey: 'character.classes.ranger.subclasses.beastMaster.name',
+        nameKey: 'character.classes.ranger.subclasses.beastMaster.title',
         descriptionKey:
             'character.classes.ranger.subclasses.beastMaster.description',
         features: [
@@ -35,3 +35,18 @@ export const rangerSubclasses = {
         ],
     },
 };
+
+export const huntersPrey = [
+    {
+        value: 'colossusSlayer',
+        label: 'character.classes.ranger.subclasses.hunter.huntersPrey.colossusSlayer.index',
+    },
+    {
+        value: 'giantKiller',
+        label: 'character.classes.ranger.subclasses.hunter.huntersPrey.giantKiller.index',
+    },
+    {
+        value: 'hordeBreaker',
+        label: 'character.classes.ranger.subclasses.hunter.huntersPrey.hordeBreaker.index',
+    },
+];

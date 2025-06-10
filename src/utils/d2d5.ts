@@ -114,11 +114,11 @@ const shouldChooseSubclass = (
 type ProficiencyCategory = 'race' | 'class' | 'background';
 
 export interface ExtractedProficiencies {
-    fromBackground: string[];
-    fromRace: string[];
-    fromSelectedRace: string[];
-    fromSelectedClass: string[];
-    fromSelectedSubclass: string[];
+    fromBackground?: string[];
+    fromRace?: string[];
+    fromSelectedRace?: string[];
+    fromSelectedClass?: string[];
+    fromSelectedSubclass?: string[];
     all: string[]; // flat list, unique
 }
 
@@ -168,16 +168,25 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
             ...fromRace,
             ...fromSelectedRace,
             ...fromSelectedClass,
-            // ...fromSelectedSubclass
+            ...fromSelectedSubclass,
         ],
     };
 };
 
 const getAvailableProficiencies = (
     data: ProficiencyOption,
-    extractedProficiencies: ExtractedProficiencies
+    extractedProficiencies: ExtractedProficiencies,
+    excludeSources: (keyof ExtractedProficiencies)[] = []
 ): ProficiencyOption => {
-    const ownedSkills = new Set(extractedProficiencies.all);
+    const combinedProficiencies = Object.entries(extractedProficiencies)
+        .filter(
+            ([key]) =>
+                key !== 'all' &&
+                !excludeSources.includes(key as keyof ExtractedProficiencies)
+        )
+        .flatMap(([, profs]) => profs || []);
+
+    const ownedSkills = new Set(combinedProficiencies);
 
     const filteredOptions = data.from.options.filter((option) => {
         if (option.option_type === 'reference') {
@@ -193,8 +202,7 @@ const getAvailableProficiencies = (
             return !ownedSkills.has(optionSelect.index);
         }
 
-        // Keep other types (like nested choices or bonuses) by default
-        return true;
+        return true; // Keep other types
     });
 
     return {

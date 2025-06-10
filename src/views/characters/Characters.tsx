@@ -1,18 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from 'react-native-paper';
+import { Button, Modal, Portal } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-import SafeView from '../../components/library/SafeView';
+import SafeView from '@components/library/SafeView';
+import CharacterItem from '@components/character/CharacterItem';
+import Separator from '@components/library/Separator';
+import CustomText from '@components/atom/CustomText';
+import { useAuth } from '@navigation/hook/useAuth';
+import { useAppDispatch, useAppSelector } from '@store/index';
+import { selectAllCharacters } from '@store/character/selectors';
+import { loadCharacters } from '@store/character/slice';
+import ModalSelectGame from '@views/characters/ModalSelectGame.tsx';
+import CustomButton from '@components/atom/CustomButton.tsx';
+
 import { theme } from '../../../style/theme';
-import { loadCharacters } from '../../store/character/slice';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { useAuth } from '../../navigation/hook/useAuth';
-import { selectAllCharacters } from '../../store/character/selectors';
-import CharacterItem from '../../components/character/CharacterItem';
-import Separator from '../../components/library/Separator';
-import CustomText from '../../components/atom/CustomText';
 
 const margin = 10;
 
@@ -26,6 +29,17 @@ const CharactersScreen = () => {
     }, [auth.user.email, dispatch]);
     const characters = useAppSelector(selectAllCharacters);
     const [mounted, setMounted] = useState(false);
+    const [shouldShowModal, setShouldShowModal] = useState(false);
+
+    const handleShowModal = useCallback(() => {
+        setShouldShowModal(!shouldShowModal);
+    }, [shouldShowModal]);
+
+    const handleNavigation = useCallback(() => {
+        navigation.navigate('CharacterFormProvider', {
+            gameType: 'dnd5e',
+        });
+    }, [navigation]);
 
     // This seems to fix an Android bug where the bottom bar is hidden after mount
     useEffect(() => {
@@ -41,6 +55,13 @@ const CharactersScreen = () => {
 
     return (
         <SafeView>
+            <Portal>
+                <ModalSelectGame
+                    shouldShowModal={shouldShowModal}
+                    setShouldShowModal={setShouldShowModal}
+                    handleNavigation={handleNavigation}
+                />
+            </Portal>
             <View style={styles.title}>
                 <CustomText
                     fontSize={theme.fontSize.extraLarge}
@@ -51,11 +72,7 @@ const CharactersScreen = () => {
                 style={styles.button}
                 textColor={theme.colors.white}
                 buttonColor={theme.colors.primary}
-                onPress={() =>
-                    navigation.navigate('CharacterFormProvider', {
-                        gameType: 'dnd5e',
-                    })
-                }
+                onPress={handleShowModal}
             >
                 {t('characters.titleButtonText')}
             </Button>

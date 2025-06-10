@@ -16,7 +16,7 @@ import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
 import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
 import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
 import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
-import RangerTalentForm from '../dnd5e/classSpecifics/RangerTalentForm';
+import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
 import PaladinTalentForm from '../dnd5e/classSpecifics/PaladinTalentForm';
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
 import { theme } from '../../../../../style/theme';
@@ -88,6 +88,21 @@ const TalentClassForm = ({
                         value: 'totem',
                     },
                 ];
+            case 'ranger':
+                return [
+                    {
+                        label: t(
+                            'character.classes.ranger.subclasses.hunter.title'
+                        ),
+                        value: 'hunter',
+                    },
+                    {
+                        label: t(
+                            'character.classes.ranger.subclasses.beastMaster.title'
+                        ),
+                        value: 'beastMaster',
+                    },
+                ];
             default:
                 return [];
         }
@@ -154,7 +169,17 @@ const TalentClassForm = ({
                     />
                 );
             case 'ranger':
-                return <RangerTalentForm level={level} />;
+                return (
+                    <RangerTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedRaceElements={selectedRaceElements}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
+                );
             case 'fighter':
                 return (
                     <FighterTalentForm
@@ -182,28 +207,28 @@ const TalentClassForm = ({
         subclass,
         proficienciesExtracted,
         selectedClassElements,
+        selectedRaceElements,
         handleSubclassChoices,
         isOnEdit,
     ]);
 
     return (
         <View>
-            {showSubclassSelector && (
-                <View
-                    style={{
-                        marginBottom: theme.space.md,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: theme.space.md,
-                    }}
-                >
-                    <EditMode
-                        isEditModeEnabled={isEditModeEnabled}
-                        handleChange={handleChangeEditMode}
-                        handleSave={handleSave}
-                        style={{ flexDirection: 'row' }}
-                    />
-                    {isOnEdit ? (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: theme.space.md,
+                }}
+            >
+                <EditMode
+                    isEditModeEnabled={isEditModeEnabled}
+                    handleChange={handleChangeEditMode}
+                    handleSave={handleSave}
+                    style={{ flexDirection: 'row' }}
+                />
+                {showSubclassSelector &&
+                    (isOnEdit ? (
                         subclass ? (
                             <CustomSelectionButton
                                 items={availableSubclasses}
@@ -246,9 +271,8 @@ const TalentClassForm = ({
                                 text={'Choisir une sous classe'}
                             />
                         )
-                    )}
-                </View>
-            )}
+                    ))}
+            </View>
             {renderClassSpecific()}
         </View>
     );

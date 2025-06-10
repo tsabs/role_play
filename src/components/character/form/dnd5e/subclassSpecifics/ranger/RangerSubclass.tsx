@@ -1,16 +1,16 @@
+import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useCallback, useMemo, useState } from 'react';
 import { SelectedClassElementsProps } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
 
-import { genericClassFormStyles } from '../../classSpecifics/genericStyle';
 import DisplaySelection from '../../atom/DisplaySelection.tsx';
+import { genericClassFormStyles } from '../../classSpecifics/genericStyle';
 
-import { barbarianSubclasses, totemAnimalData } from './barbarianSubclasses';
+import { rangerSubclasses } from './rangerSubclasses';
 
-interface BarbarianSubclassProps {
+interface RangerSubclassProps {
     subclass: string;
     selectedClassElements: SelectedClassElementsProps;
     isOnEdit: boolean;
@@ -23,63 +23,51 @@ interface BarbarianSubclassProps {
     level: number;
 }
 
-const BarbarianSubclass = ({
+const RangerSubclass = ({
     subclass,
     selectedClassElements,
     isOnEdit,
     handleSubclassChoices,
     level,
-}: BarbarianSubclassProps) => {
+}: RangerSubclassProps) => {
     const { t } = useTranslation();
 
-    const data = useMemo(
-        () => barbarianSubclasses[subclass as keyof typeof barbarianSubclasses],
-        [subclass]
-    );
+    const data = rangerSubclasses[subclass as keyof typeof rangerSubclasses];
 
-    const selectedTotem = useMemo(
-        () => selectedClassElements?.classChoices?.['totem-spirit']?.[0]?.index,
+    const selectedHuntersPrey = useMemo(
+        () => selectedClassElements?.classChoices?.['hunters-prey']?.[0]?.index,
         [selectedClassElements?.classChoices]
     );
 
-    const [totem, setTotem] = useState(selectedTotem);
-
-    const totemOptions = useMemo(
-        () =>
-            totemAnimalData.map((animal) => ({
-                label: t(animal.label),
-                value: animal.value,
-            })),
-        [t]
-    );
+    const [prey, setPreyPrey] = useState(selectedHuntersPrey);
 
     const handleChange = useCallback(
         (value: string) => {
-            setTotem(value);
+            setPreyPrey(value);
             handleSubclassChoices({
                 ...selectedClassElements.classChoices,
-                ['totem-spirit']: [{ index: value }],
+                ['hunters-prey']: [{ index: value }],
             });
         },
         [selectedClassElements, handleSubclassChoices]
     );
 
-    const displaySubclassSpecifics = useCallback(() => {
-        if (subclass === 'totem') {
+    const displaySubClassSpecifics = useCallback(() => {
+        if (subclass === 'hunter') {
             return (
                 <DisplaySelection
                     isOnEdit={isOnEdit}
-                    className={'barbarian'}
-                    handleChange={handleChange}
-                    type={'spiritAnimalFeatures'}
+                    className={'ranger'}
                     subclass={subclass}
-                    selectedValue={totem}
+                    handleChange={handleChange}
+                    type="huntersPrey"
+                    selectedValue={prey}
                 />
             );
         }
-    }, [subclass, handleChange, totem, isOnEdit]);
+    }, [handleChange, isOnEdit, prey, subclass]);
 
-    if (!subclass || !(subclass in barbarianSubclasses)) return null;
+    if (!subclass || !(subclass in rangerSubclasses)) return null;
 
     return (
         <View>
@@ -95,10 +83,9 @@ const BarbarianSubclass = ({
                 .map((f, idx) => (
                     <CustomText key={idx} text={`• ${t(f.descriptionKey)}`} />
                 ))}
-
-            {displaySubclassSpecifics()}
+            {displaySubClassSpecifics()}
         </View>
     );
 };
 
-export default BarbarianSubclass;
+export default RangerSubclass;

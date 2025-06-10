@@ -1,19 +1,17 @@
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { SelectedClassElementsProps } from 'types/games/d2d5e';
+
+import CustomText from '@components/atom/CustomText';
+import { ExtractedProficiencies, getAvailableProficiencies } from '@utils/d2d5';
 
 import {
     bardSubclasses,
     loreProficiencyData,
 } from '../classSpecifics/bard/bardSubclasses';
-import {
-    ExtractedProficiencies,
-    getAvailableProficiencies,
-} from '../../../../../utils/d2d5';
-import CustomText from '../../../../atom/CustomText';
 import { genericClassFormStyles } from '../classSpecifics/genericStyle';
 import ProficiencySelector from '../proficiencies/ProficiencySelector';
-import { SelectedClassElementsProps } from '../../../../../types/games/d2d5e';
 
 interface BardSubclassProps {
     subclass: string;
@@ -39,7 +37,10 @@ const BardSubclass = ({
 }: BardSubclassProps) => {
     const { t } = useTranslation();
 
-    const data = bardSubclasses[subclass as keyof typeof bardSubclasses];
+    const data = useMemo(
+        () => bardSubclasses[subclass as keyof typeof bardSubclasses],
+        [subclass]
+    );
 
     const loreProficienciesSelected = useMemo(
         () => selectedClassElements?.classChoices?.['lore-extra-proficiencies'],
@@ -54,7 +55,8 @@ const BardSubclass = ({
         () =>
             getAvailableProficiencies(
                 loreProficiencyData,
-                proficienciesExtracted
+                proficienciesExtracted,
+                ['fromSelectedSubclass']
             ),
         [proficienciesExtracted]
     );
@@ -77,30 +79,10 @@ const BardSubclass = ({
         [handleSubclassChoices, selectedClassElements.classChoices]
     );
 
-    if (!subclass || !(subclass in bardSubclasses)) return null;
-
-    console.log(selectedClassElements);
-
-    return (
-        <Fragment>
-            <CustomText
-                text={t(data.nameKey)}
-                fontSize={16}
-                fontWeight="bold"
-                style={genericClassFormStyles.sectionTitle}
-            />
-            <CustomText text={t(data.descriptionKey)} />
-            {data.features
-                .filter((f) => level >= f.level)
-                .map((f, idx) => (
-                    <Fragment key={idx}>
-                        <CustomText text={`• ${t(f.descriptionKey)}`} />
-                    </Fragment>
-                ))}
-            {/* 3 Additional Proficiencies */}
-            {isOnEdit ? (
-                level >= 3 &&
-                subclass === 'lore' && (
+    const displaySubClassSpecifics = useCallback(() => {
+        if (subclass === 'lore') {
+            return isOnEdit ? (
+                level >= 3 && (
                     <ProficiencySelector
                         data={selectableProficiencies}
                         groupId={`lore-extra-proficiencies`}
@@ -123,7 +105,40 @@ const BardSubclass = ({
                 </View>
             ) : (
                 <CustomText text="Selectionner trois maitrises supplémentaires" />
-            )}
+            );
+        }
+    }, [
+        handleChange,
+        isOnEdit,
+        level,
+        proficienciesSelected,
+        selectableProficiencies,
+        subclass,
+        t,
+    ]);
+
+    if (!subclass || !(subclass in bardSubclasses)) return null;
+
+    console.log(selectedClassElements);
+
+    return (
+        <Fragment>
+            <CustomText
+                text={t(data.nameKey)}
+                fontSize={16}
+                fontWeight="bold"
+                style={genericClassFormStyles.sectionTitle}
+            />
+            <CustomText text={t(data.descriptionKey)} />
+            {data.features
+                .filter((f) => level >= f.level)
+                .map((f, idx) => (
+                    <Fragment key={idx}>
+                        <CustomText text={`• ${t(f.descriptionKey)}`} />
+                    </Fragment>
+                ))}
+            {/* 3 Additional Proficiencies */}
+            {displaySubClassSpecifics()}
         </Fragment>
     );
 };
