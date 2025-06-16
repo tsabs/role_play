@@ -222,26 +222,18 @@ export const callAddNote = async (
         (char) => char.id === characterId
     );
 
+    const character = currentCharacters[characterIndex];
+    const noteIndex = character.notes.findIndex((n) => n.id === note.id);
+    const noteRef = doc(db, 'characters', userEmail, 'character', characterId);
     if (characterIndex !== -1) {
-        const character = currentCharacters[characterIndex];
-
         if (!character.notes) {
             character.notes = [];
         }
-
-        character.notes.unshift(note);
-
-        console.log('character', character);
-        console.log('currentCharacters', currentCharacters);
-
-        const noteRef = doc(
-            db,
-            'characters',
-            userEmail,
-            'character',
-            characterId
-        );
-
+        if (noteIndex !== -1) {
+            character.notes[noteIndex] = note;
+        } else {
+            character.notes.unshift(note);
+        }
         await updateDoc(noteRef, { notes: character.notes })
             .then(async () => {
                 // Save to local storage
@@ -262,6 +254,66 @@ export const callAddNote = async (
                 );
             })
             .catch((err) => console.log(err));
+    }
+};
+
+export const callRemoveNote = async (
+    userEmail: string,
+    characterId: string,
+    noteId: string,
+    dispatch: Dispatch<any>
+) => {
+    const storedCharacters = await AsyncStorage.getItem(
+        `characters_${userEmail}`
+    );
+    let currentCharacters: Character[] = storedCharacters
+        ? JSON.parse(storedCharacters)
+        : [];
+
+    const characterIndex = currentCharacters.findIndex(
+        (char) => char.id === characterId
+    );
+
+    if (characterIndex !== -1) {
+        const character = currentCharacters[characterIndex];
+
+        if (!character.notes) {
+            character.notes = [];
+        }
+
+        const noteRef = doc(
+            db,
+            'characters',
+            userEmail,
+            'character',
+            characterId
+        );
+
+        const resultNotes = character.notes.filter(
+            (note) => note.id !== noteId
+        );
+
+        dispatch(characterSlice.actions.removeNote({ characterId, noteId }));
+        await updateDoc(noteRef, { notes: resultNotes }).then(async () => {
+            await AsyncStorage.setItem(
+                `characters_${userEmail}`,
+                JSON.stringify(currentCharacters)
+            );
+
+            dispatch(
+                characterSlice.actions.removeNote({ characterId, noteId })
+            );
+
+            Toast.show({
+                type: 'success',
+                text1: 'Note deleted successfully!',
+            });
+
+            console.log(
+                'Note deleted successfully from character:',
+                character.name
+            );
+        });
     }
 };
 
@@ -295,7 +347,30 @@ export const characterSlice = createSlice({
             const characterIndex = state.characters.findIndex(
                 (char) => char.id === action.payload.characterId
             );
+            const character = state.characters[characterIndex];
+            const noteIndex = character.notes.findIndex(
+                (n) => n.id === action.payload.note.id
+            );
 
+            if (characterIndex !== -1) {
+                if (!character.notes) {
+                    character.notes = [];
+                }
+
+                if (noteIndex !== -1) {
+                    character.notes[noteIndex] = action.payload.note;
+                } else {
+                    character.notes.unshift(action.payload.note); // add newest note at top
+                }
+            }
+        },
+        removeNote: (
+            state,
+            action: PayloadAction<{ characterId: string; noteId: string }>
+        ) => {
+            const characterIndex = state.characters.findIndex(
+                (char) => char.id === action.payload.characterId
+            );
             if (characterIndex !== -1) {
                 const character = state.characters[characterIndex];
 
@@ -303,7 +378,9 @@ export const characterSlice = createSlice({
                     character.notes = [];
                 }
 
-                character.notes.unshift(action.payload.note); // add newest note at top
+                character.notes = character.notes.filter(
+                    (note) => note.id !== action.payload.noteId
+                );
             }
         },
     },

@@ -15,7 +15,7 @@ import { ExtractedProficiencies, shouldChooseSubclass } from '@utils/d2d5';
 import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
 import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
 import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
-import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
+import FighterTalentForm from '../dnd5e/classSpecifics/fighter/FighterTalentForm';
 import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
 import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentForm';
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
@@ -153,6 +153,7 @@ const TalentClassForm = ({
     );
 
     const handleChangeEditMode = useCallback(() => {
+        console.log(isOnEdit);
         setIsOnEdit(!isOnEdit);
     }, [isOnEdit]);
 
@@ -205,6 +206,10 @@ const TalentClassForm = ({
                 return (
                     <FighterTalentForm
                         level={level}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
                         // abilities={abilities}
                     />
                 );

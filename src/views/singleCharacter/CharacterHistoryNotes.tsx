@@ -1,47 +1,129 @@
-import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { List, Text } from 'react-native-paper';
+import { IconButton, List, TextInput } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { Note } from 'types/note';
 
-import { useAppSelector } from '../../store';
-import { selectNotes } from '../../store/character/selectors';
+import CustomText from '@components/atom/CustomText';
+import { useAppDispatch, useAppSelector } from '@store/index';
+import { selectNotes } from '@store/character/selectors';
+import { callAddNote, callRemoveNote } from '@store/character/slice';
+import { AuthProps, useAuth } from '@navigation/hook/useAuth';
+
 import { theme } from '../../../style/theme';
-import CustomText from '../../components/atom/CustomText';
-import { Note } from '../../types/note';
 
 const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
     const [notes, setNotes] = useState<Note[]>([]);
+    const auth: AuthProps = useAuth();
     const isFocused = useIsFocused();
+    const dispatch = useAppDispatch();
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [editedNote, setEditedNote] = useState<string>(undefined);
 
     const notesFromSelector = useAppSelector(selectNotes(characterId));
 
+    const handleChangeMode = useCallback((value: boolean) => {
+        setIsEditMode(value);
+    }, []);
+
+    const handleEditNote = useCallback(
+        async (item: Note) => {
+            setIsEditMode(false);
+            const newNote: Note = {
+                ...item,
+                description: editedNote,
+            };
+            await callAddNote(auth.user.email, characterId, newNote, dispatch);
+        },
+        [auth.user.email, characterId, dispatch, editedNote]
+    );
+
+    const removeNote = useCallback(
+        async (noteId: string) => {
+            await callRemoveNote(
+                auth.user.email,
+                characterId,
+                noteId,
+                dispatch
+            );
+        },
+        [auth.user.email, characterId, dispatch]
+    );
+
     useEffect(() => {
-        if (notesFromSelector?.length !== notes?.length) {
-            setNotes(notesFromSelector);
-        }
-    }, [notesFromSelector, notes]);
+        setNotes(notesFromSelector);
+    }, [notesFromSelector]);
+
+    const renderItem = useCallback(
+        ({ item, index }: { item: Note; index: number }) => {
+            return (
+                <List.Accordion id={index} title={item.title}>
+                    <Animated.View
+                        style={styles.accordionContainer}
+                        entering={FadeIn.duration(400)}
+                    >
+                        {isEditMode ? (
+                            <TextInput
+                                mode="outlined"
+                                multiline
+                                numberOfLines={10}
+                                onChangeText={setEditedNote}
+                                // label=""
+                                value={editedNote}
+                                defaultValue={item.description}
+                            />
+                        ) : (
+                            <CustomText text={item.description} />
+                        )}
+                        <View style={styles.content}>
+                            <View style={styles.editButton}>
+                                <IconButton
+                                    size={18}
+                                    iconColor={theme.colors.primary}
+                                    icon="pen"
+                                    onPress={() =>
+                                        handleChangeMode(!isEditMode)
+                                    }
+                                />
+                                {isEditMode && (
+                                    <IconButton
+                                        size={18}
+                                        iconColor={theme.colors.success}
+                                        icon="check"
+                                        onPress={() => {
+                                            handleEditNote(item);
+                                        }}
+                                    />
+                                )}
+                            </View>
+                            <View style={styles.deleteButton}>
+                                <IconButton
+                                    size={18}
+                                    iconColor={theme.colors.danger}
+                                    icon="delete"
+                                    onPress={() => removeNote(item.id)}
+                                    style={styles.deleteIcon}
+                                />
+                            </View>
+                        </View>
+                    </Animated.View>
+                </List.Accordion>
+            );
+        },
+        [editedNote, handleChangeMode, handleEditNote, isEditMode, removeNote]
+    );
 
     if (!isFocused) return null;
-
-    const renderItem = ({ item, index }: { item: Note; index: number }) => {
-        return (
-            <List.Accordion id={index} title={item.title}>
-                <Animated.View
-                    style={styles.accordionContainer}
-                    entering={FadeIn.duration(400)}
-                >
-                    <CustomText text={item.description} />
-                </Animated.View>
-            </List.Accordion>
-        );
-    };
 
     return (
         <Animated.View style={styles.container} entering={FadeIn.duration(500)}>
             <List.AccordionGroup>
                 {!notes?.length ? (
-                    <Text style={styles.noNotes}>Pas encore de notes</Text>
+                    <CustomText
+                        text={'Pas encore de notes'}
+                        style={styles.noNotes}
+                    />
                 ) : (
                     <FlatList data={notes} renderItem={renderItem} />
                 )}
@@ -53,6 +135,20 @@ const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
 const styles = StyleSheet.create({
     container: {
         margin: theme.space.xl,
+    },
+    content: {
+        flexDirection: 'row',
+        flex: 1,
+    },
+    editButton: {
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        gap: theme.space.md,
+        flex: 1,
+    },
+    deleteButton: { justifyContent: 'flex-end', flex: 1 },
+    deleteIcon: {
+        alignSelf: 'flex-end',
     },
     accordionContainer: {
         margin: theme.space.xl,

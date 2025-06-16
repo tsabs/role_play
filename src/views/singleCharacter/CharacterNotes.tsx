@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { Note } from 'types/note';
 
-import { callAddNote } from '../../store/character/slice';
-import { useAppDispatch } from '../../store';
+import CustomButton from '@components/atom/CustomButton';
+import { AuthProps, useAuth } from '@navigation/hook/useAuth';
+import { callAddNote } from '@store/character/slice';
+import { useAppDispatch } from '@store/index';
+
 import { theme } from '../../../style/theme';
-import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
-import CustomButton from '../../components/atom/CustomButton';
-import { Note } from '../../types/note';
 
 const inputAccessoryViewID = 'customAccessory';
 

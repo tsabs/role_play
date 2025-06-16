@@ -4,7 +4,7 @@ import { Divider, List } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
-import { Ability } from 'types/generic';
+import { Ability, Character } from 'types/generic';
 import { DnDAbility, DnDCharacter } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
@@ -141,8 +141,9 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 selected_subclass: selected,
                 classChoices: seClassChoices,
             });
-            const updatedCharacter = {
+            const updatedCharacter: Character = {
                 ...character,
+                level,
                 selectedClassElements: {
                     classChoices: seClassChoices,
                     selected_subclass: selected,
@@ -150,7 +151,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             };
             await callUpdateCharacter(updatedCharacter, dispatch);
         },
-        [character, dispatch]
+        [character, dispatch, level]
     );
 
     const transformedAbilities = useMemo(
@@ -322,6 +323,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                                 customStyle={{
                                     flexDirection: 'row',
                                 }}
+                                textColor={theme.colors.white}
                                 preSelectedValue={{
                                     label: level.toString(),
                                     value: level,
@@ -394,7 +396,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: theme.space.md,
         top: theme.space.md,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
         paddingHorizontal: theme.space.md,
         paddingVertical: theme.space.sm,
         borderRadius: theme.radius.md,
@@ -405,8 +407,7 @@ const styles = StyleSheet.create({
         top: theme.space.md,
         right: theme.space.md,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        paddingHorizontal: theme.space.md,
-        paddingVertical: theme.space.sm,
+        padding: theme.space.xl,
         borderRadius: theme.radius.md,
     },
 });

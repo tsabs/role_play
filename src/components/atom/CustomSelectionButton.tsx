@@ -12,6 +12,7 @@ type SelectionButtonProps<T = number> = {
     preSelectedValue?: { label: string; value: T };
     displayValue?: string;
     placeHolder?: string;
+    textColor?: string;
     customStyle?: ViewStyle;
 };
 
@@ -21,6 +22,7 @@ const CustomSelectionButton = <T = number,>({
     preSelectedValue,
     displayValue,
     onSelect,
+    textColor,
     customStyle,
 }: SelectionButtonProps<T>) => {
     const [visible, setVisible] = useState(false);
@@ -54,7 +56,7 @@ const CustomSelectionButton = <T = number,>({
                         {selectedItem ? (
                             <CustomText
                                 fontWeight={'bold'}
-                                color={theme.colors.textSecondary}
+                                color={textColor || theme.colors.textSecondary}
                                 text={
                                     displayValue
                                         ? displayValue

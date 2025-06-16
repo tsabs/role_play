@@ -1,4 +1,9 @@
-import { collection, getDocs } from '@react-native-firebase/firestore';
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+} from '@react-native-firebase/firestore';
 
 import { removeDuplicate } from '@utils/utils';
 
@@ -88,4 +93,40 @@ const getRaces = async () => {
     return [...originalRace.map((doc) => doc.data()), ...mergeRaces];
 };
 
-export { getBackgrounds, getClasses, getRaces, getSkills };
+const getEquipments = async () => {
+    const equipmentsRef = collection(db, 'games', 'dnd5e', 'equipment');
+    const equipmentsSnapshot = await getDocs(equipmentsRef);
+
+    return equipmentsSnapshot.docs.map((doc) => doc.data());
+};
+
+const getEquipmentsFromQueries = async (indexes: string[]) => {
+    if (indexes.length === 0) return [];
+
+    const equipmentsRef = collection(db, 'games', 'dnd5e', 'equipment');
+
+    // Firestore allows max 10 elements in `in` query
+    const chunks = [];
+    for (let i = 0; i < indexes.length; i += 10) {
+        chunks.push(indexes.slice(i, i + 10));
+    }
+
+    const results: any[] = [];
+
+    for (const chunk of chunks) {
+        const q = query(equipmentsRef, where('index', 'in', chunk));
+        const snapshot = await getDocs(q);
+        results.push(...snapshot.docs.map((doc) => doc.data()));
+    }
+
+    return results;
+};
+
+export {
+    getBackgrounds,
+    getClasses,
+    getRaces,
+    getSkills,
+    getEquipments,
+    getEquipmentsFromQueries,
+};
