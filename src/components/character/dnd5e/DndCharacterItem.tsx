@@ -82,7 +82,11 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                 />
                 <Card style={styles.card}>
                     <Card.Cover
-                        source={DND_CHARACTER_DEFAULT}
+                        source={
+                            character?.imageUri
+                                ? { uri: character.imageUri }
+                                : DND_CHARACTER_DEFAULT
+                        }
                         style={styles.image}
                         resizeMode="cover"
                     />

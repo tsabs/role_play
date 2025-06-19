@@ -1,41 +1,53 @@
-import * as FileSystem from 'expo-file-system';
+import { OPENAI_API_KEY } from '@env';
+import storage from '@react-native-firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 
-const downloadImage = async (imageUrl: string) => {
+const generateImage = async (prompt: string): Promise<string | null> => {
+    console.log('api key: ', OPENAI_API_KEY);
     try {
-        const fileUri = FileSystem.documentDirectory + 'generated-image.jpg'; // Save path
-        const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+        const res = await fetch(
+            'https://api.openai.com/v1/images/generations',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: 'dall-e-3',
+                    prompt: prompt,
+                    n: 1,
+                    size: '1024x1024',
+                    quality: 'standard',
+                }),
+            }
+        );
 
-        console.log('Image saved to:', uri);
-        return uri;
+        const json = await res.json();
+        return json.data?.[0]?.url ?? null;
     } catch (error) {
-        console.error('Error downloading image:', error);
+        console.error('Image generation failed:', error);
+        return null;
     }
 };
 
-const generateAndDownloadImage = async (prompt: string) => {
+export const uploadImageFromUrl = async (
+    imageUrl: string
+): Promise<string | null> => {
     try {
-        // 1️⃣ Generate Image
-        const response = await fetch('https://api.deepai.org/api/text2img', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'api-key': 'YOUR_DEEPAI_API_KEY',
-            },
-            body: JSON.stringify({ text: prompt }),
-        });
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
 
-        const data = await response.json();
-        const imageUrl = data.output_url;
-        console.log('Generated Image URL:', imageUrl);
+        const imageId = uuidv4;
+        const storageRef = storage().ref(`images/${imageId}.png`);
 
-        // 2️⃣ Download Image
-        const fileUri = FileSystem.documentDirectory + 'generated-image.jpg';
-        const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+        await storageRef.put(blob as any);
 
-        console.log('Image downloaded at:', uri);
-        return uri;
+        const downloadUrl = await storageRef.getDownloadURL();
+        return downloadUrl;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error uploading image to Firebase Storage:', error);
+        return null;
     }
 };
 
@@ -77,4 +89,4 @@ const combatsStyle = (className: string) => [
     },
 ];
 
-export { generateAndDownloadImage, combatsStyle };
+export { generateImage, combatsStyle };

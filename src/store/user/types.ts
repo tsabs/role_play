@@ -3,9 +3,8 @@ interface SignUpUserType {
     password: string;
 }
 interface UserState {
-    userName: string;
     email: string;
-    password: string;
+    uuid: string;
 }
 
 interface LoginUserType {

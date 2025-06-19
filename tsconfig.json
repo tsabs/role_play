@@ -17,11 +17,9 @@
       "@types/*": ["types/*"],
       "@navigation/*": ["navigation/*"],
       "@style/*": ["style/*"],
-      "@locales/*": ["locales/*"]
-    }
-//    "paths": {
-//      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
-//    },
+      "@locales/*": ["locales/*"],
+    },
   },
+  "types": ["@env"],
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }

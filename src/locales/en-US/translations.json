@@ -826,5 +826,13 @@
     "ensnaring-strike": "Frappe entravante",
     "speak-with-animals": "Parler aux animaux",
     "moonbeam": "Rayon de lune"
+  },
+  "games": {
+    "dnd5e": {
+      "name": "Dongeons & Dragons 5th Edition"
+    },
+    "warHammer": {
+      "name": "Warhammer fantasy roleplay"
+    }
   }
 }

@@ -27,17 +27,13 @@ const ModalSelectGame = ({
         >
             <Animated.View style={{ alignItems: 'center' }} entering={FadeIn}>
                 <CustomText
-                    text={
-                        t('characters.selectGameTitle') ||
-                        'Choose a game system'
-                    }
+                    text={t('characters.selectGameTitle')}
                     fontSize={theme.fontSize.big}
                     style={styles.modalTitle}
                 />
                 <TouchableRipple
                     onPress={() => {
                         setShouldShowModal(false);
-                        // Navigate to D&D character creation
                         handleNavigation();
                     }}
                     rippleColor={theme.colors.primary25}
@@ -50,7 +46,6 @@ const ModalSelectGame = ({
                     />
                 </TouchableRipple>
 
-                {/* Future options */}
                 <TouchableRipple
                     onPress={() => {}}
                     rippleColor={theme.colors.secondary25}

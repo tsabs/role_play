@@ -908,5 +908,13 @@
     "ensnaring-strike": "Frappe entravante",
     "speak-with-animals": "Parler aux animaux",
     "moonbeam": "Rayon de lune"
+  },
+  "games": {
+    "dnd5e": {
+      "name": "Donjons et Dragons 5e"
+    },
+    "warHammer": {
+      "name": "Warhammer fantasy jeu de rôle"
+    }
   }
 }

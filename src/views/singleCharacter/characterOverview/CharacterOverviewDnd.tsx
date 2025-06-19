@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
+import { Divider, IconButton, List, Portal } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
@@ -29,10 +29,12 @@ import {
     remainingPoints,
     transformRaceAbilities,
 } from '@utils/d2d5';
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from '@utils/utils';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
+
+import ModalCharacterSettings from './ModalCharacterSettings';
 
 interface CharacterOverviewDndProps {
     character: DnDCharacter;
@@ -61,6 +63,12 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         selected_subclass?: string;
         classChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
     }>(character.selectedClassElements);
+    const [shouldShowModal, setShouldShowModal] = useState(false);
+    const [characterImgUri, setCharacterImgUri] = useState(character?.imageUri);
+
+    const handleShowModal = useCallback(() => {
+        setShouldShowModal(!shouldShowModal);
+    }, [shouldShowModal]);
 
     const handleEditMode = useCallback(() => {
         setIsEditMode((previousState) => {
@@ -119,14 +127,60 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         }
     }, [character?.abilities, selectedAbilities]);
 
+    const handleUpdateCharacterInFirestore = useCallback(
+        async ({
+            imgUri,
+            elements,
+            lvl,
+        }: {
+            imgUri: string;
+            elements: {
+                selected_subclass?: string;
+                classChoices?: Record<
+                    string,
+                    Array<{ index: string; bonus?: number }>
+                >;
+            };
+            lvl: number;
+        }) => {
+            const updatedCharacter: Character = {
+                ...character,
+                level: lvl,
+                selectedClassElements: elements,
+                imageUri: imgUri,
+            };
+            await callUpdateCharacter(updatedCharacter, dispatch);
+        },
+        [character, dispatch]
+    );
+
+    const handleCharacterImgChange = useCallback(
+        async (uri: string) => {
+            setCharacterImgUri(uri);
+            await handleUpdateCharacterInFirestore({
+                imgUri: uri,
+                elements: selectedClassElements,
+                lvl: level,
+            });
+        },
+        [handleUpdateCharacterInFirestore, level, selectedClassElements]
+    );
+
     const handleSelectLevel = useCallback(
         async (value: string | number) => {
             const newLevel = Number(value);
             setLevel(newLevel);
-            const updatedCharacter = { ...character, level: newLevel };
-            await callUpdateCharacter(updatedCharacter, dispatch);
+            await handleUpdateCharacterInFirestore({
+                imgUri: characterImgUri,
+                elements: selectedClassElements,
+                lvl: newLevel,
+            });
         },
-        [character, dispatch]
+        [
+            characterImgUri,
+            handleUpdateCharacterInFirestore,
+            selectedClassElements,
+        ]
     );
 
     const handleSubclassChange = useCallback(
@@ -141,17 +195,16 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 selected_subclass: selected,
                 classChoices: seClassChoices,
             });
-            const updatedCharacter: Character = {
-                ...character,
-                level,
-                selectedClassElements: {
-                    classChoices: seClassChoices,
+            await handleUpdateCharacterInFirestore({
+                elements: {
                     selected_subclass: selected,
+                    classChoices: seClassChoices,
                 },
-            };
-            await callUpdateCharacter(updatedCharacter, dispatch);
+                imgUri: characterImgUri,
+                lvl: level,
+            });
         },
-        [character, dispatch, level]
+        [characterImgUri, handleUpdateCharacterInFirestore, level]
     );
 
     const transformedAbilities = useMemo(
@@ -306,15 +359,74 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         [level, classData?.hit_die]
     );
 
+    const makeCharacterImgPrompt = useMemo(() => {
+        const gameTypeTrad = t(`games.${character.gameType}.name`);
+        const raceTrad = t(`character.races.${character.race.index}.name`);
+        const classTrad = t(
+            `character.classes.${character.className.index}.name`
+        );
+        const backgroundTrad = t(
+            `character.backgrounds.${character.background.index}.name`
+        );
+        const subClass = selectedClassElements?.selected_subclass
+            ? `et sous classe ${t(
+                  `character.classes.${character.className.index}.subclasses.${selectedClassElements.selected_subclass}.title`
+              )}`
+            : '';
+        const style =
+            'en style semi-réaliste inspiré des Royaumes Oubliés (RA Salvatore).';
+
+        const shouldNotDisplay =
+            "Important, ne pas afficher de texte, de description, de bordure ou de mise en page graphique. L’image doit être une scène illustrée, ce n'est en aucun cas un document.";
+
+        return (
+            `Image vertical de qualité professionnelle, ${style}\n` +
+            'Le genre et apparence du personnage dépendent de sa description.\n' +
+            `Le personnage est un ${raceTrad}, de classe ${classTrad} ${
+                subClass ? subClass : ''
+            }. Issu(e) d’un passé de type ${backgroundTrad}, dans l’univers ${gameTypeTrad}.\n` +
+            `Description : ${character.description}\n` +
+            `Histoire : ${character.additionalBackground}\n` +
+            `Le personnage est représenté en pied (corps entier), dans un environnement détaillé lié à son histoire : montagne, cité médiévale, forêt enchantée, temple en ruine, bord de mer etc.` +
+            `Aucun texte, aucune bordure, aucune interface ou fiche détaillé, juste l’illustration du personnage dans son environnement. Il ou elle peut etre réprésenté en pleine action ou en pause, mais sans texte ni éléments graphiques.`
+        );
+    }, [
+        character.background,
+        character.className.index,
+        character.description,
+        character.gameType,
+        character.race.index,
+        selectedClassElements.selected_subclass,
+        t,
+    ]);
+
+    // console.log(makeCharacterImgPrompt);
+
     return (
-        <SafeView parentStyles={{ flex: 1, padding: 0 }} title={character.name}>
+        <SafeView
+            parentStyles={{ flex: 1, padding: 0 }}
+            title={character.name}
+            rightIcon={<IconButton icon="menu" onPress={handleShowModal} />}
+        >
+            <Portal>
+                <ModalCharacterSettings
+                    prompt={makeCharacterImgPrompt}
+                    shouldShowModal={shouldShowModal}
+                    setShouldShowModal={setShouldShowModal}
+                    handleCharacterImgChange={handleCharacterImgChange}
+                />
+            </Portal>
             <VirtualizedScrollView
                 scrollEnabled
                 contentContainerStyle={{ paddingBottom: tabBarHeight }}
             >
                 <Animated.View entering={FadeIn.duration(750).delay(100)}>
                     <ImageBackground
-                        source={DND_CHARACTER_DEFAULT}
+                        source={
+                            characterImgUri
+                                ? { uri: characterImgUri }
+                                : DND_CHARACTER_DEFAULT
+                        }
                         style={styles.imageBackground}
                     >
                         <View style={styles.levelBadge}>

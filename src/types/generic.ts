@@ -43,7 +43,7 @@ interface GenericCharacter<
         ? Config['selectedBackgroundElements']
         : never;
     // Cause DnD has background as talent this is actually the user imagined background
-    characterImg?: string;
+    imageUri?: string;
     gameId?: string;
     additionalBackground?: string;
     notes?: Note[];
