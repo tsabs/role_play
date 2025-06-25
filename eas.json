@@ -12,7 +12,12 @@
       }
     },
     "preview": {
+      "environment": "preview",
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "developmentClient": false,
       "env": {
         "OPENAI_API_KEY": "USE_EAS_ENV"
       }

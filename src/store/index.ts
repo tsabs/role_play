@@ -16,7 +16,7 @@ export const store = configureStore({
     reducer: rootReducer,
     devTools: process.env.NODE_ENV !== 'production',
     enhancers: (getDefaultEnhancers) =>
-        getDefaultEnhancers.concat(devToolsEnhancer()),
+        getDefaultEnhancers().concat(devToolsEnhancer()),
 });
 
 // Get the type of our store variable
