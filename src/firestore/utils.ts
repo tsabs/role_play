@@ -27,7 +27,10 @@ export const canGenerateImage = async (): Promise<boolean> => {
     return data?.imageGenerations?.count < 5;
 };
 
-export const recordImageGeneration = async (prompt: string) => {
+export const recordImageGeneration = async (
+    prompt: string,
+    characterId: string
+) => {
     const user = getAuth().currentUser;
     if (!user || !user?.email) throw new Error('User not authenticated');
 
@@ -36,20 +39,24 @@ export const recordImageGeneration = async (prompt: string) => {
     const currentMonth = getCurrentMonth();
 
     let newCount = 1;
+    let previousPrompts: Record<string, string> = {};
 
     if (snap.exists) {
         const data = snap.data();
 
         if (data?.imageGenerations?.month === currentMonth) {
-            newCount = data?.imageGenerations?.count + 1;
+            newCount = (data?.imageGenerations?.count || 0) + 1;
+            previousPrompts = data.imageGenerations.previousPrompts || {};
         }
     }
+
+    previousPrompts[characterId] = prompt;
 
     await updateDoc(userDocRef, {
         imageGenerations: {
             month: currentMonth,
             count: newCount,
-            previousPrompt: prompt,
+            previousPrompts,
             lastGenerated: new Date(),
         },
     });

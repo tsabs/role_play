@@ -376,8 +376,8 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         const style =
             'en style semi-réaliste inspiré des Royaumes Oubliés (RA Salvatore).';
 
-        const shouldNotDisplay =
-            "Important, ne pas afficher de texte, de description, de bordure ou de mise en page graphique. L’image doit être une scène illustrée, ce n'est en aucun cas un document.";
+        // const shouldNotDisplay =
+        //     "Important, ne pas afficher de texte, de description, de bordure ou de mise en page graphique. L’image doit être une scène illustrée, ce n'est en aucun cas un document.";
 
         return (
             `Image vertical de qualité professionnelle, ${style}\n` +
@@ -391,7 +391,8 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             `Aucun texte, aucune bordure, aucune interface ou fiche détaillé, juste l’illustration du personnage dans son environnement. Il ou elle peut etre réprésenté en pleine action ou en pause, mais sans texte ni éléments graphiques.`
         );
     }, [
-        character.background,
+        character.additionalBackground,
+        character.background.index,
         character.className.index,
         character.description,
         character.gameType,
@@ -413,6 +414,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                     prompt={makeCharacterImgPrompt}
                     shouldShowModal={shouldShowModal}
                     setShouldShowModal={setShouldShowModal}
+                    characterId={character.id}
                     handleCharacterImgChange={handleCharacterImgChange}
                 />
             </Portal>

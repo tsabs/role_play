@@ -38,13 +38,12 @@ export const uploadImageFromUrl = async (
         const response = await fetch(imageUrl);
         const blob = await response.blob();
 
-        const imageId = uuidv4;
+        const imageId = uuidv4();
         const storageRef = storage().ref(`images/${imageId}.png`);
 
         await storageRef.put(blob as any);
 
-        const downloadUrl = await storageRef.getDownloadURL();
-        return downloadUrl;
+        return await storageRef.getDownloadURL();
     } catch (error) {
         console.error('Error uploading image to Firebase Storage:', error);
         return null;

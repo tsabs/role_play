@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Image, ImageBackground, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, View } from 'react-native';
 import {
     ActivityIndicator,
     IconButton,
@@ -30,11 +30,13 @@ interface ModalCharacterSettingsProps {
     setShouldShowModal: (val: boolean) => void;
     handleCharacterImgChange: (uri: string) => void;
     prompt: string;
+    characterId: string;
 }
 
 const ModalCharacterSettings = ({
     shouldShowModal,
     prompt,
+    characterId,
     setShouldShowModal,
     handleCharacterImgChange,
 }: ModalCharacterSettingsProps) => {
@@ -46,8 +48,10 @@ const ModalCharacterSettings = ({
 
     const handleGetPrompt = useCallback(async () => {
         const infoUser = await getUserInfo();
-        setEditedPrompt(infoUser?.imageGenerations?.previousPrompt || prompt);
-    }, [prompt]);
+        setEditedPrompt(
+            infoUser?.imageGenerations?.previousPrompts?.[characterId] || prompt
+        );
+    }, [characterId, prompt]);
 
     const handleDismiss = useCallback(() => {
         setShouldShowModal(false);
@@ -85,16 +89,16 @@ const ModalCharacterSettings = ({
                     // .replace(/fiche|carte|texte/gi, '') // supprimer mots pouvant orienter vers fiche
                     .trim()
             );
-            await recordImageGeneration(editedPrompt);
+            await recordImageGeneration(editedPrompt, characterId);
             if (!dallEUrl) {
-                throw new Error('No image URL returned from DALL·E');
+                return new Error('No image URL returned from DALL·E');
             }
 
             // Upload the image to Firebase Storage
             const uploadedUrl = await uploadImageFromUrl(dallEUrl);
 
             if (!uploadedUrl) {
-                throw new Error('Image upload failed');
+                return new Error('Image upload failed');
             }
             setUri(uploadedUrl);
         } catch (error) {
@@ -102,7 +106,7 @@ const ModalCharacterSettings = ({
         } finally {
             setIsLoading(false);
         }
-    }, [editedPrompt]);
+    }, [characterId, editedPrompt]);
 
     useEffect(() => {
         handleGetPrompt();
@@ -192,6 +196,7 @@ const ModalCharacterSettings = ({
                 )}
                 {isLoading && (
                     <View
+                        // eslint-disable-next-line react-native/no-color-literals
                         style={{
                             ...StyleSheet.absoluteFillObject,
                             backgroundColor: 'transparent',
