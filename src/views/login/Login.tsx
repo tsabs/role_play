@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
-// import { auth as authFirebase, db } from '../../../firebaseConfig';
-
-import { signUpUser, loginUser } from '../../store/user/service';
-import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
-import { CharacterFormProvider } from '../../components/character/form/CharacterFormProvider';
+import { CharacterFormProvider } from '@components/character/form/CharacterFormProvider';
+import { AuthProps, useAuth } from '@navigation/hook/useAuth';
+import { signUpUser, loginUser } from '@store/user/service';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -20,9 +19,6 @@ const LoginScreen = () => {
         if (auth?.loading !== isLoading) {
             setIsLoading(auth?.loading);
         }
-        // if (isLoading === true) {
-        //     console.log('Login auth user : ', auth);
-        // }
     }, [auth.loading, isLoading]);
 
     const signUp = useCallback(
@@ -33,18 +29,31 @@ const LoginScreen = () => {
                         screen: CharacterFormProvider,
                     })
                 )
+                .catch((err) => {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'La création du compte a échoué',
+                        text2: `Une erreur est survenue: ${err}`,
+                    });
+                })
                 .finally(() => setIsLoading(false)),
         [email, password, navigation]
     );
 
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
-            .then((res) => {
+            .then(() => {
                 navigation.navigate('ProtectedScreen', {
                     screen: CharacterFormProvider,
                 });
             })
-            .catch((err) => console.log('error on log', err))
+            .catch(() => {
+                Toast.show({
+                    type: 'error',
+                    text1: 'La connexion  a échoué',
+                    text2: 'Veuillez vérifier vos identifiants.',
+                });
+            })
             .finally(() => setIsLoading(false));
     }, [email, password, navigation]);
 
