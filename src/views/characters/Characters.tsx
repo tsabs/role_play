@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Modal, Portal } from 'react-native-paper';
+import { Button, Portal } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
 import SafeView from '@components/library/SafeView';
@@ -12,8 +12,7 @@ import { useAuth } from '@navigation/hook/useAuth';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectAllCharacters } from '@store/character/selectors';
 import { loadCharacters } from '@store/character/slice';
-import ModalSelectGame from '@views/characters/ModalSelectGame.tsx';
-import CustomButton from '@components/atom/CustomButton.tsx';
+import ModalSelectGame from '@views/characters/ModalSelectGame';
 
 import { theme } from '../../../style/theme';
 

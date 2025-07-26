@@ -1,3 +1,6 @@
+import Fuse from 'fuse.js';
+
+import rawData from '../../assets/llmRelated/corpus_dd5_structuredEn.json';
 import {
     DnDAbility,
     DnDCharacter,
@@ -214,8 +217,46 @@ const getAvailableProficiencies = (
     };
 };
 
+type DataCategory = 'spells' | 'feats' | 'races' | 'classes';
+
+const categories: { label: string; value: DataCategory }[] = [
+    { label: 'Sort', value: 'spells' },
+    { label: 'Classe', value: 'classes' },
+    { label: 'Race', value: 'races' },
+    { label: 'Don', value: 'feats' },
+];
+
+const detectCategory = (input: string): DataCategory | null => {
+    const lower = input.toLowerCase();
+    if (lower.includes('sort')) return 'spells';
+    if (lower.includes('talent')) return 'feats';
+    if (lower.includes('race')) return 'races';
+    if (lower.includes('classe')) return 'classes';
+    return null;
+};
+
+const findItemByName = (category: DataCategory, name: string) => {
+    const dataCategory = [...rawData[category]];
+
+    const fuse = new Fuse(dataCategory, {
+        keys: ['name', 'slug'],
+        threshold: 0.3,
+    });
+
+    const fuseResults = fuse.search(name.toLocaleLowerCase());
+    console.log('fuseResults', fuseResults);
+    if (fuseResults.length) return fuseResults;
+    return rawData[category].filter((item) =>
+        name.includes(item.name.toLowerCase())
+    );
+};
+
 export {
     calculateModifier,
+    categories,
+    DataCategory,
+    detectCategory,
+    findItemByName,
     getSkillModifier,
     shouldChooseSubclass,
     extractCharacterProficiencies,

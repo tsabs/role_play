@@ -115,6 +115,19 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             );
     }, [character?.className, character?.gameType, character?.level]);
 
+    // const callAPID = useCallback(async () => {
+    //     await fetch(`https://api.open5e.com/armor?limit=200`)
+    //         .then((res) => {
+    //             const data = res.json();
+    //             console.log(data);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, []);
+    //
+    // useEffect(() => {
+    //     callAPID();
+    // }, [callAPID]);
+
     useEffect(() => {
         Promise.all([handleClassSpecificTalent(), handleClassData()]);
     }, [handleClassSpecificTalent, handleClassData]);
