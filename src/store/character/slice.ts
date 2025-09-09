@@ -50,7 +50,7 @@ export const loadCharactersFromFirebase = async (
             JSON.stringify(characters)
         );
         dispatch(characterSlice.actions.setCharacters(characters));
-        console.log('Fetched and saved characters:', characters);
+        // console.log('Fetched and saved characters:', characters);
     } else {
         console.log('No such document!');
     }

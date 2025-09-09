@@ -4,9 +4,9 @@ import { Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
-import { CharacterFormProvider } from '@components/character/form/CharacterFormProvider';
 import { AuthProps, useAuth } from '@navigation/hook/useAuth';
 import { signUpUser, loginUser } from '@store/user/service';
+import CharactersScreen from '@views/characters/Characters.tsx';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -25,8 +25,8 @@ const LoginScreen = () => {
         async () =>
             await signUpUser({ email, password })
                 .then(() =>
-                    navigation.navigate('ProtectedScreen', {
-                        screen: CharacterFormProvider,
+                    navigation.navigate('Home', {
+                        screen: CharactersScreen,
                     })
                 )
                 .catch((err) => {
@@ -43,8 +43,8 @@ const LoginScreen = () => {
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
             .then(() => {
-                navigation.navigate('ProtectedScreen', {
-                    screen: CharacterFormProvider,
+                navigation.navigate('Home', {
+                    screen: CharactersScreen,
                 });
             })
             .catch(() => {

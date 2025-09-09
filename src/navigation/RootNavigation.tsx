@@ -28,6 +28,7 @@ export type RootStackParamList = {
     CharacterNotesScreen: {
         characterId: string;
     };
+    ChatBot: {};
     BottomCharacterTabs: {
         character: Character;
     };

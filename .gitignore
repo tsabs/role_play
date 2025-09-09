@@ -44,3 +44,10 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# files
+*.gguf
+assets/llmRelated/corpus_dd5_structuredEn.json
+
+# folder
+/assets/llmRelated/
