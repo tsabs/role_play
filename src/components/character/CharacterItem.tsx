@@ -7,17 +7,34 @@ import WHCharacterItem from './warHammer/WHCharacterItem';
 interface CharacterItemProps {
     character: Character;
     index: number;
+    mode: string;
+    sessionId?: string;
+    gmId?: string;
 }
 
-const CharacterItem = ({ character, index }: CharacterItemProps) => {
+const CharacterItem = ({
+    character,
+    index,
+    mode,
+    sessionId,
+    gmId,
+}: CharacterItemProps) => {
     const renderCharacterItem = useCallback(() => {
         switch (character.gameType) {
             case GAME_TYPE.DND5E:
-                return <DndCharacterItem character={character} index={index} />;
+                return (
+                    <DndCharacterItem
+                        character={character}
+                        index={index}
+                        mode={mode}
+                        sessionId={sessionId}
+                        gmId={gmId}
+                    />
+                );
             case GAME_TYPE.WAR_HAMMER:
                 return <WHCharacterItem character={character} index={index} />;
         }
-    }, [character, index]);
+    }, [character, gmId, index, mode, sessionId]);
 
     return renderCharacterItem();
 };

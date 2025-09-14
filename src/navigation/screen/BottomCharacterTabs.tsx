@@ -1,15 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { DnDCharacter } from 'types/games/d2d5e';
 
 import BottomBar from '@components/library/BottomBar';
+import { callAddNote, callRemoveNote } from '@store/character/slice';
 import CharacterOverview from '@views/singleCharacter/characterOverview/CharacterOverview';
 import ChatBot from '@views/chatBot/ChatBot';
 
-import { DnDCharacter } from '../../types/games/d2d5e';
 import { RootStackParamList } from '../RootNavigation';
 
-import CharacterNotesScreen from './CharacterNotesScreen';
+import NotesScreen from './NotesScreen.tsx';
 
 const BottomNavigator = createBottomTabNavigator();
 
@@ -19,25 +20,47 @@ type BottomCharacterTabsProps = NativeStackScreenProps<
 >;
 
 const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
+    const { character, gmId } = route.params;
     const renderOverviewComponent = useCallback(
-        () => CharacterOverview({ character: route.params.character }),
-        [route.params.character]
+        () => CharacterOverview({ character: character }),
+        [character]
     );
 
+    const bottomBarElements = useMemo(() => {
+        if (gmId === undefined) {
+            return [
+                { icon: 'profile', screenName: 'CharacterOverview' },
+                { icon: 'mail', screenName: 'ChatBot' },
+                { icon: 'book', screenName: 'NotesScreen' },
+            ];
+        }
+        return [
+            { icon: 'profile', screenName: 'CharacterOverview' },
+            { icon: 'book', screenName: 'NotesScreen' },
+        ];
+    }, [gmId]);
+
     const renderChatbotComponent = useCallback(() => {
-        const { race, level, className, selectedClassElements } = route.params
-            .character as DnDCharacter;
+        const { race, level, className, selectedClassElements } =
+            character as DnDCharacter;
         return ChatBot({
             race: race.index,
             level,
             className: className.index,
             subClassName: selectedClassElements?.selected_subclass,
         });
-    }, [route.params.character]);
+    }, [character]);
 
     const renderNotesComponent = useCallback(
-        () => CharacterNotesScreen({ characterId: route.params.character.id }),
-        [route.params.character.id]
+        () =>
+            NotesScreen({
+                entityId: character.id,
+                onAddNote: callAddNote,
+                onEditNote: callAddNote,
+                onRemoveNote: callRemoveNote,
+                collectionName: 'characters',
+            }),
+        [character.id]
     );
 
     return (
@@ -46,11 +69,7 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
             screenOptions={{ animation: 'shift' }}
             tabBar={(props) =>
                 BottomBar({
-                    elements: [
-                        { icon: 'profile', screenName: 'CharacterOverview' },
-                        { icon: 'mail', screenName: 'ChatBot' },
-                        { icon: 'book', screenName: 'CharacterNotesScreen' },
-                    ],
+                    elements: bottomBarElements,
                     props,
                 })
             }
@@ -60,13 +79,15 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
                 component={renderOverviewComponent}
                 options={{ headerShown: false }}
             />
+            {gmId === undefined && (
+                <BottomNavigator.Screen
+                    name="ChatBot"
+                    component={renderChatbotComponent}
+                    options={{ headerShown: false }}
+                />
+            )}
             <BottomNavigator.Screen
-                name="ChatBot"
-                component={renderChatbotComponent}
-                options={{ headerShown: false }}
-            />
-            <BottomNavigator.Screen
-                name="CharacterNotesScreen"
+                name="NotesScreen"
                 component={renderNotesComponent}
                 options={{ headerShown: false }}
             />

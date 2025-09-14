@@ -6,7 +6,6 @@ import Toast from 'react-native-toast-message';
 
 import { AuthProps, useAuth } from '@navigation/hook/useAuth';
 import { signUpUser, loginUser } from '@store/user/service';
-import CharactersScreen from '@views/characters/Characters.tsx';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -24,11 +23,9 @@ const LoginScreen = () => {
     const signUp = useCallback(
         async () =>
             await signUpUser({ email, password })
-                .then(() =>
-                    navigation.navigate('Home', {
-                        screen: CharactersScreen,
-                    })
-                )
+                .then(() => {
+                    navigation.navigate('Home', { screen: 'Characters' });
+                })
                 .catch((err) => {
                     Toast.show({
                         type: 'error',
@@ -43,9 +40,7 @@ const LoginScreen = () => {
     const loginIn = useCallback(async () => {
         await loginUser({ email, password })
             .then(() => {
-                navigation.navigate('Home', {
-                    screen: CharactersScreen,
-                });
+                navigation.navigate('Home', { screen: 'Characters' });
             })
             .catch(() => {
                 Toast.show({

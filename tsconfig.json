@@ -1,5 +1,4 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "jsx": "react-native",
     "esModuleInterop": true,
@@ -10,16 +9,39 @@
     "noEmit": true,
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@views/*": ["views/*"],
-      "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"],
-      "@navigation/*": ["navigation/*"],
-      "@style/*": ["style/*"],
-      "@locales/*": ["locales/*"],
-    },
+      "@components/*": [
+        "components/*"
+      ],
+      "@views/*": [
+        "views/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
+      "@navigation/*": [
+        "navigation/*"
+      ],
+      "@style/*": [
+        "style/*"
+      ],
+      "@locales/*": [
+        "locales/*"
+      ]
+    }
   },
-  "types": ["@env"],
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+  "types": [
+    "@env"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js"
+  ],
+  "extends": "expo/tsconfig.base"
 }

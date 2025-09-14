@@ -29,9 +29,7 @@ const TopBar = ({ elements, props }: TopBarProps) => {
     return (
         <SafeView
             title={'Prise de note'}
-            customBackNavigation={() =>
-                props.navigation.navigate('ProtectedScreen')
-            }
+            customBackNavigation={() => props.navigation.goBack()}
             parentStyles={{ padding: 0, margin: 0, flex: 0 }}
             styles={styles.container}
         >

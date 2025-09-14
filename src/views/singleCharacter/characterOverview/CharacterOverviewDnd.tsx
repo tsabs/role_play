@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Divider, IconButton, List, Portal } from 'react-native-paper';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import { Ability, Character } from 'types/generic';
@@ -422,87 +422,91 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             title={character.name}
             rightIcon={<IconButton icon="menu" onPress={handleShowModal} />}
         >
-            <Portal>
-                <ModalCharacterSettings
-                    prompt={makeCharacterImgPrompt}
-                    shouldShowModal={shouldShowModal}
-                    setShouldShowModal={setShouldShowModal}
-                    characterId={character.id}
-                    handleCharacterImgChange={handleCharacterImgChange}
-                />
-            </Portal>
-            <VirtualizedScrollView
-                scrollEnabled
-                contentContainerStyle={{ paddingBottom: tabBarHeight }}
-            >
-                <Animated.View entering={FadeIn.duration(750).delay(100)}>
-                    <ImageBackground
-                        source={
-                            characterImgUri
-                                ? { uri: characterImgUri }
-                                : DND_CHARACTER_DEFAULT
-                        }
-                        style={styles.imageBackground}
-                    >
-                        <View style={styles.levelBadge}>
-                            <CustomSelectionButton
-                                items={maxLevels}
-                                customStyle={{
-                                    flexDirection: 'row',
-                                }}
-                                textColor={theme.colors.white}
-                                preSelectedValue={{
-                                    label: level.toString(),
-                                    value: level,
-                                }}
-                                displayValue={`LVL: ${level}`}
-                                onSelect={handleSelectLevel}
-                            />
-                        </View>
-                        <View style={styles.lifePointsBadge}>
-                            <CustomText
-                                fontSize={16}
-                                fontWeight={'bold'}
-                                color={theme.colors.white}
-                                text={`${totalHp} PV`}
-                            />
-                        </View>
-                    </ImageBackground>
-                </Animated.View>
-                <List.AccordionGroup>
-                    {accordions.map((accordion) => {
-                        return (
-                            <List.Accordion
-                                key={accordion.id}
-                                expanded={expandedId === accordion.id}
-                                style={styles.accordionContainer}
-                                onPress={() => {
-                                    setExpandedId(
-                                        expandedId === accordion.id
-                                            ? null
-                                            : accordion.id
-                                    );
-                                    setCurrentForm(accordion.id.toString());
-                                }}
-                                title={
-                                    <CustomText
-                                        fontSize={16}
-                                        text={t(accordion.title)}
-                                    />
-                                }
-                                id={accordion.id}
-                            >
-                                <Animated.View
-                                    style={styles.accordionContent}
-                                    entering={FadeIn.duration(500).delay(50)}
+            <Animated.View entering={SlideInRight.duration(500).delay(50)}>
+                <Portal>
+                    <ModalCharacterSettings
+                        prompt={makeCharacterImgPrompt}
+                        shouldShowModal={shouldShowModal}
+                        setShouldShowModal={setShouldShowModal}
+                        characterId={character.id}
+                        handleCharacterImgChange={handleCharacterImgChange}
+                    />
+                </Portal>
+                <VirtualizedScrollView
+                    scrollEnabled
+                    contentContainerStyle={{ paddingBottom: tabBarHeight }}
+                >
+                    <View>
+                        <ImageBackground
+                            source={
+                                characterImgUri
+                                    ? { uri: characterImgUri }
+                                    : DND_CHARACTER_DEFAULT
+                            }
+                            style={styles.imageBackground}
+                        >
+                            <View style={styles.levelBadge}>
+                                <CustomSelectionButton
+                                    items={maxLevels}
+                                    customStyle={{
+                                        flexDirection: 'row',
+                                    }}
+                                    textColor={theme.colors.white}
+                                    preSelectedValue={{
+                                        label: level.toString(),
+                                        value: level,
+                                    }}
+                                    displayValue={`LVL: ${level}`}
+                                    onSelect={handleSelectLevel}
+                                />
+                            </View>
+                            <View style={styles.lifePointsBadge}>
+                                <CustomText
+                                    fontSize={16}
+                                    fontWeight={'bold'}
+                                    color={theme.colors.white}
+                                    text={`${totalHp} PV`}
+                                />
+                            </View>
+                        </ImageBackground>
+                    </View>
+                    <List.AccordionGroup>
+                        {accordions.map((accordion) => {
+                            return (
+                                <List.Accordion
+                                    key={accordion.id}
+                                    expanded={expandedId === accordion.id}
+                                    style={styles.accordionContainer}
+                                    onPress={() => {
+                                        setExpandedId(
+                                            expandedId === accordion.id
+                                                ? null
+                                                : accordion.id
+                                        );
+                                        setCurrentForm(accordion.id.toString());
+                                    }}
+                                    title={
+                                        <CustomText
+                                            fontSize={16}
+                                            text={t(accordion.title)}
+                                        />
+                                    }
+                                    id={accordion.id}
                                 >
-                                    {accordion.content}
-                                </Animated.View>
-                            </List.Accordion>
-                        );
-                    })}
-                </List.AccordionGroup>
-            </VirtualizedScrollView>
+                                    <Animated.View
+                                        style={styles.accordionContent}
+                                        entering={FadeIn.duration(500).delay(
+                                            50
+                                        )}
+                                    >
+                                        {accordion.content}
+                                    </Animated.View>
+                                </List.Accordion>
+                            );
+                        })}
+                    </List.AccordionGroup>
+                </VirtualizedScrollView>
+            </Animated.View>
         </SafeView>
     );
 };
