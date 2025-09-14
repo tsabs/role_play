@@ -4,11 +4,17 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import { userSlice } from './user/slice';
 import { characterSlice } from './character/slice';
-import { CHARACTER_MODULE_KEY, LOGIN_MODULE_KEY } from './constants';
+import {
+    CHARACTER_MODULE_KEY,
+    LOGIN_MODULE_KEY,
+    ROLE_SESSIONS_MODULE_KEY,
+} from './constants';
+import { sessionSlice } from './session/slice';
 // ...
 
 const rootReducer = combineReducers({
     [LOGIN_MODULE_KEY]: userSlice.reducer,
+    [ROLE_SESSIONS_MODULE_KEY]: sessionSlice.reducer,
     [CHARACTER_MODULE_KEY]: characterSlice.reducer,
 });
 

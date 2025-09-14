@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { IconButton, List, TextInput } from 'react-native-paper';
@@ -8,12 +8,30 @@ import { Note } from 'types/note';
 import CustomText from '@components/atom/CustomText';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectNotes } from '@store/character/selectors';
-import { callAddNote, callRemoveNote } from '@store/character/slice';
+import { selectNotes as selectSessionNotes } from '@store/session/selectors';
 import { AuthProps, useAuth } from '@navigation/hook/useAuth';
 
 import { theme } from '../../../style/theme';
 
-const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
+const HistoryNotes = ({
+    entityId,
+    onEditNote,
+    onRemoveNote,
+    collectionName,
+}: {
+    entityId: string;
+    onEditNote: (
+        entityId: string,
+        note: Note,
+        dispatch: Dispatch<any>
+    ) => Promise<void>;
+    onRemoveNote: (
+        entityId: string,
+        noteId: string,
+        dispatch: Dispatch<any>
+    ) => Promise<void>;
+    collectionName: string;
+}) => {
     const [notes, setNotes] = useState<Note[]>([]);
     const auth: AuthProps = useAuth();
     const isFocused = useIsFocused();
@@ -21,7 +39,11 @@ const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [editedNote, setEditedNote] = useState<string>(undefined);
 
-    const notesFromSelector = useAppSelector(selectNotes(characterId));
+    const notesFromSelector = useAppSelector(
+        collectionName === 'characters'
+            ? selectNotes(entityId)
+            : selectSessionNotes(entityId)
+    );
 
     const handleChangeMode = useCallback((value: boolean) => {
         setIsEditMode(value);
@@ -34,21 +56,16 @@ const CharacterHistoryNotes = ({ characterId }: { characterId: string }) => {
                 ...item,
                 description: editedNote,
             };
-            await callAddNote(auth.user.email, characterId, newNote, dispatch);
+            await onEditNote(entityId, newNote, dispatch);
         },
-        [auth.user.email, characterId, dispatch, editedNote]
+        [editedNote, onEditNote, entityId, dispatch]
     );
 
     const removeNote = useCallback(
         async (noteId: string) => {
-            await callRemoveNote(
-                auth.user.email,
-                characterId,
-                noteId,
-                dispatch
-            );
+            await onRemoveNote(entityId, noteId, dispatch);
         },
-        [auth.user.email, characterId, dispatch]
+        [onRemoveNote, entityId, dispatch]
     );
 
     useEffect(() => {
@@ -160,4 +177,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CharacterHistoryNotes;
+export default HistoryNotes;

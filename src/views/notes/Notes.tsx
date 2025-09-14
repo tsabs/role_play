@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { Dispatch, useCallback, useRef, useState } from 'react';
 import {
     InputAccessoryView,
     Keyboard,
@@ -14,14 +14,23 @@ import { Note } from 'types/note';
 
 import CustomButton from '@components/atom/CustomButton';
 import { AuthProps, useAuth } from '@navigation/hook/useAuth';
-import { callAddNote } from '@store/character/slice';
 import { useAppDispatch } from '@store/index';
 
 import { theme } from '../../../style/theme';
 
 const inputAccessoryViewID = 'customAccessory';
 
-const CharacterNotes = ({ characterId }: { characterId: string }) => {
+const Notes = ({
+    entityId,
+    onAddNote,
+}: {
+    entityId: string;
+    onAddNote: (
+        entityId: string,
+        note: Note,
+        dispatch: Dispatch<any>
+    ) => Promise<void>;
+}) => {
     const editorContentRef = useRef(null);
     const editorTitleRef = useRef(null);
     const auth: AuthProps = useAuth();
@@ -31,7 +40,6 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
     const dispatch = useAppDispatch();
 
     const saveNote = useCallback(async () => {
-        console.log('saving note');
         const note: Note = {
             id: Date.now().toString(),
             title,
@@ -40,13 +48,13 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
             updatedAt: new Date().toISOString(),
         };
 
-        callAddNote(auth.user.email, characterId, note, dispatch);
+        await onAddNote(entityId, note, dispatch);
 
         setContent('');
         setTitle('');
         editorContentRef.current?.setContentHTML('');
         editorTitleRef.current?.setContentHTML('');
-    }, [auth.user.email, characterId, content, dispatch, title]);
+    }, [title, content, onAddNote, entityId, dispatch]);
 
     return (
         <KeyboardAvoidingView
@@ -130,4 +138,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CharacterNotes;
+export default Notes;

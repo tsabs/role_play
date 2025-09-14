@@ -472,6 +472,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                             dndBackground.index ===
                                             selectedBackground
                                     ),
+                                    ownerId: auth.user.uid,
                                     selectedBackgroundElements:
                                         selectedBackgroundElements,
                                     gameType: GAME_TYPE.DND5E,

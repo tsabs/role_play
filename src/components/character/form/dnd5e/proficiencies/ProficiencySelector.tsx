@@ -53,7 +53,6 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
     useEffect(() => {
         if (selected) {
-            console.log('changed');
             onChange?.(groupId ?? '', selected);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

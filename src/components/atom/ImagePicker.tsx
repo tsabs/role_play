@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
-import { Button, Image, View, StyleSheet } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { Image, View, StyleSheet } from 'react-native';
 import * as CustomImagePicker from 'expo-image-picker';
 
 import CustomButton from '@components/atom/CustomButton';
@@ -41,7 +42,19 @@ const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
                 onPress={pickImage}
             />
             {image && (
-                <Image source={{ uri: image }} style={styles.imagePreview} />
+                <View style={styles.imageContainer}>
+                    <IconButton
+                        icon={'trash-can'}
+                        size={40}
+                        iconColor={theme.colors.danger}
+                        onPress={() => setImage(undefined)}
+                        style={styles.deleteButton}
+                    />
+                    <Image
+                        source={{ uri: image }}
+                        style={styles.imagePreview}
+                    />
+                </View>
             )}
         </View>
     );
@@ -53,11 +66,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    imagePreview: {
+    imageContainer: {
+        position: 'relative',
         width: SCREEN_WIDTH * 0.9,
         height: SCREEN_HEIGHT * 0.4,
+    },
+    imagePreview: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
         borderRadius: theme.radius.md,
-        // marginBottom: theme.space.l,
+    },
+    deleteButton: {
+        position: 'absolute',
+        top: 0,
+        zIndex: 2,
+        right: 0,
     },
 });
 

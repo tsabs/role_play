@@ -7,7 +7,9 @@ import {
     TextInput,
 } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
 import { useTranslation } from 'react-i18next';
+import * as Clipboard from 'expo-clipboard';
 
 import CustomText from '@components/atom/CustomText';
 import ImagePicker from '@components/atom/ImagePicker';
@@ -108,6 +110,14 @@ const ModalCharacterSettings = ({
         }
     }, [characterId, editedPrompt]);
 
+    const handleClipboard = useCallback(() => {
+        Clipboard.setStringAsync(characterId);
+        Toast.show({
+            type: 'success',
+            text1: 'ID du personnage copié',
+        });
+    }, [characterId]);
+
     useEffect(() => {
         handleGetPrompt();
     }, [handleGetPrompt]);
@@ -207,6 +217,12 @@ const ModalCharacterSettings = ({
                         <ActivityIndicator animating />
                     </View>
                 )}
+                <View>
+                    <CustomButton
+                        text="Copier l'ID du personnage"
+                        onPress={handleClipboard}
+                    />
+                </View>
             </Animated.View>
         </Modal>
     );

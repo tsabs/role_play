@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Portal } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-import SafeView from '@components/library/SafeView';
-import CharacterItem from '@components/character/CharacterItem';
-import Separator from '@components/library/Separator';
 import CustomText from '@components/atom/CustomText';
+import SafeView from '@components/library/SafeView';
+import { CharactersList } from '@components/character/dnd5e/CharactersList';
 import { useAuth } from '@navigation/hook/useAuth';
+import { RootStackParamList } from '@navigation/RootNavigation';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectAllCharacters } from '@store/character/selectors';
 import { loadCharacters } from '@store/character/slice';
@@ -18,15 +19,20 @@ import { theme } from '../../../style/theme';
 
 const margin = 10;
 
-const CharactersScreen = () => {
+type CharactersProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const CharactersScreen = ({ route }: CharactersProps) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const auth = useAuth();
     const callCharacters = useCallback(async () => {
-        await loadCharacters(auth.user.email, dispatch);
-    }, [auth.user.email, dispatch]);
-    const characters = useAppSelector(selectAllCharacters);
+        await loadCharacters(dispatch);
+    }, [dispatch]);
+    const allCharacters = useAppSelector(selectAllCharacters);
+    const characters = allCharacters.filter(
+        (character) => character.ownerId === auth.user.uid
+    );
     const [mounted, setMounted] = useState(false);
     const [shouldShowModal, setShouldShowModal] = useState(false);
 
@@ -75,27 +81,7 @@ const CharactersScreen = () => {
             >
                 {t('characters.titleButtonText')}
             </Button>
-            <FlatList
-                data={characters}
-                keyExtractor={(item) => item.id}
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                ItemSeparatorComponent={({ leadingItem }) => (
-                    <Separator
-                        key={leadingItem.id}
-                        horizontal
-                        spacer={{ size: theme.space.md }}
-                    />
-                )}
-                renderItem={({ item, index }) => (
-                    <CharacterItem
-                        key={item.id}
-                        character={item}
-                        index={index}
-                    />
-                )}
-            />
+            <CharactersList characters={characters} />
         </SafeView>
     );
 };
