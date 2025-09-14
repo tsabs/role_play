@@ -3,9 +3,10 @@ import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/AntDesign';
 
+import { theme } from '../../../style/theme';
+
 import Separator from './Separator';
 import Shadow from './Shadow';
-import { theme } from '../../../style/theme';
 
 const iconSize = 24;
 

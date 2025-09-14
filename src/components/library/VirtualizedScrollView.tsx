@@ -1,9 +1,7 @@
-import { Fragment, memo, ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 import { FlatList, FlatListProps } from 'react-native';
 
-const RenderItem = memo(({ children }: { children: ReactNode }) => (
-    <Fragment>{children}</Fragment>
-));
+const RenderItem = memo(({ children }: { children: ReactNode }) => children);
 
 export const VirtualizedScrollView = ({ children, ...props }: any) => {
     return (

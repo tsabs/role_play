@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { Note } from 'types/note';
 
-import { callAddNote } from '../../store/character/slice';
-import { useAppDispatch } from '../../store';
+import CustomButton from '@components/atom/CustomButton';
+import { AuthProps, useAuth } from '@navigation/hook/useAuth';
+import { callAddNote } from '@store/character/slice';
+import { useAppDispatch } from '@store/index';
+
 import { theme } from '../../../style/theme';
-import { AuthProps, useAuth } from '../../navigation/hook/useAuth';
-import CustomButton from '../../components/atom/CustomButton';
-import { Note } from '../../types/note';
 
 const inputAccessoryViewID = 'customAccessory';
 
@@ -45,7 +46,7 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
         setTitle('');
         editorContentRef.current?.setContentHTML('');
         editorTitleRef.current?.setContentHTML('');
-    }, [characterId, content, title]);
+    }, [auth.user.email, characterId, content, dispatch, title]);
 
     return (
         <KeyboardAvoidingView
@@ -76,7 +77,7 @@ const CharacterNotes = ({ characterId }: { characterId: string }) => {
                         }
                         onChangeText={setContent}
                         value={content}
-                        multiline={true}
+                        multiline
                         placeholder="Ecrivez votre note ici..."
                         style={styles.editor}
                         inputAccessoryViewID={inputAccessoryViewID}

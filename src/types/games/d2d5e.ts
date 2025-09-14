@@ -173,6 +173,10 @@ interface DndClass {
     selectedSubClass?: string;
 }
 
+interface SelectedRaceElementsProps {
+    raceChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
+}
+
 interface SelectedClassElementsProps {
     classChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
     selected_subclass?: string;
@@ -184,9 +188,7 @@ interface DnDConfig {
     race: DndRace;
     className: DndClass;
     selectedClassElements: SelectedClassElementsProps;
-    selectedRaceElements: {
-        raceChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
-    };
+    selectedRaceElements: SelectedRaceElementsProps;
     background: DndBackground;
     selectedBackgroundElements: {
         backgroundChoices?: Record<
@@ -211,6 +213,7 @@ export {
     SkillProficiency,
     StartingEquipmentOption,
     SelectedClassElementsProps,
+    SelectedRaceElementsProps,
     AbilityScores,
     DnDAbility,
     DndBackground,

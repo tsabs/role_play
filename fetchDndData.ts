@@ -1,10 +1,11 @@
-import { db } from './firebaseConfig';
 import {
     collection,
     doc,
     setDoc,
     updateDoc,
 } from '@react-native-firebase/firestore';
+
+import { db } from './firebaseConfig';
 import { DndRace, DndSubRace } from './src/types/games/d2d5e';
 const BASE_URL = 'https://www.dnd5eapi.co/api';
 

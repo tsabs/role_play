@@ -1,19 +1,17 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import { SelectedClassElementsProps } from 'types/games/d2d5e';
+
+import CustomText from '@components/atom/CustomText';
+import { ExtractedProficiencies, getAvailableProficiencies } from '@utils/d2d5';
 
 import {
     bardSubclasses,
     loreProficiencyData,
 } from '../classSpecifics/bard/bardSubclasses';
-import {
-    ExtractedProficiencies,
-    getAvailableProficiencies,
-} from '../../../../../utils/d2d5';
-import CustomText from '../../../../atom/CustomText';
-import { genericClassFormStyles } from '../classSpecifics/genericStyle';
+import { genericClassFormStyles } from '../genericStyle';
 import ProficiencySelector from '../proficiencies/ProficiencySelector';
-import { SelectedClassElementsProps } from '../../../../../types/games/d2d5e';
-import { View } from 'react-native';
 
 interface BardSubclassProps {
     subclass: string;
@@ -38,17 +36,10 @@ const BardSubclass = ({
     level,
 }: BardSubclassProps) => {
     const { t } = useTranslation();
-    if (!subclass || !(subclass in bardSubclasses)) return null;
 
-    const data = bardSubclasses[subclass as keyof typeof bardSubclasses];
-
-    const selectableProficiencies = useMemo(
-        () =>
-            getAvailableProficiencies(
-                loreProficiencyData,
-                proficienciesExtracted
-            ),
-        [loreProficiencyData, proficienciesExtracted]
+    const data = useMemo(
+        () => bardSubclasses[subclass as keyof typeof bardSubclasses],
+        [subclass]
     );
 
     const loreProficienciesSelected = useMemo(
@@ -56,8 +47,77 @@ const BardSubclass = ({
         [selectedClassElements?.classChoices]
     );
 
-    console.log(selectedClassElements);
-    // console.log(isOnEdit);
+    const [proficienciesSelected, setProficienciesSelected] = useState(
+        loreProficienciesSelected
+    );
+
+    const selectableProficiencies = useMemo(
+        () =>
+            getAvailableProficiencies(
+                loreProficiencyData,
+                proficienciesExtracted,
+                ['fromSelectedSubclass']
+            ),
+        [proficienciesExtracted]
+    );
+
+    const handleChange = useCallback(
+        (
+            groupId: string,
+            selected: Array<{ index: string; bonus?: number }>
+        ) => {
+            const result: Record<
+                string,
+                Array<{ index: string; bonus?: number }>
+            > = {
+                ...selectedClassElements.classChoices,
+                [groupId]: selected,
+            };
+            setProficienciesSelected(selected);
+            handleSubclassChoices(result);
+        },
+        [handleSubclassChoices, selectedClassElements.classChoices]
+    );
+
+    const displaySubClassSpecifics = useCallback(() => {
+        if (subclass === 'lore') {
+            return isOnEdit ? (
+                level >= 3 && (
+                    <ProficiencySelector
+                        data={selectableProficiencies}
+                        groupId={`lore-extra-proficiencies`}
+                        defaultValue={proficienciesSelected}
+                        onChange={handleChange}
+                    />
+                )
+            ) : !!proficienciesSelected ? (
+                <View style={{ flexDirection: 'row', gap: 6 }}>
+                    <CustomText text="Selection: " />
+                    {proficienciesSelected.map((proficiency) => (
+                        <CustomText
+                            fontWeight="bold"
+                            key={proficiency.index}
+                            text={t(
+                                `character.skills.${proficiency.index}.name`
+                            )}
+                        />
+                    ))}
+                </View>
+            ) : (
+                <CustomText text="Selectionner trois maitrises supplémentaires" />
+            );
+        }
+    }, [
+        handleChange,
+        isOnEdit,
+        level,
+        proficienciesSelected,
+        selectableProficiencies,
+        subclass,
+        t,
+    ]);
+
+    if (!subclass || !(subclass in bardSubclasses)) return null;
 
     return (
         <Fragment>
@@ -76,41 +136,7 @@ const BardSubclass = ({
                     </Fragment>
                 ))}
             {/* 3 Additional Proficiencies */}
-            {isOnEdit ? (
-                level >= 3 &&
-                subclass === 'lore' && (
-                    <ProficiencySelector
-                        data={selectableProficiencies}
-                        groupId={`lore-extra-proficiencies`}
-                        defaultValue={loreProficienciesSelected}
-                        onChange={(groupId, selected) => {
-                            const result: Record<
-                                string,
-                                Array<{ index: string; bonus?: number }>
-                            > = {
-                                ...selectedClassElements.classChoices,
-                                [groupId]: selected,
-                            };
-                            handleSubclassChoices(result);
-                        }}
-                    />
-                )
-            ) : !loreProficienciesSelected ? (
-                <CustomText text="Selectionner trois maitrises supplémentaires" />
-            ) : (
-                <View style={{ flexDirection: 'row', gap: 6 }}>
-                    <CustomText text="Selection: " />
-                    {loreProficienciesSelected.map((proficiency) => (
-                        <CustomText
-                            fontWeight="bold"
-                            key={proficiency.index}
-                            text={t(
-                                `character.skills.${proficiency.index}.name`
-                            )}
-                        />
-                    ))}
-                </View>
-            )}
+            {displaySubClassSpecifics()}
         </Fragment>
     );
 };

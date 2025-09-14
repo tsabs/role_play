@@ -40,6 +40,14 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
+
+# files
+*.gguf
+assets/llmRelated/corpus_dd5_structuredEn.json
+
+# folder
+/assets/llmRelated/

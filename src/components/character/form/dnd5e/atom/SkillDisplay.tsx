@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CustomText from '../../../../atom/CustomText';
@@ -25,8 +24,7 @@ const SkillDisplay = ({ proficiencies }: SkillsDisplayProps) => {
             >
                 <CustomText text={'Compétences: '} />
                 {proficiencies.map((proficiency, index) => {
-                    if (!proficiency.index.includes('skill'))
-                        return <Fragment />;
+                    if (!proficiency.index.includes('skill')) return null;
                     return (
                         <CustomText
                             key={proficiency?.index ? proficiency.index : index}

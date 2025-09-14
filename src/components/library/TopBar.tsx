@@ -6,11 +6,11 @@ import {
     useWindowDimensions,
 } from 'react-native';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
-
 import { Text } from 'react-native-paper';
 
-import SafeView from './SafeView';
 import { theme } from '../../../style/theme';
+
+import SafeView from './SafeView';
 
 interface TopBarProps {
     elements: Array<{ text: string; screenName: string }>;
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         borderRadius: theme.radius.md,
         top: 0,
         bottom: 0,
-        backgroundColor: 'transparent',
+        backgroundColor: theme.colors.transparent,
     },
 });
 

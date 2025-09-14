@@ -1,32 +1,32 @@
 import { useCallback, useMemo, useState } from 'react';
-
-import CustomText from '../../../atom/CustomText';
-import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
-import BarbarianTalentForm from '../dnd5e/classSpecifics/BarbarianTalentForm';
-import RangerTalentForm from '../dnd5e/classSpecifics/RangerTalentForm';
-import FighterTalentForm from '../dnd5e/classSpecifics/FighterTalentForm';
-import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
-import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
-import PaladinTalentForm from '../dnd5e/classSpecifics/PaladinTalentForm';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import {
     DnDAbility,
     SelectedClassElementsProps,
-} from '../../../../types/games/d2d5e';
-import { useTranslation } from 'react-i18next';
-import {
-    ExtractedProficiencies,
-    shouldChooseSubclass,
-} from '../../../../utils/d2d5';
-import { View } from 'react-native';
-import CustomSelectionButton from '../../../atom/CustomSelectionButton';
+    SelectedRaceElementsProps,
+} from 'types/games/d2d5e';
+
+import CustomText from '@components/atom/CustomText';
+import CustomSelectionButton from '@components/atom/CustomSelectionButton';
+import EditMode from '@components/library/EditMode';
+import { ExtractedProficiencies, shouldChooseSubclass } from '@utils/d2d5';
+
+import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
+import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
+import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
+import FighterTalentForm from '../dnd5e/classSpecifics/fighter/FighterTalentForm';
+import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
+import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentForm';
+import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
 import { theme } from '../../../../../style/theme';
-import EditMode from '../../../library/EditMode';
 
 interface TalentClassFormProps {
     characterClass: string;
     level: number;
     abilities: Record<DnDAbility, number>;
-    proficienciesExtracted: ExtractedProficiencies;
+    proficienciesExtracted?: ExtractedProficiencies;
+    selectedRaceElements?: SelectedRaceElementsProps;
     selectedClassElements?: SelectedClassElementsProps;
     isEditModeEnabled?: boolean;
     onSubclassSelect?: (
@@ -43,9 +43,10 @@ const TalentClassForm = ({
     level,
     abilities,
     proficienciesExtracted,
+    selectedRaceElements,
     selectedClassElements,
     isEditModeEnabled,
-    onSubclassSelect, // optional callback to persist
+    onSubclassSelect,
 }: TalentClassFormProps) => {
     const { t } = useTranslation();
     const [subclass, setSubclass] = useState(
@@ -87,6 +88,42 @@ const TalentClassForm = ({
                         value: 'totem',
                     },
                 ];
+            case 'ranger':
+                return [
+                    {
+                        label: t(
+                            'character.classes.ranger.subclasses.hunter.title'
+                        ),
+                        value: 'hunter',
+                    },
+                    {
+                        label: t(
+                            'character.classes.ranger.subclasses.beastMaster.title'
+                        ),
+                        value: 'beastMaster',
+                    },
+                ];
+            case 'paladin':
+                return [
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.devotion.title'
+                        ),
+                        value: 'devotion',
+                    },
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.ancients.title'
+                        ),
+                        value: 'ancients',
+                    },
+                    {
+                        label: t(
+                            'character.classes.paladin.subclasses.vengeance.title'
+                        ),
+                        value: 'vengeance',
+                    },
+                ];
             default:
                 return [];
         }
@@ -101,7 +138,6 @@ const TalentClassForm = ({
 
     const handleSubclassChange = useCallback((selected: string) => {
         setSubclass(selected);
-        // onSubclassSelect?.(selected);
     }, []);
 
     const handleSubclassChoices = useCallback(
@@ -117,11 +153,11 @@ const TalentClassForm = ({
     );
 
     const handleChangeEditMode = useCallback(() => {
+        console.log(isOnEdit);
         setIsOnEdit(!isOnEdit);
     }, [isOnEdit]);
 
     const handleSave = useCallback(() => {
-        //
         onSubclassSelect(subclass, subclassChoices);
         setIsOnEdit(false);
     }, [onSubclassSelect, subclass, subclassChoices]);
@@ -144,14 +180,36 @@ const TalentClassForm = ({
                 );
             case 'barbarian':
                 return (
-                    <BarbarianTalentForm level={level} abilities={abilities} />
+                    <BarbarianTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedRaceElements={selectedRaceElements}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
                 );
             case 'ranger':
-                return <RangerTalentForm level={level} />;
+                return (
+                    <RangerTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedRaceElements={selectedRaceElements}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
+                );
             case 'fighter':
                 return (
                     <FighterTalentForm
                         level={level}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
                         // abilities={abilities}
                     />
                 );
@@ -163,24 +221,47 @@ const TalentClassForm = ({
                 );
             case 'paladin':
                 return (
-                    <PaladinTalentForm level={level} abilities={abilities} />
+                    <PaladinTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                    />
                 );
             default:
                 return <CustomText text="Class not yet supported." />;
         }
-    }, [level, abilities, isOnEdit, characterClass]);
+    }, [
+        characterClass,
+        level,
+        abilities,
+        subclass,
+        proficienciesExtracted,
+        selectedClassElements,
+        selectedRaceElements,
+        handleSubclassChoices,
+        isOnEdit,
+    ]);
 
     return (
         <View>
-            {showSubclassSelector && (
-                <View style={{ marginBottom: theme.space.md }}>
-                    <EditMode
-                        isEditModeEnabled={isEditModeEnabled}
-                        handleChange={handleChangeEditMode}
-                        handleSave={handleSave}
-                        style={{ flexDirection: 'row' }}
-                    />
-                    {isOnEdit ? (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: theme.space.md,
+                }}
+            >
+                <EditMode
+                    isEditModeEnabled={isEditModeEnabled}
+                    handleChange={handleChangeEditMode}
+                    handleSave={handleSave}
+                    style={{ flexDirection: 'row' }}
+                />
+                {showSubclassSelector &&
+                    (isOnEdit ? (
                         subclass ? (
                             <CustomSelectionButton
                                 items={availableSubclasses}
@@ -190,15 +271,14 @@ const TalentClassForm = ({
                                     borderRadius: theme.radius.sm,
                                     borderColor: theme.colors.primary,
                                 }}
-                                // value={subclass}
                                 preSelectedValue={{
                                     label: t(
-                                        `character.classes.bard.subclasses.${subclass}.title`
+                                        `character.classes.${characterClass}.subclasses.${subclass}.title`
                                     ),
                                     value: subclass,
                                 }}
                                 displayValue={t(
-                                    `character.classes.bard.subclasses.${subclass}.title`
+                                    `character.classes.${characterClass}.subclasses.${subclass}.title`
                                 )}
                                 onSelect={handleSubclassChange}
                             />
@@ -224,9 +304,8 @@ const TalentClassForm = ({
                                 text={'Choisir une sous classe'}
                             />
                         )
-                    )}
-                </View>
-            )}
+                    ))}
+            </View>
             {renderClassSpecific()}
         </View>
     );

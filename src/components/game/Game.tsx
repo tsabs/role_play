@@ -1,4 +1,5 @@
 import { Card, Text } from 'react-native-paper';
+
 import { theme } from '../../../style/theme';
 
 const GameCard = ({ game }) => {

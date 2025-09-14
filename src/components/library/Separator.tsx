@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+
 import { theme } from '../../../style/theme';
 
 const Separator = ({

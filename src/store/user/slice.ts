@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { LOGIN_MODULE_KEY } from '../constants';
+
 import { UserState } from './types';
 
 declare global {
@@ -10,9 +11,8 @@ declare global {
 }
 
 const userInitialState: UserState = {
-    userName: '',
     email: '',
-    password: '',
+    uuid: '',
 };
 
 export const userSlice = createSlice({
@@ -21,9 +21,8 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action: PayloadAction<UserState>) => {
             return {
-                userName: action.payload.userName,
                 email: action.payload.email,
-                password: state.password,
+                uuid: state.uuid,
             };
         },
     },

@@ -2,9 +2,13 @@ import { useCallback } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import BottomBar from '../../components/library/BottomBar';
-import CharacterOverview from '../../views/singleCharacter/characterOverview/CharacterOverview';
+import BottomBar from '@components/library/BottomBar';
+import CharacterOverview from '@views/singleCharacter/characterOverview/CharacterOverview';
+import ChatBot from '@views/chatBot/ChatBot';
+
+import { DnDCharacter } from '../../types/games/d2d5e';
 import { RootStackParamList } from '../RootNavigation';
+
 import CharacterNotesScreen from './CharacterNotesScreen';
 
 const BottomNavigator = createBottomTabNavigator();
@@ -17,12 +21,23 @@ type BottomCharacterTabsProps = NativeStackScreenProps<
 const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
     const renderOverviewComponent = useCallback(
         () => CharacterOverview({ character: route.params.character }),
-        []
+        [route.params.character]
     );
+
+    const renderChatbotComponent = useCallback(() => {
+        const { race, level, className, selectedClassElements } = route.params
+            .character as DnDCharacter;
+        return ChatBot({
+            race: race.index,
+            level,
+            className: className.index,
+            subClassName: selectedClassElements?.selected_subclass,
+        });
+    }, [route.params.character]);
 
     const renderNotesComponent = useCallback(
         () => CharacterNotesScreen({ characterId: route.params.character.id }),
-        []
+        [route.params.character.id]
     );
 
     return (
@@ -33,6 +48,7 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
                 BottomBar({
                     elements: [
                         { icon: 'profile', screenName: 'CharacterOverview' },
+                        { icon: 'mail', screenName: 'ChatBot' },
                         { icon: 'book', screenName: 'CharacterNotesScreen' },
                     ],
                     props,
@@ -42,6 +58,11 @@ const BottomCharacterTabs = ({ route }: BottomCharacterTabsProps) => {
             <BottomNavigator.Screen
                 name="CharacterOverview"
                 component={renderOverviewComponent}
+                options={{ headerShown: false }}
+            />
+            <BottomNavigator.Screen
+                name="ChatBot"
+                component={renderChatbotComponent}
                 options={{ headerShown: false }}
             />
             <BottomNavigator.Screen

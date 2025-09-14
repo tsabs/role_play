@@ -7,15 +7,16 @@ import {
     Divider,
     TouchableRipple,
 } from 'react-native-paper';
-
 import {
     ElementIdentification,
     OptionChoice,
     ProficiencyOption,
     SocialChoice,
-} from '../../../../../types/games/d2d5e';
+} from 'types/games/d2d5e';
+
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../../style/theme';
-import CustomText from '../../../../atom/CustomText';
 
 type AbilityOption = {
     ability_score: ElementIdentification;
@@ -51,10 +52,12 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
     const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
-        if (defaultValue) {
-            onChange?.(groupId ?? '', defaultValue);
+        if (selected) {
+            console.log('changed');
+            onChange?.(groupId ?? '', selected);
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selected]);
 
     const handleToggle = useCallback(
         (index: string, bonus?: number) => {
@@ -72,7 +75,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
             setSelected(updated);
             onChange?.(groupId ?? '', updated);
         },
-        [selected, groupId, onChange]
+        [selected, data.choose, groupId, onChange]
     );
 
     const renderItem = useCallback(
@@ -155,8 +158,10 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
             return null;
         },
-        [data.choose, selected, handleToggle]
+        [selected, t, data.choose, handleToggle, onChange]
     );
+
+    // console.log(data);
 
     return (
         <View style={styles.groupContainer}>
@@ -202,7 +207,7 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
 
 const styles = StyleSheet.create({
     groupContainer: {
-        paddingVertical: 8,
+        paddingVertical: theme.space.md,
     },
     containerDescription: {
         gap: theme.space.sm,
@@ -211,10 +216,10 @@ const styles = StyleSheet.create({
         marginHorizontal: theme.space.sm,
     },
     nested: {
-        marginTop: 8,
-        paddingLeft: 8,
+        marginTop: theme.space.md,
+        paddingLeft: theme.space.md,
         borderLeftWidth: 1,
-        borderColor: '#ccc',
+        borderColor: theme.colors.white,
     },
     divider: {
         marginVertical: 8,

@@ -1,7 +1,8 @@
 {
   "characters": {
     "title": "Liste des personnages",
-    "titleButtonText": "Créer un personnage"
+    "titleButtonText": "Créer un personnage",
+    "selectGameTitle": "Choisir le type de jeu"
   },
   "character": {
     "abilities": {
@@ -87,10 +88,28 @@
         },
         "subclasses": {
           "berserker": {
-            "title": "Berserker"
+            "title": "Berserker",
+            "description": "Un barbare qui donne libre cours à une fureur sans retenue dans la bataille.",
+            "frenzy": "Lorsque vous entrez en rage, vous pouvez choisir de vous déchaîner. Si vous le faites, pendant la rage, vous pouvez effectuer une attaque avec une arme de mêlée comme action bonus à chaque tour. Lorsque la rage se termine, vous subissez un niveau d'épuisement."
           },
           "totem": {
-            "title": "Guerrier totem"
+            "title": "Guerrier totem",
+            "description": "Un barbare qui canalise les esprits animaux pour obtenir une force mystique.",
+            "spiritAnimal": "Animal Spirituel: Choisir un animal totem pour un effect magique spécifique.",
+            "spiritAnimalFeatures": {
+              "bear": {
+                "index": "Esprit Totem: Ours",
+                "description": "Ours: Vous avez une résistance à tous les types de dégâts sauf psychiques pendant la rage."
+              },
+              "wolf": {
+                "index": "Esprit Totem: Loup",
+                "description": "Loup: Vos alliés proches gagnent un avantage aux attaques contre les créatures que vous attaquez."
+              },
+              "eagle": {
+                "index": "Esprit Totem: Aigle",
+                "description": "Aigle: Pendant la rage, d'autres créatures ont un désavantage aux attaques d'opportunité contre vous, et vous pouvez vous déplacer entre les ennemis sans difficulté."
+              }
+            }
           }
         }
       },
@@ -111,7 +130,8 @@
             "title": "Collège du savoir",
             "description": "Un Barde du Savoir enchante par le savoir et les récits oubliés.",
             "cuttingWordsDescription": "Mots singlants",
-            "additionalMasteryDescription": "Maîtrises supplémentaires"
+            "additionalMasteryDescription": "Maîtrises supplémentaires",
+            "additionalProficienciesDescription": "Choisir 3 maîtrises supplémentaires"
           },
           "valor": {
             "title": "Collège de vaillance",
@@ -154,6 +174,36 @@
           "extraAttackDescription": "Vous pouvez attaquer deux fois, au lieu d'une, lorsque vous prenez l'action d'attaquer.",
           "martialArchetypeTitle": "🧠 Archétype Martial",
           "martialArchetypeDescription": "Choisissez un archétype : Champion, Maître de Bataille, Chevalier Eldritch, etc."
+        },
+        "combatsStyle": {
+          "archery": {
+            "index": "Archerie",
+            "description": "+2 aux jets d'attaque avec une arme à distance."
+          },
+          "defense": {
+            "index": "Défense",
+            "description": "Si on porte une armure, +1 à la CA."
+          },
+          "dueling": {
+            "index": "Duel",
+            "description": "Si on tient seulement une arme de corps à corps dans une main, +2 aux dégâts."
+          },
+          "twoWeapon": {
+            "index": "Combat à deux armes",
+            "description": "Si on combat avec deux armes, ajoute le modificateur de caractéristique aux dégâts de la seconde attaque."
+          },
+          "thrownWeapon": {
+            "index": "Armes de lancer",
+            "description": "Dégaine une arme de lancer dans la même action que l'attaque et +2 aux dégâts avec une arme de lancer."
+          },
+          "blind": {
+            "index": "Combat en aveugle",
+            "description": "Voit dans un rayon de 3 m tout ce qui n'a pas un abri total, et les créatures invisibles non cachées."
+          },
+          "druidicWarrior": {
+            "index": "Combattant druidique",
+            "description": "Apprend 2 sorts mineurs de druide avec la Sagesse comme caractéristique d'incantation."
+          }
         }
       },
       "monk": {
@@ -164,18 +214,84 @@
       },
       "paladin": {
         "name": "Paladin",
+        "channelDivinityTitle": "Canalisation d'énergie divine",
+        "oathSpellsAtLevel": "Sorts du serment – Niveau {{level}}",
         "talents":  {
           "layOnHandsTitle": "🛡 Imposition des Mains",
           "layOnHandsDescription": "Vous pouvez restaurer {{layOnHands}} PV par repos long.",
           "layOnHandsUsage": "Vous pouvez dépenser 5 PV pour guérir une maladie ou un poison.",
           "divineSmiteTitle": "💥 Châtiment Divin",
           "divineSmiteDescription": "Lorsque vous touchez, dépensez un emplacement de sort pour infliger des dégâts radiants.",
+          "fightingStyleTitle": "🛡️ Style de Combat",
+          "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
           "divineHealthTitle": "🏰 Santé Divine",
           "divineHealthDescription": "Vous êtes immunisé contre les maladies.",
           "sacredOathTitle": "🕊 Serment Sacré",
           "sacredOathDescription": "Choisissez une sous-classe de Serment au niveau 3.",
           "spellcastingTitle": "✨ Incantation",
           "spellcastingDescription": "Vous pouvez préparer mod CHA ({{chaMod}}) + la moitié de votre niveau en sorts de Paladin."
+        },
+        "combatsStyle": {
+          "archery": {
+            "index": "Archerie",
+            "description": "+2 aux jets d'attaque avec une arme à distance."
+          },
+          "defense": {
+            "index": "Défense",
+            "description": "Si on porte une armure, +1 à la CA."
+          },
+          "dueling": {
+            "index": "Duel",
+            "description": "Si on tient seulement une arme de corps à corps dans une main, +2 aux dégâts."
+          },
+          "twoWeapon": {
+            "index": "Combat à deux armes",
+            "description": "Si on combat avec deux armes, ajoute le modificateur de caractéristique aux dégâts de la seconde attaque."
+          },
+          "thrownWeapon": {
+            "index": "Armes de lancer",
+            "description": "Dégaine une arme de lancer dans la même action que l'attaque et +2 aux dégâts avec une arme de lancer."
+          },
+          "blind": {
+            "index": "Combat en aveugle",
+            "description": "Voit dans un rayon de 3 m tout ce qui n'a pas un abri total, et les créatures invisibles non cachées."
+          },
+          "druidicWarrior": {
+            "index": "Combattant druidique",
+            "description": "Apprend 2 sorts mineurs de druide avec la Sagesse comme caractéristique d'incantation."
+          }
+        },
+        "subclasses": {
+          "devotion": {
+            "title": "Dévotion",
+            "description": "Vous avez juré de défendre l'honneur, la compassion, la justice et la vertu. Vous êtes un bouclier contre les ténèbres.",
+            "channelDivinity": {
+              "sacredWeapon": "Arme sacrée",
+              "turnUnholy": "Repousser les profanes"
+            },
+            "feature1": "Canalisation d’énergie divine : Repousser le mal.",
+            "feature2": "Aura de protection contre la magie noire."
+          },
+          "ancients": {
+            "title": "Anciens",
+            "description": "Vous êtes lié aux forces de la nature et à la lumière primordiale, protégeant la vie contre la corruption.",
+            "channelDivinity": {
+              "natureWrath": "Courroux de la nature",
+              "turnFey": "Repousser les fées"
+            },
+            "feature1": "Énergie féerique : Immobiliser les ennemis.",
+            "feature2": "Aura de réconfort : Régénération naturelle."
+          },
+          "vengeance": {
+            "title": "Vengeance",
+            "description": "Votre serment est une croisade impitoyable contre le mal. Vous êtes la punition incarnée.",
+            "channelDivinity": {
+              "abjureEnemy": "Éloigner l'ennemi",
+              "vowOfEnmity": "Vœu d’inimitié"
+            },
+            "feature1": "Marque de vengeance : Traque infaillible.",
+            "feature2": "Relâche de la colère divine."
+          }
         }
       },
       "ranger": {
@@ -189,6 +305,160 @@
           "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
           "spellcastingTitle": "✨ Incantation",
           "spellcastingDescription": "Vous pouvez lancer des sorts de rôdeur. Vous préparez un nombre égal au modificateur de SAG + la moitié de votre niveau."
+        },
+        "favoredEnemies": {
+          "aberrations": {
+            "index": "Aberrations",
+            "description": "Vous avez appris à traquer les créatures aux formes et esprits déformés, tels que les flagelleurs mentaux ou les tyrannœils."
+          },
+          "celestials": {
+            "index": "Célestes",
+            "description": "Vous êtes spécialisé dans le repérage et le combat contre les êtres d'origine divine ou céleste."
+          },
+          "constructs": {
+            "index": "Artificiels",
+            "description": "Vous êtes formé à combattre les créatures fabriquées, telles que les golems et autres créations magiques."
+          },
+          "monstrosities": {
+            "index": "Monstruosités",
+            "description": "Vous avez une expérience avec les créatures monstrueuses, souvent issues d’expériences ou de mutations étranges."
+          },
+          "dragons": {
+            "index": "Dragons",
+            "description": "Vous avez étudié les dragons et êtes entraîné à traquer ces puissantes créatures reptiliennes."
+          },
+          "elementals": {
+            "index": "Élémentaires",
+            "description": "Vous êtes capable d'affronter les incarnations élémentaires du feu, de l'eau, de l'air et de la terre."
+          },
+          "fey": {
+            "index": "Fées",
+            "description": "Vous connaissez les créatures capricieuses et mystiques du royaume féerique."
+          },
+          "fiends": {
+            "index": "Fiélons",
+            "description": "Vous êtes entraîné à combattre les démons et diables venus des plans infernaux."
+          },
+          "giants": {
+            "index": "Géants",
+            "description": "Vous avez étudié les comportements et points faibles des géants, trolls et autres colosses."
+          },
+          "humanoids": {
+            "index": "Humanoïdes",
+            "description": "Vous avez choisi une ou plusieurs races humanoïdes comme ennemis jurés. (à définir précisément en jeu)"
+          },
+          "oozes": {
+            "index": "Vases",
+            "description": "Vous êtes capable de survivre à l’affrontement avec des créatures amorphes comme les cubes gélatineux et les vases acides."
+          },
+          "plants": {
+            "index": "Plantes",
+            "description": "Vous avez étudié les créatures végétales dotées de conscience ou de comportements hostiles."
+          },
+          "beasts": {
+            "index": "Bêtes",
+            "description": "Vous avez une connaissance approfondie des comportements et faiblesses des bêtes."
+          },
+          "undead": {
+            "index": "Morts-vivants",
+            "description": "Vous êtes un traqueur spécialisé des créatures revenues d’entre les morts."
+          }
+        },
+        "favoredTerrains": {
+          "arctic": {
+            "index": "Arctique",
+            "description": "Vous êtes habitué aux étendues glacées des régions polaires, maîtrisant survie et navigation dans le froid extrême."
+          },
+          "coast": {
+            "index": "Côte",
+            "description": "Vous connaissez bien les rivages et plages, ainsi que les courants, marées et dangers côtiers."
+          },
+          "desert": {
+            "index": "Désert",
+            "description": "Vous avez survécu aux étendues arides, aux chaleurs flamboyantes et aux nuits glaciales du désert."
+          },
+          "forest": {
+            "index": "Forêt",
+            "description": "Les forêts sont votre domaine entre canopées, clairières et sous-bois, vous vous y déplacez sans bruit."
+          },
+          "grassland": {
+            "index": "Prairie",
+            "description": "Vous êtes à l’aise dans les vastes étendues herbeuses, comprenant leurs cycles naturels et animaux."
+          },
+          "mountain": {
+            "index": "Montagne",
+            "description": "Les terrains escarpés et sommets ne vous effraient pas: vous savez grimper, vous orienter et survivre en altitude."
+          },
+          "swamp": {
+            "index": "Marais",
+            "description": "Vous êtes aguerri aux terrains humides, aux eaux stagnantes et aux créatures qui s’y cachent."
+          },
+          "underdark": {
+            "index": "Outreterre",
+            "description": "Vous connaissez les cavernes obscures et les tunnels souterrains, leurs dangers et leur géographie complexe."
+          }
+        },
+        "combatsStyle": {
+          "archery": {
+            "index": "Archerie",
+            "description": "+2 aux jets d'attaque avec une arme à distance."
+          },
+          "defense": {
+            "index": "Défense",
+            "description": "Si on porte une armure, +1 à la CA."
+          },
+          "dueling": {
+            "index": "Duel",
+            "description": "Si on tient seulement une arme de corps à corps dans une main, +2 aux dégâts."
+          },
+          "twoWeapon": {
+            "index": "Combat à deux armes",
+            "description": "Si on combat avec deux armes, ajoute le modificateur de caractéristique aux dégâts de la seconde attaque."
+          },
+          "thrownWeapon": {
+            "index": "Armes de lancer",
+            "description": "Dégaine une arme de lancer dans la même action que l'attaque et +2 aux dégâts avec une arme de lancer."
+          },
+          "blind": {
+            "index": "Combat en aveugle",
+            "description": "Voit dans un rayon de 3 m tout ce qui n'a pas un abri total, et les créatures invisibles non cachées."
+          },
+          "druidicWarrior": {
+            "index": "Combattant druidique",
+            "description": "Apprend 2 sorts mineurs de druide avec la Sagesse comme caractéristique d'incantation."
+          }
+        },
+        "subclasses": {
+          "hunter": {
+            "title": "Chasseur",
+            "description": "Un maître des tactiques de chasse, traquant des proies surnaturelles ou mortelles.",
+            "huntersPrey": {
+              "colossusSlayer": {
+                "index": "Tueur de colosses",
+                "description": "Votre ténacité peut user les ennemis les plus puissants. Quand vous touchez une créature lors d'une attaque avec une arme, la créature prend 1d8 dégâts supplémentaires si elle est sous son maximum de points de vie. Vous ne pouvez infliger ces dégâts supplémentaires qu'une fois par tour."
+              },
+              "giantKiller": {
+                "index": "Tueur de géants",
+                "description": "Quand une créature, de taille G ou supérieure et située à 1,50 mètre ou moins de vous, vous touche ou vous manque lors d'une attaque, vous pouvez utiliser votre réaction pour attaquer cette créature immédiatement après son attaque, à condition que vous puissiez voir la créature."
+              },
+              "hordeBreaker": {
+                "index": "Briseur de hordes",
+                "description": "Une fois à chacun de vos tours, lorsque vous faites une attaque avec une arme, vous pouvez faire une autre attaque avec la même arme contre une créature différente qui se situe à 1,50 mètre ou moins de la cible initiale et à portée de votre arme."
+              }
+            },
+            "features": {
+              "colossusSlayer": "Vous infligez des dégâts supplémentaires à une créature déjà blessée.",
+              "defensiveTactics": "Vous obtenez une tactique défensive comme Évasion ou Riposte."
+            }
+          },
+          "beastMaster": {
+            "title": "Maître des bêtes",
+            "description": "Vous combattez aux côtés d’un compagnon animal loyal.",
+            "features": {
+              "rangerCompanion": "Vous gagnez un compagnon animal pour vous aider au combat.",
+              "exceptionalTraining": "Votre compagnon peut attaquer en même temps que vous."
+            }
+          }
         }
       },
       "rogue": {
@@ -625,5 +895,26 @@
   "modal": {
     "confirmAction": "Oui",
     "cancelAction": "Non"
+  },
+  "spells": {
+    "protection-from-evil-and-good": "Protection contre le Bien et le Mal",
+    "sanctuary": "Sanctuaire",
+    "lesser-restoration": "Restauration partielle",
+    "zone-of-truth": "Zone de vérité",
+    "bane": "Fléau",
+    "hunter’s-mark": "Marque du chasseur",
+    "hold-person": "Immobilisation de personne",
+    "misty-step": "Pas brumeux",
+    "ensnaring-strike": "Frappe entravante",
+    "speak-with-animals": "Parler aux animaux",
+    "moonbeam": "Rayon de lune"
+  },
+  "games": {
+    "dnd5e": {
+      "name": "Donjons et Dragons 5e"
+    },
+    "warHammer": {
+      "name": "Warhammer fantasy jeu de rôle"
+    }
   }
 }

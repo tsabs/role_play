@@ -6,16 +6,17 @@ import { BlurView } from 'expo-blur';
 import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
+import { DnDCharacter } from 'types/games/d2d5e';
 
-import { callRemoveCharacter } from '../../../store/character/slice';
-import { theme } from '../../../../style/theme';
+import CustomText from '@components/atom/CustomText';
+import Separator from '@components/library/Separator';
+import CustomDialog from '@components/library/CustomDialog';
+import { callRemoveCharacter } from '@store/character/slice';
+import { useAppDispatch } from '@store/index';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
+
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
-import { useAppDispatch } from '../../../store';
-import Separator from '../../library/Separator';
-import CustomDialog from '../../library/CustomDialog';
-import { DnDCharacter } from '../../../types/games/d2d5e';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../utils/utils';
-import CustomText from '../../atom/CustomText';
+import { theme } from '../../../../style/theme';
 
 interface DndCharacterItemProps {
     character: DnDCharacter;
@@ -30,8 +31,17 @@ const FLATLIST_WIDTH = SCREEN_WIDTH - 32 - 24;
 const LabeledElement = ({ label, val }: { label: string; val: string }) => {
     return (
         <View style={styles.contentElement}>
-            <Text style={styles.contentElementLabel}>{label}</Text>
-            <Text style={styles.contentElementText}>{val}</Text>
+            <CustomText
+                fontSize={16}
+                text={label}
+                style={styles.contentElementLabel}
+            />
+            <CustomText
+                style={styles.contentElementText}
+                text={val}
+                color={theme.colors.textSecondary}
+                fontSize={16}
+            />
         </View>
     );
 };
@@ -72,7 +82,11 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                 />
                 <Card style={styles.card}>
                     <Card.Cover
-                        source={DND_CHARACTER_DEFAULT}
+                        source={
+                            character?.imageUri
+                                ? { uri: character.imageUri }
+                                : DND_CHARACTER_DEFAULT
+                        }
                         style={styles.image}
                         resizeMode="cover"
                     />
@@ -100,34 +114,16 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                             val={character.gameType}
                         />
                         <Separator margin={theme.space.md} horizontal />
-                        <View
-                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
-                        >
-                            <CustomText
-                                fontSize={theme.fontSize.large}
-                                text="Description: "
-                            />
-                            <CustomText
-                                fontSize={theme.fontSize.large}
-                                color={theme.colors.textSecondary}
-                                text={character.description}
-                            />
-                        </View>
+                        <LabeledElement
+                            label={'Description: '}
+                            val={character.description}
+                        />
 
                         <Separator spacer={{ size: 10 }} horizontal />
-                        <View
-                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
-                        >
-                            <CustomText
-                                fontSize={theme.fontSize.large}
-                                text="Histoire: "
-                            />
-                            <CustomText
-                                fontSize={theme.fontSize.large}
-                                color={theme.colors.textSecondary}
-                                text={character.additionalBackground}
-                            />
-                        </View>
+                        <LabeledElement
+                            label={'Histoire: '}
+                            val={character.additionalBackground}
+                        />
                     </Card.Content>
                 </Card>
                 <View style={styles.progressiveBlurContainer}>
@@ -137,7 +133,13 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
                         style={StyleSheet.absoluteFill}
                     />
                     <LinearGradient
-                        colors={[theme.colors.light0, theme.colors.light100]}
+                        colors={[
+                            theme.colors.light0,
+                            theme.colors.light50,
+                            theme.colors.light75,
+                            theme.colors.light100,
+                            theme.colors.light100,
+                        ]}
                         start={{ x: 0.5, y: 0 }}
                         end={{ x: 0.5, y: 1 }}
                         style={StyleSheet.absoluteFill}
@@ -155,17 +157,12 @@ const styles = StyleSheet.create({
         height: FLATLIST_HEIGHT,
         borderRadius: 20,
         paddingBottom: theme.space.md,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        elevation: 6,
         overflow: 'hidden',
     },
     image: {
         backgroundColor: theme.colors.light,
         alignSelf: 'stretch',
-        height: '60%',
+        height: SCREEN_HEIGHT / 2.5,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
@@ -181,6 +178,7 @@ const styles = StyleSheet.create({
     },
     contentElement: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
     },
     contentElementLabel: {
         fontSize: theme.fontSize.large,
@@ -188,7 +186,6 @@ const styles = StyleSheet.create({
     },
     contentElementText: {
         alignSelf: 'flex-end',
-        color: theme.colors.textSecondary,
         fontSize: theme.fontSize.medium,
     },
     name: {
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 60, // or however much space you want to cover
+        height: 120, // or however much space you want to cover
         overflow: 'hidden',
         borderBottomLeftRadius: theme.radius.xl,
         borderBottomRightRadius: theme.radius.xl,

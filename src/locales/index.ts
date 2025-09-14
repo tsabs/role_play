@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
+
 import translationEn from './en-US/translations.json';
 import translationFr from './fr-FR/translations.json';
 

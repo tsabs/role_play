@@ -46,6 +46,7 @@ const colors = {
     black: '#000000',
     textPrimary: '#212529', // Deep Charcoal - Best readability
     textSecondary: '#6c757d',
+    transparent: 'transparent',
 };
 
 const fontSize = {

@@ -1,3 +1,6 @@
+import Fuse from 'fuse.js';
+
+import rawData from '../../assets/llmRelated/corpus_dd5_structuredEn.json';
 import {
     DnDAbility,
     DnDCharacter,
@@ -114,10 +117,11 @@ const shouldChooseSubclass = (
 type ProficiencyCategory = 'race' | 'class' | 'background';
 
 export interface ExtractedProficiencies {
-    fromRace: string[];
-    fromClass: string[];
-    fromBackground: string[];
-    fromSubclass: string[];
+    fromBackground?: string[];
+    fromRace?: string[];
+    fromSelectedRace?: string[];
+    fromSelectedClass?: string[];
+    fromSelectedSubclass?: string[];
     all: string[]; // flat list, unique
 }
 
@@ -134,16 +138,24 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
         }) || [];
 
     const fromRace =
+        character.race?.starting_proficiencies?.flatMap((prof) => {
+            if (prof.index?.includes('skill-')) {
+                return [prof.index.split('skill-')[1]];
+            }
+            return [];
+        }) || [];
+
+    const fromSelectedRace =
         character.selectedRaceElements?.raceChoices?.[
             `${character.race?.index}-race-proficiencies`
         ]?.map((prof) => prof.index) || [];
 
-    const fromClass =
+    const fromSelectedClass =
         character.selectedClassElements?.classChoices?.[
             `${character.className?.index}-class-0`
         ]?.map((prof) => prof.index) || [];
 
-    const fromSubclass =
+    const fromSelectedSubclass =
         character.selectedClassElements?.classChoices?.[
             `${character.selectedClassElements?.selected_subclass}-extra-proficiencies`
         ]?.map((prof) => prof.index) || [];
@@ -151,17 +163,33 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
     return {
         fromBackground,
         fromRace,
-        fromClass,
-        fromSubclass,
-        all: [...fromBackground, ...fromRace, ...fromClass, ...fromSubclass],
+        fromSelectedRace,
+        fromSelectedClass,
+        fromSelectedSubclass,
+        all: [
+            ...fromBackground,
+            ...fromRace,
+            ...fromSelectedRace,
+            ...fromSelectedClass,
+            ...fromSelectedSubclass,
+        ],
     };
 };
 
 const getAvailableProficiencies = (
     data: ProficiencyOption,
-    extractedProficiencies: ExtractedProficiencies
+    extractedProficiencies: ExtractedProficiencies,
+    excludeSources: (keyof ExtractedProficiencies)[] = []
 ): ProficiencyOption => {
-    const ownedSkills = new Set(extractedProficiencies.all);
+    const combinedProficiencies = Object.entries(extractedProficiencies)
+        .filter(
+            ([key]) =>
+                key !== 'all' &&
+                !excludeSources.includes(key as keyof ExtractedProficiencies)
+        )
+        .flatMap(([, profs]) => profs || []);
+
+    const ownedSkills = new Set(combinedProficiencies);
 
     const filteredOptions = data.from.options.filter((option) => {
         if (option.option_type === 'reference') {
@@ -177,8 +205,7 @@ const getAvailableProficiencies = (
             return !ownedSkills.has(optionSelect.index);
         }
 
-        // Keep other types (like nested choices or bonuses) by default
-        return true;
+        return true; // Keep other types
     });
 
     return {
@@ -190,8 +217,46 @@ const getAvailableProficiencies = (
     };
 };
 
+type DataCategory = 'spells' | 'feats' | 'races' | 'classes';
+
+const categories: { label: string; value: DataCategory }[] = [
+    { label: 'Sort', value: 'spells' },
+    { label: 'Classe', value: 'classes' },
+    { label: 'Race', value: 'races' },
+    { label: 'Don', value: 'feats' },
+];
+
+const detectCategory = (input: string): DataCategory | null => {
+    const lower = input.toLowerCase();
+    if (lower.includes('sort')) return 'spells';
+    if (lower.includes('talent')) return 'feats';
+    if (lower.includes('race')) return 'races';
+    if (lower.includes('classe')) return 'classes';
+    return null;
+};
+
+const findItemByName = (category: DataCategory, name: string) => {
+    const dataCategory = [...rawData[category]];
+
+    const fuse = new Fuse(dataCategory, {
+        keys: ['name', 'slug'],
+        threshold: 0.3,
+    });
+
+    const fuseResults = fuse.search(name.toLocaleLowerCase());
+    console.log('fuseResults', fuseResults);
+    if (fuseResults.length) return fuseResults;
+    return rawData[category].filter((item) =>
+        name.includes(item.name.toLowerCase())
+    );
+};
+
 export {
     calculateModifier,
+    categories,
+    DataCategory,
+    detectCategory,
+    findItemByName,
     getSkillModifier,
     shouldChooseSubclass,
     extractCharacterProficiencies,

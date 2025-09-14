@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { theme } from '../../../../../../style/theme';
+import { theme } from '../../../../../style/theme.ts';
 
 export const genericClassFormStyles = StyleSheet.create({
     container: { padding: theme.space.l },

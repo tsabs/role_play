@@ -1,4 +1,4 @@
-import { ProficiencyOption } from '../../../../../../types/games/d2d5e';
+import { ProficiencyOption } from 'types/games/d2d5e';
 
 export type BardSubclassKey = 'lore' | 'valor';
 
@@ -80,7 +80,8 @@ export const bardSubclasses: Record<BardSubclassKey, BardSubclassData> = {
 
 export const loreProficiencyData: ProficiencyOption = {
     choose: 3,
-    desc: 'character.classes.bard.subclasses.lore.additionalProficienciesDescription',
+    desc: 'Choose 3 additional mastery',
+    desc_fr: 'Choisir 3 maîtrises supplémentaires',
     from: {
         option_set_type: 'options_array',
         options: [

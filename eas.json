@@ -6,10 +6,21 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "OPENAI_API_KEY": "USE_EAS_ENV"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "environment": "preview",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "developmentClient": false,
+      "env": {
+        "OPENAI_API_KEY": "USE_EAS_ENV"
+      }
     },
     "production": {
       "autoIncrement": true

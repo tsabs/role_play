@@ -5,12 +5,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../views/login/Login';
 import GamesScreen from '../views/games/Games';
 import CharactersScreen from '../views/characters/Characters';
-import { AuthProps, useAuth } from './hook/useAuth';
 import CharacterItem from '../components/character/CharacterItem';
 import { CharacterFormProvider } from '../components/character/form/CharacterFormProvider';
 import BottomBar from '../components/library/BottomBar';
-import BottomCharacterTabs from './screen/BottomCharacterTabs';
 import { Character } from '../types/generic';
+
+import BottomCharacterTabs from './screen/BottomCharacterTabs';
+import { AuthProps, useAuth } from './hook/useAuth';
 
 const BottomNavigator = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +28,7 @@ export type RootStackParamList = {
     CharacterNotesScreen: {
         characterId: string;
     };
+    ChatBot: {};
     BottomCharacterTabs: {
         character: Character;
     };

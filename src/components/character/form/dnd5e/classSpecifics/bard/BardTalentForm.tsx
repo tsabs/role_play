@@ -1,15 +1,12 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { SelectedClassElementsProps } from 'types/games/d2d5e';
 
-import CustomText from '../../../../../atom/CustomText';
-import {
-    calculateModifier,
-    ExtractedProficiencies,
-} from '../../../../../../utils/d2d5';
-import { genericClassFormStyles } from '../genericStyle';
+import CustomText from '@components/atom/CustomText';
+import { calculateModifier, ExtractedProficiencies } from '@utils/d2d5';
 
-import { SelectedClassElementsProps } from '../../../../../../types/games/d2d5e';
+import { genericClassFormStyles } from '../../genericStyle.tsx';
 import BardSubclass from '../../subclassSpecifics/BardSubclass';
 
 interface BardTalentFormProps {
