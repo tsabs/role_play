@@ -23,6 +23,7 @@ import {
 } from '@store/character/slice';
 import { useAppDispatch } from '@store/index';
 import {
+    calculateModifier,
     extractCharacterProficiencies,
     maxLevels,
     mergeAbilityBonuses,
@@ -86,7 +87,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const handleSaveEdit = useCallback(
         async (abilities: OnSaveAbilities<Ability>) => {
             const updatedCharacter = { ...character, ...abilities };
-            await callUpdateCharacter(updatedCharacter, dispatch);
+            await dispatch(callUpdateCharacter(updatedCharacter));
         },
         [character, dispatch]
     );
@@ -160,9 +161,9 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 ...character,
                 level: lvl,
                 selectedClassElements: elements,
-                imageUri: imgUri,
+                imageUri: imgUri ?? '',
             };
-            await callUpdateCharacter(updatedCharacter, dispatch);
+            await dispatch(callUpdateCharacter(updatedCharacter));
         },
         [character, dispatch]
     );
@@ -184,7 +185,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             const newLevel = Number(value);
             setLevel(newLevel);
             await handleUpdateCharacterInFirestore({
-                imgUri: characterImgUri,
+                imgUri: characterImgUri ?? '',
                 elements: selectedClassElements,
                 lvl: newLevel,
             });
@@ -213,7 +214,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                     selected_subclass: selected,
                     classChoices: seClassChoices,
                 },
-                imgUri: characterImgUri,
+                imgUri: characterImgUri ?? '',
                 lvl: level,
             });
         },
@@ -363,13 +364,15 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         () =>
             classData?.hit_die && level
                 ? level === 1
-                    ? classData.hit_die
+                    ? classData.hit_die +
+                      calculateModifier(selectedAbilities?.CON)
                     : classData.hit_die +
-                      Math.ceil((classData.hit_die * (level - 1)) / 2) +
-                      level -
-                      1
+                      (Math.ceil((classData.hit_die * (level - 1)) / 2) +
+                          level -
+                          1) +
+                      calculateModifier(selectedAbilities?.CON) * level
                 : 1,
-        [level, classData?.hit_die]
+        [classData?.hit_die, level, selectedAbilities?.CON]
     );
 
     const makeCharacterImgPrompt = useMemo(() => {
@@ -386,25 +389,23 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                   `character.classes.${character.className.index}.subclasses.${selectedClassElements.selected_subclass}.title`
               )}`
             : '';
-        const style =
-            'en style semi-réaliste inspiré des Royaumes Oubliés (RA Salvatore).';
+        const style = 'en style semi-réaliste inspiré de donjons et dragons.';
 
         // const shouldNotDisplay =
         //     "Important, ne pas afficher de texte, de description, de bordure ou de mise en page graphique. L’image doit être une scène illustrée, ce n'est en aucun cas un document.";
 
         return (
             `Image vertical de qualité professionnelle, ${style}\n` +
-            'Le genre et apparence du personnage dépendent de sa description.\n' +
-            `Le personnage est un ${raceTrad}, de classe ${classTrad} ${
-                subClass ? subClass : ''
-            }. Issu(e) d’un passé de type ${backgroundTrad}, dans l’univers ${gameTypeTrad}.\n` +
-            `Description : ${character.description}\n` +
-            `Histoire : ${character.additionalBackground}\n` +
-            `Le personnage est représenté en pied (corps entier), dans un environnement détaillé lié à son histoire : montagne, cité médiévale, forêt enchantée, temple en ruine, bord de mer etc.` +
-            `Aucun texte, aucune bordure, aucune interface ou fiche détaillé, juste l’illustration du personnage dans son environnement. Il ou elle peut etre réprésenté en pleine action ou en pause, mais sans texte ni éléments graphiques.`
+            // 'Le genre et apparence du personnage dépendent de sa description.\n' +
+            `Le personnage est un ${raceTrad}, de classe ${classTrad}.` +
+            `Issu(e) d’un passé de type ${backgroundTrad}\n` + // dans l’univers ${gameTypeTrad}.\n` +
+            `Description : ${character.description}\n`
+            // `Histoire : ${character.additionalBackground}\n` +
+            // `Le personnage est représenté en pied (corps entier), dans un environnement détaillé lié à son histoire : montagne, cité médiévale, forêt enchantée, temple en ruine, bord de mer etc.` +
+            // `Aucun texte, aucune bordure, aucune interface ou fiche détaillé, juste l’illustration du personnage dans son environnement. Il ou elle peut etre réprésenté en pleine action ou en pause, mais sans texte ni éléments graphiques.`
         );
     }, [
-        character.additionalBackground,
+        // character.additionalBackground,
         character.background.index,
         character.className.index,
         character.description,
@@ -413,8 +414,6 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         selectedClassElements.selected_subclass,
         t,
     ]);
-
-    // console.log(makeCharacterImgPrompt);
 
     return (
         <SafeView

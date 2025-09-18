@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { IconButton } from 'react-native-paper';
 import { Image, View, StyleSheet } from 'react-native';
 import * as CustomImagePicker from 'expo-image-picker';
@@ -15,8 +15,6 @@ interface ImagePickerProps {
 }
 
 const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
-    const [image, setImage] = useState<string | undefined>(uri);
-
     const pickImage = useCallback(async () => {
         // No permissions request is necessary for launching the image library
         let result = await CustomImagePicker.launchImageLibraryAsync({
@@ -28,7 +26,6 @@ const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
 
         if (!result.canceled) {
             setUri(result.assets[0].uri);
-            setImage(result.assets[0].uri);
         }
     }, [setUri]);
 
@@ -41,19 +38,16 @@ const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
                 text={label}
                 onPress={pickImage}
             />
-            {image && (
+            {uri && (
                 <View style={styles.imageContainer}>
                     <IconButton
                         icon={'trash-can'}
                         size={40}
                         iconColor={theme.colors.danger}
-                        onPress={() => setImage(undefined)}
+                        onPress={() => setUri?.('')}
                         style={styles.deleteButton}
                     />
-                    <Image
-                        source={{ uri: image }}
-                        style={styles.imagePreview}
-                    />
+                    <Image source={{ uri }} style={styles.imagePreview} />
                 </View>
             )}
         </View>
@@ -80,7 +74,6 @@ const styles = StyleSheet.create({
     deleteButton: {
         position: 'absolute',
         top: 0,
-        zIndex: 2,
         right: 0,
     },
 });

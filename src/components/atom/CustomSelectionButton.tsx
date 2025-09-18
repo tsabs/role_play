@@ -60,7 +60,7 @@ const CustomSelectionButton = <T = number,>({
                                 text={
                                     displayValue
                                         ? displayValue
-                                        : `Niveau ${selectedItem.label}`
+                                        : `${selectedItem.label}`
                                 }
                             />
                         ) : (

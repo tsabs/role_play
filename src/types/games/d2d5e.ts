@@ -54,7 +54,7 @@ interface ProficiencyOption {
         options: OptionChoice[];
         option_set_type: string;
     };
-    type: string;
+    type?: string;
 }
 
 interface StartingEquipment {

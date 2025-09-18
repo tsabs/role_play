@@ -1,5 +1,10 @@
 import { Dispatch } from 'react';
-import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+    Action,
+    createAsyncThunk,
+    createSlice,
+    PayloadAction,
+} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { getAuth } from '@react-native-firebase/auth';
@@ -24,10 +29,12 @@ import { addNote, removeNote } from '../../firestore/firestoreNotes';
 
 interface CharactersState {
     characters: Character[];
+    error: any;
 }
 
 const initialState: CharactersState = {
     characters: [],
+    error: undefined,
 };
 
 declare global {
@@ -202,42 +209,23 @@ export const callAddCharacter = async (
         .catch((error) => console.error('Error adding character:', error));
 };
 
-export const callUpdateCharacter = async (
-    character: Character,
-    dispatch: Dispatch<Action>
-) => {
-    await setDoc(doc(db, 'characters', character.id), character, {
-        merge: true,
-    })
-        .then(async () => {
-            const storedCharacters = await AsyncStorage.getItem(
-                `characters_${character.userEmail}`
-            );
-
-            const parsedCharacters: Character[] = storedCharacters
-                ? JSON.parse(storedCharacters)
-                : [];
-
-            const updatedCharacters = parsedCharacters.map(
-                (storedChar: Character) =>
-                    storedChar.id === character.id ? character : storedChar
-            );
-
-            await AsyncStorage.setItem(
-                `characters_${character.userEmail}`,
-                JSON.stringify(updatedCharacters)
-            );
-
-            dispatch(characterSlice.actions.updateCharacter(character));
+export const callUpdateCharacter = createAsyncThunk(
+    'characters/updateCharacter',
+    async (character: Character, { rejectWithValue }) => {
+        try {
+            const characterRef = doc(db, 'characters', character.id);
+            await setDoc(characterRef, character, { merge: true });
             Toast.show({
                 type: 'success',
                 text1: 'Character added successfully!',
             });
-
-            console.log('updatedCharacter : ', character);
-        })
-        .catch((error) => console.error('Error updating character:', error));
-};
+            return character;
+        } catch (error) {
+            console.error('Error updating character in Firestore:', error);
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 export const callRemoveCharacter = async (
     characterId: string,
@@ -296,12 +284,6 @@ export const callRemoveNote = async (
         .catch((err) => console.error('Error removing note', err));
 };
 
-// export const callUpdateNote = async (characterId: string, updatedNote: Note, dispatch: Dispatch<any>) => {
-//     await updateNote(characterId, updatedNote, 'characters').then(() => {
-//
-//     })
-// }
-
 export const characterSlice = createSlice({
     name: CHARACTER_MODULE_KEY,
     initialState,
@@ -310,7 +292,7 @@ export const characterSlice = createSlice({
             state.characters.push(action.payload);
         },
         updateCharacter: (state, action: PayloadAction<Character>) => {
-            const index = state.characters.findIndex(
+            const index = state.characters?.findIndex(
                 (char) => char.id === action.payload.id
             );
             if (index !== -1) {
@@ -329,11 +311,11 @@ export const characterSlice = createSlice({
             state,
             action: PayloadAction<{ characterId: string; note: Note }>
         ) => {
-            const characterIndex = state.characters.findIndex(
+            const characterIndex = state.characters?.findIndex(
                 (char) => char.id === action.payload.characterId
             );
             const character = state.characters[characterIndex];
-            const noteIndex = character.notes.findIndex(
+            const noteIndex = character.notes?.findIndex(
                 (n) => n.id === action.payload.note.id
             );
 
@@ -353,7 +335,7 @@ export const characterSlice = createSlice({
             state,
             action: PayloadAction<{ characterId: string; noteId: string }>
         ) => {
-            const characterIndex = state.characters.findIndex(
+            const characterIndex = state.characters?.findIndex(
                 (char) => char.id === action.payload.characterId
             );
             if (characterIndex !== -1) {
@@ -368,5 +350,20 @@ export const characterSlice = createSlice({
                 );
             }
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(callUpdateCharacter.fulfilled, (state, action) => {
+                // Update the character in Redux state
+                const updatedCharacter = action.payload;
+                state.characters = state.characters.map((character) =>
+                    character.id === updatedCharacter.id
+                        ? updatedCharacter
+                        : character
+                );
+            })
+            .addCase(callUpdateCharacter.rejected, (state, action) => {
+                state.error = action.payload; // Handle errors
+            });
     },
 });

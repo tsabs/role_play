@@ -1,4 +1,4 @@
-import { ProficiencyOption } from 'types/games/d2d5e';
+import { OptionChoice, ProficiencyOption } from 'types/games/d2d5e';
 
 export type BardSubclassKey = 'lore' | 'valor';
 
@@ -78,142 +78,130 @@ export const bardSubclasses: Record<BardSubclassKey, BardSubclassData> = {
     },
 };
 
+const proficienciesOption: OptionChoice[] = [
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-acrobatics',
+            name: 'Acrobatics',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-animal-handling',
+            name: 'Animal Handling',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-arcana', name: 'Arcana', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-athletics', name: 'Athletics', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-deception', name: 'Deception', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-history', name: 'History', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-insight', name: 'Insight', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-intimidation',
+            name: 'Intimidation',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-investigation',
+            name: 'Investigation',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-medicine', name: 'Medicine', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-nature', name: 'Nature', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-perception',
+            name: 'Perception',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-performance',
+            name: 'Performance',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-persuasion',
+            name: 'Persuasion',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-religion', name: 'Religion', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: {
+            index: 'skill-sleight-of-hand',
+            name: 'Sleight of hand',
+            url: '',
+        },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-stealth', name: 'Stealth', url: '' },
+    },
+    {
+        option_type: 'reference',
+        item: { index: 'skill-survival', name: 'Survival', url: '' },
+    },
+];
+
 export const loreProficiencyData: ProficiencyOption = {
     choose: 3,
     desc: 'Choose 3 additional mastery',
     desc_fr: 'Choisir 3 maîtrises supplémentaires',
     from: {
         option_set_type: 'options_array',
-        options: [
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-acrobatics',
-                    name: 'Acrobatics',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-animal-handling',
-                    name: 'Animal Handling',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-arcana', name: 'Arcana', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-athletics', name: 'Athletics', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-deception', name: 'Deception', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-history', name: 'History', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-insight', name: 'Insight', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-intimidation',
-                    name: 'Intimidation',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-investigation',
-                    name: 'Investigation',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-medicine', name: 'Medicine', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-nature', name: 'Nature', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-perception',
-                    name: 'Perception',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-performance',
-                    name: 'Performance',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-persuasion',
-                    name: 'Persuasion',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-religion', name: 'Religion', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-sleight-of-hand',
-                    name: 'Sleight of hand',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-stealth', name: 'Stealth', url: '' },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-survival', name: 'Survival', url: '' },
-            },
-        ],
+        options: proficienciesOption,
     },
     type: 'proficiencies',
 };
 
-const loreExpertiseData: ProficiencyOption = {
+export const expertiseData: ProficiencyOption = {
     choose: 2,
     desc: 'character.classes.bard.subclasses.lore.expertiseDescription',
     from: {
         option_set_type: 'options_array',
-        options: [
-            {
-                option_type: 'reference',
-                item: {
-                    index: 'skill-performance',
-                    name: 'Performance',
-                    url: '',
-                },
-            },
-            {
-                option_type: 'reference',
-                item: { index: 'skill-insight', name: 'Insight', url: '' },
-            },
-            // Add more allowed skills for expertise
-        ],
+        options: proficienciesOption,
     },
     type: 'expertise',
 };

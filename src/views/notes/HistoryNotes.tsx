@@ -56,7 +56,9 @@ const HistoryNotes = ({
                 ...item,
                 description: editedNote,
             };
-            await onEditNote(entityId, newNote, dispatch);
+            await onEditNote(entityId, newNote, dispatch).finally(() => {
+                setEditedNote(undefined);
+            });
         },
         [editedNote, onEditNote, entityId, dispatch]
     );

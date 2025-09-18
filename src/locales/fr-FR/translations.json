@@ -148,11 +148,72 @@
           "preparedSpellsDescription": "Vous pouvez préparer {{preparedSpells}} sorts de clerc (mod SAG + niveau).",
           "spellcastingAccessDescription": "Vous avez accès à tous les sorts de clerc, mais vous n'en préparez qu'un sous-ensemble chaque jour.",
           "channelDivinityTitle": "🙏 Canalisation de la Divinité",
-          "channelDivinityUnlocked": "Déverrouillé au niveau 2.",
           "channelDivinityDescription": "Utilisez l'énergie divine pour alimenter les capacités de sous-classe.",
           "channelDivinityUses": "1 utilisation par repos (2 au niveau 6, 3 au niveau 18).",
           "divineInterventionTitle": "✨ Intervention Divine",
           "divineInterventionDescription": "Faites appel à votre divinité pour un miracle. Chance basée sur votre niveau (pourcentage)."
+        },
+        "subclasses": {
+          "life": {
+            "title": "Domaine de la Vie",
+            "description": "Un clerc du Domaine de la Vie incarne la vitalité et la guérison.",
+            "features": [
+              "Disciple de la vie: 2 + niveau du sorts supplémentaire pour tout sorts de niveau 1 ou plus lancé",
+              "Préservation de la vie",
+              "Guérisseur béni",
+              "Frappe divine",
+              "Guérison suprême"
+            ]
+          },
+          "light": {
+            "title": "Domaine de la Lumière",
+            "description": "Un clerc du Domaine de la Lumière incarne la puissance du soleil et de la lumière."
+          },
+          "nature": {
+            "title": "Domaine de la Nature",
+            "description": "Un clerc du Domaine de la Nature incarne les forces primordiales de la nature."
+          },
+          "tempest": {
+            "title": "Domaine de la Tempête",
+            "description": "Un clerc du Domaine de la Tempête incarne la puissance destructrice des tempêtes."
+          },
+          "trickery": {
+              "title": "Domaine de la Tromperie",
+              "description": "Un clerc du Domaine de la Tromperie incarne la ruse et la tromperie."
+          },
+          "war": {
+              "title": "Domaine de la Guerre",
+              "description": "Un clerc du Domaine de la Guerre incarne la stratégie et le combat."
+          },
+          "knowledge": {
+              "title": "Domaine de la Connaissance",
+              "description": "Un clerc du Domaine de la Connaissance incarne la sagesse et l'apprentissage."
+          },
+          "forge": {
+            "title": "Domaine de la Forge",
+            "divineSpellTitle": "Sort lié au domaine de la forge",
+            "description": "Un clerc du Domaine de la Forge incarne la création et la transformation.",
+            "features": [
+              "Bénédiction de la forge: Rituel de bénédiction d'amre ou d'amure 1CA / +1 att et dégâts",
+              "Bénédiction de l'artisan: Rituel de création d'objets non magiques",
+              "Ame de la forge: Résistance au feu et +1 CA si port d'une armure lourde",
+              "Frappe divine: Ajout de 1d8 dégats de feu aux attaques (+2d8 lvl 14)",
+              "Saint de la forge et du feu"
+            ],
+            "divineSpells": [
+              ["Renvoyer les morts vivant", "Bénédiction de l'artisan"]
+            ],
+            "domainSpells": [
+              [
+                "châtiment calcinant",
+                "identification"
+              ],
+              ["arme magique", "métal brûlant"],
+              ["arme élémentaire", "protection contre une énergie"],
+              ["fabrication", "mur de feu"],
+              ["animation d'objets", "création"]
+            ]
+          }
         }
       },
       "druid": {
@@ -484,6 +545,164 @@
         "name": "Occultiste",
         "talents":  {
 
+        },
+        "subclasses": {
+          "archfey": {
+            "title": "Archifée",
+            "description": "Votre patron est un seigneur ou une dame fée, une créature de légende qui détient des secrets oubliés d'une époque où les races mortelles n'étaient pas encore nées. Les motivations de cet être sont souvent impénétrables, parfois fantasques, et peuvent impliquer une envie d'acquérir plus de puissance magique ou la décantation de rancunes séculaires",
+            "features": [
+              "Précense des fées: Par une action, vous pouvez obliger toute créature jusqu'a trois mettre autour de vous à faire un jet de sauvegarde de SAG contre le DD de vos sort d'occuliste. Vous charmez ou effrayer les créatures qui échouent pendant 1 tour."
+            ]
+          },
+          "fiend": {
+            "title": "Fiélon",
+            "description": "Vous avez conclu un pacte avec un démon des plans inférieurs de l'existence, un être aux objectifs maléfiques, même si vous luttez contre ces objectifs. Ces êtres désirent la corruption ou la destruction de toutes choses, de vous y compris",
+            "features": [
+              "Bénédiction du ténébreux: Lorsque vous réduisez une créature hostile à 0 point de vie, vous gagnez un nombre de points de vie temporaires égal à votre modificateur de Charisme + votre niveau d'occultiste "
+            ]
+          },
+          "greatOldOne": {
+            "title": "Grand Ancien",
+            "description": "Votre patron est une entité mystérieuse dont la nature est tout à fait étrangère au tissu de la réalité. Le Grand Ancien peut ne pas être au courant de votre existence ou vous être totalement indifférent, mais les secrets que vous avez appris vous permettent d'en tirer votre magie.",
+            "features": [
+              "Esprit Eveillé: Communication télépathique à 9m. Pas besoin de partager une langue. 1h entre deux lancés",
+              "Manifestation Occulte: Vous pouvez en choisir 2 puis une autre aux levels 5, 7, 9, 12, 15, 18"
+            ]
+          }
+        },
+        "eldritchInvocations": {
+          "eldritch-invocation-agonizing-blast": {
+            "name": "Invocation Étrange : Explosion Agonisante",
+            "desc": "Lorsque vous lancez une Explosion Mystique, ajoutez votre modificateur de Charisme aux dégâts qu'elle inflige lorsqu'elle touche."
+          },
+          "eldritch-invocation-armor-of-shadows": {
+            "name": "Invocation Étrange : Armure d'Ombres",
+            "desc": "Vous pouvez lancer Armure de Mage sur vous-même à volonté, sans dépenser un emplacement de sort ni des composants matériels."
+          },
+          "eldritch-invocation-ascendant-step": {
+            "name": "Invocation Étrange : Ascendant Step",
+            "desc": "Vous pouvez lancer Lévitation sur vous-même à volonté, sans dépenser un emplacement de sort ni des composants matériels."
+          },
+          "eldritch-invocation-beast-speech": {
+            "name": "Invocation Étrange : Parler avec les Bêtes",
+            "desc": "Vous pouvez lancer Parler aux Animaux à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-beguiling-influence": {
+            "name": "Invocation Étrange : Influence Captivante",
+            "desc": "Vous gagnez la maîtrise des compétences Tromperie et Persuasion."
+          },
+          "eldritch-invocation-bewitching-whispers": {
+            "name": "Invocation Étrange : Murmures Envoûtants",
+            "desc": "Vous pouvez lancer Compulsion une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-book-of-ancient-secrets": {
+            "name": "Invocation Étrange : Livre des Secrets Anciens",
+            "desc": "Vous pouvez maintenant inscrire des rituels magiques dans votre Livre des Ombres. Choisissez deux sorts de niveau 1 ayant le tag rituel depuis n'importe quelle liste de sorts de classe (ils n'ont pas besoin d'être de la même liste). Les sorts apparaissent dans le livre et ne comptent pas dans le nombre de sorts que vous connaissez. Avec votre Livre des Ombres en main, vous pouvez lancer les sorts choisis en tant que rituels. Vous ne pouvez pas lancer les sorts autrement qu'en rituel, sauf si vous les avez appris par d'autres moyens. Vous pouvez également lancer un sort de sorcier que vous connaissez comme rituel s'il a le tag rituel."
+          },
+          "eldritch-invocation-chains-of-carceri": {
+            "name": "Invocation Étrange : Chaînes de Carcéri",
+            "desc": "Vous pouvez lancer Paralysie de Monstre à volonté (visant un céleste, un fiélon ou un élémentaire), sans dépenser un emplacement de sort ni des composants matériels. Vous devez terminer un repos long avant de pouvoir utiliser cette invocation sur la même créature à nouveau."
+          },
+          "eldritch-invocation-devils-sight": {
+            "name": "Invocation Étrange : Vision du Diable",
+            "desc": "Vous pouvez voir normalement dans l'obscurité, qu'elle soit magique ou non, jusqu'à une distance de 36 mètres."
+          },
+          "eldritch-invocation-dreadful-word": {
+            "name": "Invocation Étrange : Mot Effrayant",
+            "desc": "Vous pouvez lancer Confusion une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-eldritch-sight": {
+            "name": "Invocation Étrange : Vision Mystique",
+            "desc": "Vous pouvez lancer Détection de la Magie à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-eldritch-spear": {
+            "name": "Invocation Étrange : Lance Mystique",
+            "desc": "Lorsque vous lancez Explosion Mystique, sa portée est de 90 mètres."
+          },
+          "eldritch-invocation-eyes-of-the-rune-keeper": {
+            "name": "Invocation Étrange : Yeux du Gardien des Runes",
+            "desc": "Vous pouvez lire toutes les écritures."
+          },
+          "eldritch-invocation-fiendish-vigor": {
+            "name": "Invocation Étrange : Vigueur Infernale",
+            "desc": "Vous pouvez lancer Fausse Vie sur vous-même à volonté en tant que sort de niveau 1, sans dépenser un emplacement de sort ni des composants matériels."
+          },
+          "eldritch-invocation-gaze-of-two-minds": {
+            "name": "Invocation Étrange : Regard des Deux Esprits",
+            "desc": "Vous pouvez utiliser votre action pour toucher un humanoïde consentant et percevoir à travers ses sens jusqu'à la fin de votre prochain tour. Tant que la créature est sur le même plan d'existence que vous, vous pouvez utiliser votre action lors des tours suivants pour maintenir cette connexion, prolongeant la durée jusqu'à la fin de votre prochain tour. En percevant à travers les sens de l'autre créature, vous bénéficiez de toutes ses sens spéciaux, et vous êtes aveuglé et sourd à vos propres environs."
+          },
+          "eldritch-invocation-lifedrinker": {
+            "name": "Invocation Étrange : Buveur de Vie",
+            "desc": "Lorsque vous touchez une créature avec votre arme de pacte, cette créature subit des dégâts nécrotiques supplémentaires égaux à votre modificateur de Charisme (minimum 1)."
+          },
+          "eldritch-invocation-mask-of-many-faces": {
+            "name": "Invocation Étrange : Masque aux Mille Visages",
+            "desc": "Vous pouvez lancer Déguisement à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-master-of-myriad-forms": {
+            "name": "Invocation Étrange : Maître des Formes Multiples",
+            "desc": "Vous pouvez lancer Métamorphose à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-minions-of-chaos": {
+            "name": "Invocation Étrange : Serviteurs du Chaos",
+            "desc": "Vous pouvez lancer Invocation d'Élémentaire une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-mire-the-mind": {
+            "name": "Invocation Étrange : Altération de l'Esprit",
+            "desc": "Vous pouvez lancer Lenteur une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-misty-visions": {
+            "name": "Invocation Étrange : Visions Brumeuses",
+            "desc": "Vous pouvez lancer Image Silencieuse à volonté, sans dépenser un emplacement de sort ni des composants matériels."
+          },
+          "eldritch-invocation-one-with-shadows": {
+            "name": "Invocation Étrange : Un avec les Ombres",
+            "desc": "Lorsque vous êtes dans une zone de faible lumière ou d'obscurité, vous pouvez utiliser votre action pour devenir invisible jusqu'à ce que vous vous déplaciez, ou effectuiez une action ou une réaction."
+          },
+          "eldritch-invocation-otherworldly-leap": {
+            "name": "Invocation Étrange : Saut d'un Autre Monde",
+            "desc": "Vous pouvez lancer Saut sur vous-même à volonté, sans dépenser un emplacement de sort ni des composants matériels."
+          },
+          "eldritch-invocation-repelling-blast": {
+            "name": "Invocation Étrange : Explosion Répulsive",
+            "desc": "Lorsque vous touchez une créature avec une Explosion Mystique, vous pouvez repousser la créature à une distance de 3 mètres en ligne droite."
+          },
+          "eldritch-invocation-sculptor-of-flesh": {
+            "name": "Invocation Étrange : Sculpteur de Chair",
+            "desc": "Vous pouvez lancer Métamorphose une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-sign-of-ill-omen": {
+            "name": "Invocation Étrange : Signe de Mauvais Augure",
+            "desc": "Vous pouvez lancer Malédiction une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-thief-of-five-fates": {
+            "name": "Invocation Étrange : Voleur de Cinq Destins",
+            "desc": "Vous pouvez lancer Fléau une fois en utilisant un emplacement de sort de sorcier. Vous ne pouvez pas le refaire avant d'avoir terminé un repos long."
+          },
+          "eldritch-invocation-thirsting-blade": {
+            "name": "Invocation Étrange : Lame Assoiffée",
+            "desc": "Vous pouvez attaquer avec votre arme de pacte deux fois au lieu d'une lorsque vous effectuez l'action Attaquer à votre tour."
+          },
+          "eldritch-invocation-visions-of-distant-realms": {
+            "name": "Invocation Étrange : Visions de Royaumes Lointains",
+            "desc": "Vous pouvez lancer Œil Arcanique à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-voice-of-the-chain-master": {
+            "name": "Invocation Étrange : Voix du Maître de la Chaîne",
+            "desc": "Vous pouvez communiquer télépathiquement avec votre familier et percevoir à travers ses sens tant que vous êtes sur le même plan d’existence."
+          },
+          "eldritch-invocation-whispers-of-the-grave": {
+            "name": "Invocation Étrange : Murmures de la Tombe",
+            "desc": "Vous pouvez lancer Parler avec les Morts à volonté, sans dépenser un emplacement de sort."
+          },
+          "eldritch-invocation-witch-sight": {
+            "name": "Invocation Étrange : Vision de la Sorcière",
+            "desc": "Vous pouvez voir la véritable forme de tout métamorphe ou créature dissimulée par une illusion ou de la magie de transmutation tant que la créature se trouve à 9 mètres de vous et à portée de vue."
+          },
+          "eldritch-invocations": {
+            "name": "Invocations Étranges",
+            "desc": "Dans votre étude du savoir occulte, vous avez découvert des invocations étranges, des fragments de connaissance interdite qui vous imprègnent d’une capacité magique persistante."
+          }
         }
       },
       "wizard": {

@@ -14,11 +14,12 @@ import { ExtractedProficiencies, shouldChooseSubclass } from '@utils/d2d5';
 
 import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
 import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
-import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
+import ClericTalentForm from '../dnd5e/classSpecifics/clerc/ClericTalentForm';
 import FighterTalentForm from '../dnd5e/classSpecifics/fighter/FighterTalentForm';
 import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
 import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentForm';
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
+import { WarlockTalentForm } from '../dnd5e/classSpecifics/warlock/WarlockTalentForm';
 import { theme } from '../../../../../style/theme';
 
 interface TalentClassFormProps {
@@ -124,6 +125,78 @@ const TalentClassForm = ({
                         value: 'vengeance',
                     },
                 ];
+            case 'warlock':
+                return [
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.archfey.title'
+                        ),
+                        value: 'archfey',
+                    },
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.fiend.title'
+                        ),
+                        value: 'fiend',
+                    },
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.greatOldOne.title'
+                        ),
+                        value: 'greatOldOne',
+                    },
+                ];
+            case 'cleric':
+                return [
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.life.title'
+                        ),
+                        value: 'life',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.knowledge.title'
+                        ),
+                        value: 'knowledge',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.light.title'
+                        ),
+                        value: 'light',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.nature.title'
+                        ),
+                        value: 'nature',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.tempest.title'
+                        ),
+                        value: 'tempest',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.trickery.title'
+                        ),
+                        value: 'trickery',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.war.title'
+                        ),
+                        value: 'war',
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.forge.title'
+                        ),
+                        value: 'forge',
+                    },
+                ];
             default:
                 return [];
         }
@@ -147,6 +220,7 @@ const TalentClassForm = ({
                 Array<{ index: string; bonus?: number }>
             >
         ) => {
+            console.log('should change', selectSubclassChoices);
             setSubclassChoices(selectSubclassChoices);
         },
         []
@@ -214,7 +288,16 @@ const TalentClassForm = ({
                     />
                 );
             case 'cleric':
-                return <ClericTalentForm level={level} abilities={abilities} />;
+                return (
+                    <ClericTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                        selectedClassElements={selectedClassElements}
+                    />
+                );
             case 'sorcerer':
                 return (
                     <SorcererTalentForm level={level} abilities={abilities} />
@@ -228,6 +311,17 @@ const TalentClassForm = ({
                         selectedClassElements={selectedClassElements}
                         isOnEdit={isOnEdit}
                         handleSubclassChoices={handleSubclassChoices}
+                    />
+                );
+            case 'warlock':
+                return (
+                    <WarlockTalentForm
+                        level={level}
+                        abilities={abilities}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
                     />
                 );
             default:
