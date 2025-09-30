@@ -23,14 +23,20 @@ const chunkArray = (arr: any[], size: number) => {
 
 const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     name,
+    listLabel,
+    listLabelSelected,
     values,
+    renderItem,
     setSelectedValue,
     selectedName,
     displaySkills,
     itemsPerColumn = 1,
 }: {
     name: string;
+    listLabel: string;
+    listLabelSelected: string;
     values: T[];
+    renderItem?: (item: any) => ReactElement;
     displaySkills?: () => ReactElement;
     setSelectedValue: (value: any) => void;
     selectedName?: string;
@@ -54,23 +60,21 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
     );
 
     const groupedValues = useMemo(
-        () => chunkArray(sortedValues, itemsPerColumn),
-        [sortedValues, itemsPerColumn]
+        () => chunkArray(renderItem ? values : sortedValues, itemsPerColumn),
+        [renderItem, values, sortedValues, itemsPerColumn]
     );
 
     return (
         <Fragment>
             <View style={styles(spacer).selectedValue}>
                 <CustomText
-                    text={t(`characterForm.listSelect${name}`)}
+                    text={t(listLabel)}
                     fontSize={theme.fontSize.large}
                     style={styles(spacer).subTitle}
                 />
                 {selectedName && (
                     <CustomText
-                        text={t(
-                            `character.${name.toLowerCase()}.${selectedName}.name`
-                        )}
+                        text={t(listLabelSelected)}
                         fontSize={theme.fontSize.large}
                         fontWeight="bold"
                         style={styles(spacer).subText}
@@ -84,40 +88,48 @@ const LabeledList = <T = DndClass[] | DndRace[] | DndBackground[],>({
                 data={groupedValues}
                 horizontal
                 keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item: column, index: columnIndex }) => (
-                    <Animated.View
-                        entering={FadeInLeft.delay(columnIndex * 100)}
-                    >
-                        {column.map((item: any) => {
-                            const itemKey = item.index;
-                            const isSelected = selectedName === itemKey;
+                renderItem={
+                    renderItem
+                        ? renderItem
+                        : ({ item: column, index: columnIndex }) => (
+                              <Animated.View
+                                  entering={FadeInLeft.delay(columnIndex * 100)}
+                              >
+                                  {column.map((item: any) => {
+                                      const itemKey = item.index;
+                                      const isSelected =
+                                          selectedName === itemKey;
 
-                            return (
-                                <TouchableOpacity
-                                    key={itemKey}
-                                    style={[
-                                        styles(spacer).choiceButton,
-                                        isSelected && styles(spacer).selected,
-                                    ]}
-                                    onPress={() => setSelectedValue(item.index)}
-                                >
-                                    <Text
-                                        style={
-                                            styles(spacer, isSelected)
-                                                .choiceText
-                                        }
-                                    >
-                                        {t(
-                                            `character.${name.toLowerCase()}.${
-                                                item.index
-                                            }.name`
-                                        )}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
-                    </Animated.View>
-                )}
+                                      return (
+                                          <TouchableOpacity
+                                              key={itemKey}
+                                              style={[
+                                                  styles(spacer).choiceButton,
+                                                  isSelected &&
+                                                      styles(spacer).selected,
+                                              ]}
+                                              onPress={() =>
+                                                  setSelectedValue(item.index)
+                                              }
+                                          >
+                                              <Text
+                                                  style={
+                                                      styles(spacer, isSelected)
+                                                          .choiceText
+                                                  }
+                                              >
+                                                  {t(
+                                                      `character.${name.toLowerCase()}.${
+                                                          item.index
+                                                      }.name`
+                                                  )}
+                                              </Text>
+                                          </TouchableOpacity>
+                                      );
+                                  })}
+                              </Animated.View>
+                          )
+                }
             />
         </Fragment>
     );

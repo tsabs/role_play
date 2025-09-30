@@ -11,7 +11,7 @@ import { Ability } from '../types/generic';
 
 export const maxLevels = Array.from({ length: 20 }, (_, i) => {
     const label = i + 1;
-    return { label: label.toString(), value: i + 1 };
+    return { label: label.toString(), value: i + 1, selectable: true };
 });
 
 export const getPointBuyCost = (score: number): number => {

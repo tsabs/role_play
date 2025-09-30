@@ -10,6 +10,14 @@ export const selectAllCharacters = createSelector(
     (charactersState) => charactersState?.characters
 );
 
+export const selectCharacterById = (characterId: string) => {
+    return createSelector(selectCharacterState, (charactersState) => {
+        return charactersState?.characters.find(
+            (character) => character.id === characterId
+        );
+    });
+};
+
 export const selectNotes = (characterId: string) => {
     return createSelector(selectCharacterState, (charactersState) => {
         return charactersState?.characters.find(

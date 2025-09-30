@@ -22,6 +22,9 @@ import {
 } from '@react-native-firebase/firestore';
 import { Note } from 'types/note';
 import { Character, GAME_TYPE } from 'types/generic';
+import { Spell } from 'types/games/d2d5e';
+
+import { capitalizeFirstLetter } from '@utils/utils';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
@@ -69,6 +72,63 @@ export const loadClassData = async (gameType: GAME_TYPE, gameClass) => {
     return docSnapshot.data();
 };
 
+/**
+ * Fetch spells from the Firestore database based on class and level.
+ *
+ * @param characterClass - The class to filter spells on (e.g., "Wizard").
+ * @param operator - Optional operator filter (e.g, ==, <=, etc.
+ * @param level - Optional level filter (e.g., 1, 2, etc.).
+ * @returns Promise<Spell[]> - Array of spells matching the filters.
+ */
+export const fetchSpells = async (
+    characterClass: string,
+    operator: '==' | '<=' = '==',
+    level?: number
+): Promise<Spell[]> => {
+    try {
+        const spellsRef = collection(db, 'games', 'dnd5e', 'spells');
+        let spellsQuery;
+
+        // Build the query depending on the filters
+        if (characterClass && level !== undefined) {
+            spellsQuery = query(
+                spellsRef,
+                where('classes', 'array-contains', {
+                    index: characterClass,
+                    name: capitalizeFirstLetter(characterClass),
+                    url: `/api/2014/classes/${characterClass}`,
+                }),
+                where('level', operator, level)
+            );
+        } else if (characterClass) {
+            spellsQuery = query(
+                spellsRef,
+                where('classes', 'array-contains', {
+                    index: characterClass,
+                    name: capitalizeFirstLetter(characterClass),
+                    url: `/api/2014/classes/${characterClass}`,
+                })
+            );
+        } else if (level !== undefined) {
+            spellsQuery = query(spellsRef, where('level', '==', level));
+        } else {
+            spellsQuery = spellsRef; // No filters applied, so get all spells
+        }
+
+        const spellSnapshot = await getDocs(spellsQuery);
+
+        console.log('spells: ', spellSnapshot);
+
+        // Transform Firestore documents into array of spells
+        return spellSnapshot.docs.map((d) => ({
+            ...(d.data() as Spell),
+        }));
+    } catch (error) {
+        console.error('Error fetching spells: ', error);
+        throw error;
+    }
+};
+
 export const loadSpecificTalentClassPerLevel = async (
     gameType: GAME_TYPE,
     gameClass: string,
@@ -92,7 +152,7 @@ export const loadSpecificTalentClassPerLevel = async (
 // Async function to load from AsyncStorage
 export const loadCharacters = async (dispatch: any) => {
     try {
-        const storedCharacters = await AsyncStorage.getItem(`characters`);
+        // const storedCharacters = await AsyncStorage.getItem(`characters`);
 
         // if (storedCharacters) {
         //     console.log('Using cached characters');
@@ -314,21 +374,32 @@ export const characterSlice = createSlice({
             const characterIndex = state.characters?.findIndex(
                 (char) => char.id === action.payload.characterId
             );
-            const character = state.characters[characterIndex];
-            const noteIndex = character.notes?.findIndex(
-                (n) => n.id === action.payload.note.id
-            );
 
             if (characterIndex !== -1) {
-                if (!character.notes) {
-                    character.notes = [];
-                }
+                const character = state.characters[characterIndex];
 
-                if (noteIndex !== -1) {
-                    character.notes[noteIndex] = action.payload.note;
-                } else {
-                    character.notes.unshift(action.payload.note); // add newest note at top
-                }
+                // Ensure notes array is initialized and immutable
+                const updatedNotes = [
+                    action.payload.note,
+                    ...(character.notes || []),
+                ];
+
+                // Update the character with the new notes array
+                const updatedCharacter = {
+                    ...character,
+                    notes: updatedNotes, // Insert at the top
+                };
+
+                // Update the state immutably
+                state.characters = [
+                    ...state.characters.slice(0, characterIndex),
+                    updatedCharacter,
+                    ...state.characters.slice(characterIndex + 1),
+                ];
+            } else {
+                console.error(
+                    `Character with ID ${action.payload.characterId} not found.`
+                );
             }
         },
         removeNote: (
@@ -356,11 +427,12 @@ export const characterSlice = createSlice({
             .addCase(callUpdateCharacter.fulfilled, (state, action) => {
                 // Update the character in Redux state
                 const updatedCharacter = action.payload;
-                state.characters = state.characters.map((character) =>
-                    character.id === updatedCharacter.id
-                        ? updatedCharacter
-                        : character
+                const index = state.characters.findIndex(
+                    (character) => character.id === updatedCharacter.id
                 );
+                if (index !== -1) {
+                    state.characters[index] = updatedCharacter; // Update state
+                }
             })
             .addCase(callUpdateCharacter.rejected, (state, action) => {
                 state.error = action.payload; // Handle errors

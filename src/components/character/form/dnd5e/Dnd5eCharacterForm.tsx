@@ -283,7 +283,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                         placeHolder={'Choisissez un niveau'}
                         onSelect={(value) => setLevel(value)}
                         preSelectedValue={{
-                            label: level.toString(),
+                            label: `Niveau: ${level.toString()}`,
                             value: level,
                         }}
                     />
@@ -309,6 +309,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     })}
                     <LabeledList
                         name="Races"
+                        listLabel="characterForm.listSelectRaces"
+                        listLabelSelected={`character.races.${selectedRace}.name`}
                         values={races}
                         setSelectedValue={(newRace) => {
                             setSelectedRace(newRace);
@@ -348,6 +350,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
 
                     <LabeledList
                         name="Classes"
+                        listLabel="characterForm.listSelectClasses"
+                        listLabelSelected={`character.classes.${selectedClass}.name`}
                         values={classes}
                         setSelectedValue={(newClass) => {
                             setSelectedClass(newClass);
@@ -392,6 +396,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     {/*)}*/}
                     <LabeledList
                         name="Backgrounds"
+                        listLabel="characterForm.listSelectBackgrounds"
+                        listLabelSelected={`character.backgrounds.${selectedBackground}.name`}
                         values={backgrounds}
                         setSelectedValue={(newBackground) => {
                             setSelectedBackground(newBackground);

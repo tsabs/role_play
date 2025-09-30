@@ -181,6 +181,7 @@ export const WarlockTalentForm = ({
                                                     ''
                                                 ),
                                                 value: inv.index,
+                                                selectable: true,
                                             })
                                         )}
                                         displayValue={label}

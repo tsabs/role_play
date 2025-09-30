@@ -15,6 +15,7 @@ import TalentClassForm from '@components/character/form/dnd5e/TalentClassForm';
 import SkillsList from '@components/character/form/dnd5e/SkillsList';
 import VirtualizedScrollView from '@components/library/VirtualizedScrollView';
 import EquipmentList from '@components/character/form/dnd5e/EquipmentList';
+import SpellList from '@components/character/form/dnd5e/SpellList.tsx';
 import SafeView from '@components/library/SafeView';
 import {
     callUpdateCharacter,
@@ -30,7 +31,7 @@ import {
     remainingPoints,
     transformRaceAbilities,
 } from '@utils/d2d5';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@utils/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
@@ -342,7 +343,15 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 6,
                 title: 'character.overview.accordion.spells',
-                content: <CustomText text="Will come soon" />,
+                content: (
+                    <SpellList
+                        characterId={character.id}
+                        abilities={
+                            (selectedAbilities as Record<DnDAbility, number>) ||
+                            ABILITIES
+                        }
+                    />
+                ),
             },
         ];
     }, [
@@ -512,8 +521,8 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
 
 const styles = StyleSheet.create({
     imageBackground: {
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT / 2,
+        width: WINDOW_WIDTH,
+        height: WINDOW_HEIGHT / 2,
     },
     accordionContainer: {
         backgroundColor: theme.colors.light,

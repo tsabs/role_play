@@ -42,6 +42,9 @@ interface GenericCharacter<
     }
         ? Config['selectedBackgroundElements']
         : never;
+    selectedSpellSpecifics?: Config extends { selectedSpellSpecifics: any }
+        ? Config['selectedSpellSpecifics']
+        : never;
     ownerId?: string;
     imageUri?: string;
     gameId?: string;
