@@ -6,6 +6,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
+import CustomButton from '@components/atom/CustomButton';
 import EditMode from '@components/library/EditMode';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import {
@@ -18,19 +19,21 @@ import { calculateModifier } from '@utils/d2d5';
 
 import { theme } from '../../../../../style/theme';
 
-const SpellList = ({
-    characterId,
-    abilities,
-}: {
-    characterId: string;
-    abilities: Record<string, number>;
-}) => {
+import { SpellDescription } from './components/SpellDescription';
+
+const SpellList = ({ characterId }: { characterId: string }) => {
     const dispatch = useAppDispatch();
     const [isOnEdit, setIsOnEdit] = useState(false);
     const character = useAppSelector(selectCharacterById(characterId));
     const [spellData, setSpellData] = useState<SpellData | undefined>(
         character?.selectedSpellSpecifics?.spellClassData
     );
+    const [shouldShowSpellDescription, setShouldShowSpellDescription] =
+        useState(false);
+    const [selectedSpell, setSelectedSpell] = useState<{
+        spell: Spell | undefined;
+        isMinorSpell: boolean;
+    }>(undefined);
     const [availableSpells, setAvailableSpells] = useState<Spell[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedCantrips, setSelectedCantrips] = useState<Spell[]>(
@@ -38,6 +41,21 @@ const SpellList = ({
     );
     const [selectedSpells, setSelectedSpells] = useState<Spell[]>(
         character?.selectedSpellSpecifics?.selectedSpells
+    );
+
+    const handleChangeSpellDescription = useCallback(
+        (spell: Spell, isMSpell: boolean) => {
+            if (!spell) return;
+            setSelectedSpell((prevSpell) => {
+                if (prevSpell?.spell?.index !== spell?.index) {
+                    setShouldShowSpellDescription(true);
+                } else {
+                    setShouldShowSpellDescription(!shouldShowSpellDescription);
+                }
+                return { spell, isMinorSpell: isMSpell };
+            });
+        },
+        [shouldShowSpellDescription]
     );
 
     const fetchAvailableSpells = useCallback(async () => {
@@ -218,15 +236,30 @@ const SpellList = ({
                         marginHorizontal: theme.space.md,
                     }}
                 >
-                    <CustomText
-                        fontWeight={item?.name ? 'normal' : '300'}
+                    <CustomButton
+                        onPress={() =>
+                            handleChangeSpellDescription(item, isMinorSpell)
+                        }
+                        style={{
+                            padding: theme.space.xs,
+                            borderWidth: 1,
+                            borderColor: theme.colors.primary,
+                        }}
+                        textSize={theme.fontSize.large}
+                        textColor={theme.colors.primary}
+                        buttonColor={'transparent'}
                         text={item?.name ? item.name : 'Sélectionner un sort'}
-                        fontSize={14}
                     />
                 </View>
             );
         },
-        [groupedSpells, isOnEdit, selectedCantrips, selectedSpells]
+        [
+            groupedSpells,
+            handleChangeSpellDescription,
+            isOnEdit,
+            selectedCantrips,
+            selectedSpells,
+        ]
     );
 
     const spellSlots = useMemo(
@@ -249,19 +282,25 @@ const SpellList = ({
                 return spellData?.spells_known || 0;
             case 'druid':
             case 'cleric':
-                return character.level + calculateModifier(abilities['WIS']);
-            case 'wizard':
-                return character.level + calculateModifier(abilities['INT']);
-            case 'paladin':
                 return (
-                    Math.ceil(character.level / 2) +
-                    calculateModifier(abilities['DEX'])
+                    character.level +
+                    calculateModifier(character.abilities['WIS'])
                 );
+            case 'wizard':
+                return (
+                    character.level +
+                    calculateModifier(character.abilities['INT'])
+                );
+            case 'paladin':
+                return character.level >= 2
+                    ? Math.ceil(character.level / 2) +
+                          calculateModifier(character.abilities['DEX'])
+                    : 0;
             default:
                 return 0;
         }
     }, [
-        abilities,
+        character.abilities,
         character.className,
         character.gameType,
         character.level,
@@ -277,7 +316,9 @@ const SpellList = ({
             <CustomText text="No available spells for this level/class combination." />
         );
 
-    return (
+    return !spellKnown && !spellData?.cantrips_known ? (
+        <CustomText text="Vous ne connaissez pas encore de sorts" />
+    ) : (
         <View style={styles.container}>
             <EditMode
                 style={{ flexDirection: 'row' }}
@@ -319,31 +360,60 @@ const SpellList = ({
             <View>
                 <CustomText
                     fontWeight="bold"
-                    fontSize={16}
+                    fontSize={theme.fontSize.large}
                     text="Sorts mineurs: "
                 />
-                <FlatList
-                    data={[
-                        ...Array(parseInt(spellData.cantrips_known, 10) || []),
-                    ]}
-                    style={styles.list}
-                    numColumns={2}
-                    keyExtractor={(_, idx) => idx.toString(10)}
-                    renderItem={(item) => renderSpell(item, true)}
-                />
+                {parseInt(spellData?.cantrips_known, 10) > 0 ? (
+                    <View>
+                        <FlatList
+                            data={[
+                                ...Array(
+                                    parseInt(spellData?.cantrips_known, 10) ||
+                                        []
+                                ),
+                            ]}
+                            style={styles.list}
+                            numColumns={2}
+                            keyExtractor={(_, idx) => idx.toString(10)}
+                            renderItem={(item) => renderSpell(item, true)}
+                        />
+                        <SpellDescription
+                            shouldShow={
+                                shouldShowSpellDescription &&
+                                selectedSpell?.isMinorSpell
+                            }
+                            spell={selectedSpell?.spell}
+                        />
+                    </View>
+                ) : (
+                    <View style={styles.noSpellSection}>
+                        <CustomText
+                            fontWeight="300"
+                            text="Pas de sort mineur disponible"
+                        />
+                    </View>
+                )}
             </View>
             <View style={styles.bottomListContainer}>
                 <CustomText
                     fontWeight="bold"
-                    fontSize={16}
+                    fontSize={theme.fontSize.large}
                     text="Sorts majeurs: "
                 />
                 <FlatList
                     style={styles.list}
                     numColumns={2}
+                    contentContainerStyle={{ alignItems: 'center' }}
                     data={[...Array(spellKnown || [])]}
                     keyExtractor={(_, idx) => idx.toString(10)}
                     renderItem={(item) => renderSpell(item, false)}
+                />
+                <SpellDescription
+                    shouldShow={
+                        shouldShowSpellDescription &&
+                        !selectedSpell?.isMinorSpell
+                    }
+                    spell={selectedSpell?.spell}
                 />
             </View>
         </View>
@@ -359,6 +429,9 @@ const styles = StyleSheet.create({
         gap: theme.space.md,
         marginBottom: theme.space.l,
     },
+    noSpellSection: {
+        paddingLeft: theme.space.md,
+    },
     spellButton: {
         marginBottom: theme.space.l,
     },
@@ -366,7 +439,6 @@ const styles = StyleSheet.create({
         paddingTop: theme.space.md,
     },
     list: {
-        alignItems: 'center',
         gap: theme.space.md,
     },
 });

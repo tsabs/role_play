@@ -66,12 +66,14 @@ const TalentClassForm = ({
                             'character.classes.bard.subclasses.lore.title'
                         ),
                         value: 'lore',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.bard.subclasses.valor.title'
                         ),
                         value: 'valor',
+                        selectable: true,
                     },
                 ];
             case 'barbarian':
@@ -81,12 +83,14 @@ const TalentClassForm = ({
                             'character.classes.barbarian.subclasses.berserker.title'
                         ),
                         value: 'berserker',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.barbarian.subclasses.totem.title'
                         ),
                         value: 'totem',
+                        selectable: true,
                     },
                 ];
             case 'ranger':
@@ -96,12 +100,14 @@ const TalentClassForm = ({
                             'character.classes.ranger.subclasses.hunter.title'
                         ),
                         value: 'hunter',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.ranger.subclasses.beastMaster.title'
                         ),
                         value: 'beastMaster',
+                        selectable: true,
                     },
                 ];
             case 'paladin':
@@ -111,18 +117,21 @@ const TalentClassForm = ({
                             'character.classes.paladin.subclasses.devotion.title'
                         ),
                         value: 'devotion',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.paladin.subclasses.ancients.title'
                         ),
                         value: 'ancients',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.paladin.subclasses.vengeance.title'
                         ),
                         value: 'vengeance',
+                        selectable: true,
                     },
                 ];
             case 'warlock':
@@ -132,18 +141,21 @@ const TalentClassForm = ({
                             'character.classes.warlock.subclasses.archfey.title'
                         ),
                         value: 'archfey',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.warlock.subclasses.fiend.title'
                         ),
                         value: 'fiend',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.warlock.subclasses.greatOldOne.title'
                         ),
                         value: 'greatOldOne',
+                        selectable: true,
                     },
                 ];
             case 'cleric':
@@ -153,48 +165,56 @@ const TalentClassForm = ({
                             'character.classes.cleric.subclasses.life.title'
                         ),
                         value: 'life',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.knowledge.title'
                         ),
                         value: 'knowledge',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.light.title'
                         ),
                         value: 'light',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.nature.title'
                         ),
                         value: 'nature',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.tempest.title'
                         ),
                         value: 'tempest',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.trickery.title'
                         ),
                         value: 'trickery',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.war.title'
                         ),
                         value: 'war',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.cleric.subclasses.forge.title'
                         ),
                         value: 'forge',
+                        selectable: true,
                     },
                 ];
             default:

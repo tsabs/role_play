@@ -117,7 +117,7 @@ export const fetchSpells = async (
 
         const spellSnapshot = await getDocs(spellsQuery);
 
-        console.log('spells: ', spellSnapshot);
+        // console.log('spells: ', spellSnapshot);
 
         // Transform Firestore documents into array of spells
         return spellSnapshot.docs.map((d) => ({
@@ -378,16 +378,26 @@ export const characterSlice = createSlice({
             if (characterIndex !== -1) {
                 const character = state.characters[characterIndex];
 
-                // Ensure notes array is initialized and immutable
-                const updatedNotes = [
-                    action.payload.note,
-                    ...(character.notes || []),
-                ];
+                const updatedNotes =
+                    character.notes?.map((existingNote) =>
+                        existingNote.id === action.payload.note.id
+                            ? { ...existingNote, ...action.payload.note }
+                            : existingNote
+                    ) ?? [];
+
+                // If note does not exist, add it
+                const noteExists = updatedNotes.some(
+                    (existingNote) => existingNote.id === action.payload.note.id
+                );
+
+                if (!noteExists) {
+                    updatedNotes.unshift(action.payload.note);
+                }
 
                 // Update the character with the new notes array
                 const updatedCharacter = {
                     ...character,
-                    notes: updatedNotes, // Insert at the top
+                    notes: updatedNotes,
                 };
 
                 // Update the state immutably

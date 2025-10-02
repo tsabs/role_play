@@ -1,15 +1,16 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
-import { Divider, IconButton, List, Portal } from 'react-native-paper';
-import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
+import { Divider, IconButton, Portal } from 'react-native-paper';
+import Animated, { SlideInRight } from 'react-native-reanimated';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Ability, Character } from 'types/generic';
 import { DnDAbility, DnDCharacter } from 'types/games/d2d5e';
 
+import CustomButton from '@components/atom/CustomButton';
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
-import { ABILITIES } from '@components/character/form/dnd5e/constants';
 import AbilityForm from '@components/character/form/generic/AbilityForm';
 import TalentClassForm from '@components/character/form/dnd5e/TalentClassForm';
 import SkillsList from '@components/character/form/dnd5e/SkillsList';
@@ -48,19 +49,11 @@ interface OnSaveAbilities<T extends Ability> {
 
 const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const { t } = useTranslation();
+    const navigation = useNavigation();
     const dispatch = useAppDispatch();
     const tabBarHeight = useBottomTabBarHeight();
-    const [currentForm, setCurrentForm] = useState<string | undefined>(
-        undefined
-    );
     const [classData, setClassData] = useState(undefined);
-
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [expandedId, setExpandedId] = useState<number | null>(null);
     const [level, setLevel] = useState(character.level);
-    const [selectedAbilities, setSelectedAbilities] = useState<
-        Record<Ability, number> | undefined
-    >(undefined);
     const [selectedClassElements, setSelectedClassElements] = useState<{
         selected_subclass?: string;
         classChoices?: Record<string, Array<{ index: string; bonus?: number }>>;
@@ -71,19 +64,6 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const handleShowModal = useCallback(() => {
         setShouldShowModal(!shouldShowModal);
     }, [shouldShowModal]);
-
-    const handleEditMode = useCallback(() => {
-        setIsEditMode((previousState) => {
-            return !previousState;
-        });
-    }, []);
-
-    const handleUpdateCharacter = useCallback(
-        (updated: Record<Ability, number>) => {
-            setSelectedAbilities(updated);
-        },
-        []
-    );
 
     const handleSaveEdit = useCallback(
         async (abilities: OnSaveAbilities<Ability>) => {
@@ -133,14 +113,6 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     useEffect(() => {
         Promise.all([handleClassSpecificTalent(), handleClassData()]);
     }, [handleClassSpecificTalent, handleClassData]);
-
-    useEffect(() => {
-        if (selectedAbilities === undefined) {
-            setSelectedAbilities(
-                character?.abilities as Record<Ability, number>
-            );
-        }
-    }, [character?.abilities, selectedAbilities]);
 
     const handleUpdateCharacterInFirestore = useCallback(
         async ({
@@ -242,8 +214,23 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         ]
     );
 
+    const handleAccordionPress = useCallback(
+        (id: number, content: any, title: string) => {
+            navigation.navigate('ProtectedScreen', {
+                screen: 'AccordionModal',
+                params: {
+                    accordionId: id,
+                    characterId: character.id,
+                    content,
+                    title,
+                },
+            });
+        },
+        [character.id, navigation]
+    );
+
     const getAbilitiesFinalScore = useCallback(() => {
-        const result = { ...selectedAbilities };
+        const result = { ...character.abilities };
         mergeAbilities.forEach(({ index, bonus }) => {
             const key = index.toUpperCase();
             if (result && result?.[key] !== undefined) {
@@ -251,7 +238,7 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             }
         });
         return result;
-    }, [selectedAbilities, mergeAbilities]);
+    }, [character.abilities, mergeAbilities]);
 
     const accordions = useMemo(() => {
         const proficienciesExtracted = extractCharacterProficiencies({
@@ -313,19 +300,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                 title: 'character.overview.accordion.characteristics',
                 content: (
                     <AbilityForm<DnDAbility>
-                        abilities={
-                            (selectedAbilities as Record<DnDAbility, number>) ||
-                            ABILITIES
-                        }
-                        onChange={handleUpdateCharacter}
+                        characterId={character.id}
                         onSaveEdit={handleSaveEdit}
                         isEditModeEnabled
-                        onEditMode={handleEditMode}
-                        isEditMode={isEditMode}
                         abilityBonuses={mergeAbilities}
-                        remainingPoints={remainingPoints(
-                            selectedAbilities || ABILITIES
-                        )}
+                        remainingPoints={remainingPoints}
                     />
                 ),
             },
@@ -343,27 +322,15 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             {
                 id: 6,
                 title: 'character.overview.accordion.spells',
-                content: (
-                    <SpellList
-                        characterId={character.id}
-                        abilities={
-                            (selectedAbilities as Record<DnDAbility, number>) ||
-                            ABILITIES
-                        }
-                    />
-                ),
+                content: <SpellList characterId={character.id} />,
             },
         ];
     }, [
         character,
         level,
-        selectedAbilities,
-        handleUpdateCharacter,
         handleSaveEdit,
-        handleEditMode,
         selectedClassElements,
         handleSubclassChange,
-        isEditMode,
         mergeAbilities,
         getAbilitiesFinalScore,
         t,
@@ -374,18 +341,18 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
             classData?.hit_die && level
                 ? level === 1
                     ? classData.hit_die +
-                      calculateModifier(selectedAbilities?.CON)
+                      calculateModifier(character?.abilities?.CON)
                     : classData.hit_die +
                       (Math.ceil((classData.hit_die * (level - 1)) / 2) +
                           level -
                           1) +
-                      calculateModifier(selectedAbilities?.CON) * level
+                      calculateModifier(character?.abilities?.CON) * level
                 : 1,
-        [classData?.hit_die, level, selectedAbilities?.CON]
+        [classData?.hit_die, level, character?.abilities?.CON]
     );
 
     const makeCharacterImgPrompt = useMemo(() => {
-        const gameTypeTrad = t(`games.${character.gameType}.name`);
+        // const gameTypeTrad = t(`games.${character.gameType}.name`);
         const raceTrad = t(`character.races.${character.race.index}.name`);
         const classTrad = t(
             `character.classes.${character.className.index}.name`
@@ -393,11 +360,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         const backgroundTrad = t(
             `character.backgrounds.${character.background.index}.name`
         );
-        const subClass = selectedClassElements?.selected_subclass
-            ? `et sous classe ${t(
-                  `character.classes.${character.className.index}.subclasses.${selectedClassElements.selected_subclass}.title`
-              )}`
-            : '';
+        // const subClass = selectedClassElements?.selected_subclass
+        //     ? `et sous classe ${t(
+        //           `character.classes.${character.className.index}.subclasses.${selectedClassElements.selected_subclass}.title`
+        //       )}`
+        //     : '';
         const style = 'en style semi-réaliste inspiré de donjons et dragons.';
 
         // const shouldNotDisplay =
@@ -418,9 +385,9 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
         character.background.index,
         character.className.index,
         character.description,
-        character.gameType,
+        // character.gameType,
         character.race.index,
-        selectedClassElements.selected_subclass,
+        // selectedClassElements.selected_subclass,
         t,
     ]);
 
@@ -478,41 +445,31 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                             </View>
                         </ImageBackground>
                     </View>
-                    <List.AccordionGroup>
+                    <View style={styles.container}>
                         {accordions.map((accordion) => {
                             return (
-                                <List.Accordion
+                                <CustomButton
                                     key={accordion.id}
-                                    expanded={expandedId === accordion.id}
-                                    style={styles.accordionContainer}
-                                    onPress={() => {
-                                        setExpandedId(
-                                            expandedId === accordion.id
-                                                ? null
-                                                : accordion.id
-                                        );
-                                        setCurrentForm(accordion.id.toString());
+                                    style={{
+                                        padding: theme.space.xs,
+                                        borderWidth: 1,
+                                        borderColor: theme.colors.primary,
                                     }}
-                                    title={
-                                        <CustomText
-                                            fontSize={16}
-                                            text={t(accordion.title)}
-                                        />
+                                    textSize={theme.fontSize.large}
+                                    textColor={theme.colors.primary}
+                                    buttonColor={'transparent'}
+                                    text={t(accordion.title)}
+                                    onPress={() =>
+                                        handleAccordionPress(
+                                            accordion.id,
+                                            accordion.content,
+                                            accordion.title
+                                        )
                                     }
-                                    id={accordion.id}
-                                >
-                                    <Animated.View
-                                        style={styles.accordionContent}
-                                        entering={FadeIn.duration(500).delay(
-                                            50
-                                        )}
-                                    >
-                                        {accordion.content}
-                                    </Animated.View>
-                                </List.Accordion>
+                                />
                             );
                         })}
-                    </List.AccordionGroup>
+                    </View>
                 </VirtualizedScrollView>
             </Animated.View>
         </SafeView>
@@ -520,6 +477,11 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: theme.space.xl,
+        gap: theme.space.md,
+    },
     imageBackground: {
         width: WINDOW_WIDTH,
         height: WINDOW_HEIGHT / 2,
