@@ -7,6 +7,7 @@ import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { DnDCharacter } from 'types/games/d2d5e';
+import Toast from 'react-native-toast-message';
 
 import CustomText from '@components/atom/CustomText';
 import Separator from '@components/library/Separator';
@@ -15,12 +16,11 @@ import { useAuth } from '@navigation/hook/useAuth';
 import { removeCharacterFromSession } from '@store/session/sessionServices';
 import { callRemoveCharacter } from '@store/character/slice';
 import { useAppDispatch } from '@store/index';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@utils/utils';
 import { isOwnerOrGm } from '@views/sessions/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
-import Toast from 'react-native-toast-message';
 
 interface DndCharacterItemProps {
     character: DnDCharacter;
@@ -32,8 +32,8 @@ interface DndCharacterItemProps {
 
 const HEADER_HEIGHT = 100;
 const BOTTOM_NAV_HEIGHT = 50;
-const FLATLIST_HEIGHT = SCREEN_HEIGHT - HEADER_HEIGHT - BOTTOM_NAV_HEIGHT - 120;
-const FLATLIST_WIDTH = SCREEN_WIDTH - 32 - 24;
+const FLATLIST_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT - BOTTOM_NAV_HEIGHT - 60;
+const FLATLIST_WIDTH = WINDOW_WIDTH - 32 - 24;
 
 const LabeledElement = ({ label, val }: { label: string; val: string }) => {
     return (
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     image: {
         backgroundColor: theme.colors.light,
         alignSelf: 'stretch',
-        height: SCREEN_HEIGHT / 2.5,
+        height: WINDOW_HEIGHT / 2.5,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },

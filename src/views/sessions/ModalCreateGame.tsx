@@ -10,7 +10,6 @@ import ImagePicker from '@components/atom/ImagePicker';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
 
 import { theme } from '../../../style/theme';
-import { DAND_INTRO } from '../../../assets';
 
 interface ModalSelectGameProp {
     shouldShowModal: boolean;
@@ -37,7 +36,7 @@ export const ModalCreateGame = ({
         setGameName(name);
     }, []);
     const handlePress = useCallback(() => {
-        handleCreateGame(gameType, gameName, gameImage || DAND_INTRO);
+        handleCreateGame(gameType, gameName, gameImage);
         setShouldShowModal(false);
     }, [gameImage, gameName, gameType, handleCreateGame, setShouldShowModal]);
 

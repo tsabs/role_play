@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,6 +12,7 @@ import LoginScreen from '../views/login/Login';
 import SessionsScreen from '../views/sessions/Sessions';
 import CharactersScreen from '../views/characters/Characters';
 import { SessionCharactersScreen } from '../views/sessions/SessionCharacters';
+import { AccordionContentModal } from '../views/singleCharacter/characterOverview/AccordionModal';
 
 import BottomCharacterTabs from './screen/BottomCharacterTabs';
 import { AuthProps, useAuth } from './hook/useAuth';
@@ -34,6 +35,12 @@ export type RootStackParamList = {
     SessionNotesScreen: {
         sessionId: string;
         gmId: string;
+    };
+    AccordionModal: {
+        accordionId: number;
+        characterId: string;
+        title: string;
+        content: any;
     };
     ProtectedScreen: {};
     CharacterFormProvider: {
@@ -109,6 +116,17 @@ const ProtectedScreen = () => {
                 name="CharacterFormProvider"
                 component={CharacterFormProvider}
                 options={{ headerShown: false, gestureEnabled: true }}
+            />
+            <Stack.Screen
+                name="AccordionModal"
+                component={AccordionContentModal}
+                options={{
+                    animationDuration: 750,
+                    gestureEnabled: true,
+                    animation: 'slide_from_bottom',
+                    presentation: 'modal',
+                    headerShown: false,
+                }}
             />
             <Stack.Screen
                 name="Character"

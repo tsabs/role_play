@@ -15,7 +15,7 @@ import {
 
 import { theme } from '../../../../../style/theme';
 
-const SKILLS: { [key: string]: keyof AbilityScores } = {
+export const SKILLS: { [key: string]: keyof AbilityScores } = {
     acrobatics: 'DEX',
     'animal-handling': 'WIS',
     arcana: 'INT',
@@ -42,6 +42,7 @@ interface SkillsListProps {
     proficiencies: ExtractedProficiencies;
 }
 
+//TODO Need to properly manage EXPERT proficiency (not well done)
 const SkillsList: FC<SkillsListProps> = ({
     character,
     level,

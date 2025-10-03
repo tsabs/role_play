@@ -54,7 +54,7 @@ interface ProficiencyOption {
         options: OptionChoice[];
         option_set_type: string;
     };
-    type: string;
+    type?: string;
 }
 
 interface StartingEquipment {
@@ -87,6 +87,24 @@ interface SocialElementOptions {
         options: SocialChoice[];
     };
     type: string;
+}
+
+interface Spell {
+    casting_time: string;
+    classes: Array<ElementIdentification>;
+    components: Array<string>;
+    concentration: boolean;
+    desc: Array<string>;
+    duration: string;
+    higher_level: string;
+    index: string;
+    level: number;
+    name: string;
+    ranger: string;
+    ritual: boolean;
+    school: ElementIdentification;
+    subclasses: Array<ElementIdentification>;
+    updated_at: string;
 }
 
 // ----------------------------
@@ -182,6 +200,26 @@ interface SelectedClassElementsProps {
     selected_subclass?: string;
 }
 
+interface SpellData {
+    cantrips_known: string;
+    spell_slots_level_1: number;
+    spell_slots_level_2: number;
+    spell_slots_level_3: number;
+    spell_slots_level_4: number;
+    spell_slots_level_5: number;
+    spell_slots_level_6: number;
+    spell_slots_level_7: number;
+    spell_slots_level_8: number;
+    spell_slots_level_9: number;
+    spells_known?: number;
+}
+
+interface SelectedSpellSpecifics {
+    selectedSpells: Array<Spell>;
+    selectedMinorSpells: Array<Spell>;
+    spellClassData: SpellData;
+}
+
 interface DnDConfig {
     ability: DnDAbility;
     abilities: Record<DnDAbility, number>;
@@ -189,6 +227,7 @@ interface DnDConfig {
     className: DndClass;
     selectedClassElements: SelectedClassElementsProps;
     selectedRaceElements: SelectedRaceElementsProps;
+    selectedSpellSpecifics: SelectedSpellSpecifics;
     background: DndBackground;
     selectedBackgroundElements: {
         backgroundChoices?: Record<
@@ -211,9 +250,12 @@ export {
     OptionChoice,
     SocialChoice,
     SkillProficiency,
+    Spell,
+    SpellData,
     StartingEquipmentOption,
     SelectedClassElementsProps,
     SelectedRaceElementsProps,
+    SelectedSpellSpecifics,
     AbilityScores,
     DnDAbility,
     DndBackground,

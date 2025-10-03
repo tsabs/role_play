@@ -403,6 +403,140 @@
         "name": "Warlock",
         "talents": {
 
+        },
+        "eldritchInvocations": {
+          "eldritch-invocation-agonizing-blast": {
+            "name": "Eldritch Invocation: Agonizing Blast",
+            "desc": "When you cast eldritch blast, add your Charisma modifier to the damage it deals on a hit."
+          },
+          "eldritch-invocation-armor-of-shadows": {
+            "name": "Eldritch Invocation: Armor of Shadows",
+            "desc": "You can cast mage armor on yourself at will, without expending a spell slot or material components."
+          },
+          "eldritch-invocation-ascendant-step": {
+            "name": "Eldritch Invocation: Ascendant Step",
+            "desc": "You can cast levitate on yourself at will, without expending a spell slot or material components."
+          },
+          "eldritch-invocation-beast-speech": {
+            "name": "Eldritch Invocation: Beast Speech",
+            "desc": "You can cast speak with animals at will, without expending a spell slot."
+          },
+          "eldritch-invocation-beguiling-influence": {
+            "name": "Eldritch Invocation: Beguiling Influence",
+            "desc": "You gain proficiency in the Deception and Persuasion skills."
+          },
+          "eldritch-invocation-bewitching-whispers": {
+            "name": "Eldritch Invocation: Bewitching Whispers",
+            "desc": "You can cast compulsion once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-book-of-ancient-secrets": {
+            "name": "Eldritch Invocation: Book of Ancient Secrets",
+            "desc": "You can now inscribe magical rituals in your Book of Shadows. Choose two 1st-level spells that have the ritual tag from any class's spell list (the two needn't be from the same list). The spells appear in the book and don't count against the number of spells you know. With your Book of Shadows in hand, you can cast the chosen spells as rituals. You can't cast the spells except as rituals, unless you've learned them by some other means. You can also cast a warlock spell you know as a ritual if it has the ritual tag."
+          },
+          "eldritch-invocation-chains-of-carceri": {
+            "name": "Eldritch Invocation: Chains of Carceri",
+            "desc": "You can cast hold monster at will--targeting a celestial, fiend, or elemental--without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again."
+          },
+          "eldritch-invocation-devils-sight": {
+            "name": "Eldritch Invocation: Devil's Sight",
+            "desc": "You can see normally in darkness, both magical and nonmagical, to a distance of 120 feet."
+          },
+          "eldritch-invocation-dreadful-word": {
+            "name": "Eldritch Invocation: Dreadful Word",
+            "desc": "You can cast confusion once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-eldritch-sight": {
+            "name": "Eldritch Invocation: Eldritch Sight",
+            "desc": "You can cast detect magic at will, without expending a spell slot."
+          },
+          "eldritch-invocation-eldritch-spear": {
+            "name": "Eldritch Invocation: Eldritch Spear",
+            "desc": "When you cast eldritch blast, its range is 300 feet."
+          },
+          "eldritch-invocation-eyes-of-the-rune-keeper": {
+            "name": "Eldritch Invocation: Eyes of the Rune Keeper",
+            "desc": "You can read all writing."
+          },
+          "eldritch-invocation-fiendish-vigor": {
+            "name": "Eldritch Invocation: Fiendish Vigor",
+            "desc": "You can cast false life on yourself at will as a 1st-level spell, without expending a spell slot or material components."
+          },
+          "eldritch-invocation-gaze-of-two-minds": {
+            "name": "Eldritch Invocation: Gaze of Two Minds",
+            "desc": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings."
+          },
+          "eldritch-invocation-lifedrinker": {
+            "name": "Eldritch Invocation: Lifedrinker",
+            "desc": "When you hit a creature with your pact weapon, the creature takes extra necrotic damage equal to your Charisma modifier (minimum 1)."
+          },
+          "eldritch-invocation-mask-of-many-faces": {
+            "name": "Eldritch Invocation: Mask of Many Faces",
+            "desc": "You can cast disguise self at will, without expending a spell slot."
+          },
+          "eldritch-invocation-master-of-myriad-forms": {
+            "name": "Eldritch Invocation: Master of Myriad Forms",
+            "desc": "You can cast alter self at will, without expending a spell slot."
+          },
+          "eldritch-invocation-minions-of-chaos": {
+            "name": "Eldritch Invocation: Minions of Chaos",
+            "desc": "You can cast conjure elemental once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-mire-the-mind": {
+            "name": "Eldritch Invocation: Mire the Mind",
+            "desc": "You can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-misty-visions": {
+            "name": "Eldritch Invocation: Misty Visions",
+            "desc": "You can cast silent image at will, without expending a spell slot or material components."
+          },
+          "eldritch-invocation-one-with-shadows": {
+            "name": "Eldritch Invocation: One with Shadows",
+            "desc": "When you are in an area of dim light or darkness, you can use your action to become invisible until you move or take an action or a reaction."
+          },
+          "eldritch-invocation-otherworldly-leap": {
+            "name": "Eldritch Invocation: Otherworldly Leap",
+            "desc": "You can cast jump on yourself at will, without expending a spell slot or material components."
+          },
+          "eldritch-invocation-repelling-blast": {
+            "name": "Eldritch Invocation: Repelling Blast",
+            "desc": "When you hit a creature with eldritch blast, you can push the creature up to 10 feet away from you in a straight line."
+          },
+          "eldritch-invocation-sculptor-of-flesh": {
+            "name": "Eldritch Invocation: Sculptor of Flesh",
+            "desc": "You can cast polymorph once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-sign-of-ill-omen": {
+            "name": "Eldritch Invocation: Sign of Ill Omen",
+            "desc": "You can cast bestow curse once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-thief-of-five-fates": {
+            "name": "Eldritch Invocation: Thief of Five Fates",
+            "desc": "You can cast bane once using a warlock spell slot. You can't do so again until you finish a long rest."
+          },
+          "eldritch-invocation-thirsting-blade": {
+            "name": "Eldritch Invocation: Thirsting Blade",
+            "desc": "You can attack with your pact weapon twice, instead of once, whenever you take the Attack action on your turn."
+          },
+          "eldritch-invocation-visions-of-distant-realms": {
+            "name": "Eldritch Invocation: Visions of Distant Realms",
+            "desc": "You can cast arcane eye at will, without expending a spell slot."
+          },
+          "eldritch-invocation-voice-of-the-chain-master": {
+            "name": "Eldritch Invocation: Voice of the Chain Master",
+            "desc": "You can communicate telepathically with your familiar and perceive through your familiar's senses as long as you are on the same plane of existence."
+          },
+          "eldritch-invocation-whispers-of-the-grave": {
+            "name": "Eldritch Invocation: Whispers of the Grave",
+            "desc": "You can cast speak with dead at will, without expending a spell slot."
+          },
+          "eldritch-invocation-witch-sight": {
+            "name": "Eldritch Invocation: Witch Sight",
+            "desc": "You can see the true form of any shapechanger or creature concealed by illusion or transmutation magic while the creature is within 30 feet of you and within line of sight."
+          },
+          "eldritch-invocations": {
+            "name": "Eldritch Invocations",
+            "desc": "In your study of occult lore, you have unearthed eldritch invocations, fragments of forbidden knowledge that imbue you with an abiding magical ability."
+          }
         }
       },
       "wizard": {

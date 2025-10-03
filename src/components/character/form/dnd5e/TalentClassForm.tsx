@@ -14,11 +14,12 @@ import { ExtractedProficiencies, shouldChooseSubclass } from '@utils/d2d5';
 
 import BardTalentForm from '../dnd5e/classSpecifics/bard/BardTalentForm';
 import BarbarianTalentForm from '../dnd5e/classSpecifics/barbarian/BarbarianTalentForm';
-import ClericTalentForm from '../dnd5e/classSpecifics/ClericTalentForm';
+import ClericTalentForm from '../dnd5e/classSpecifics/clerc/ClericTalentForm';
 import FighterTalentForm from '../dnd5e/classSpecifics/fighter/FighterTalentForm';
 import RangerTalentForm from '../dnd5e/classSpecifics/ranger/RangerTalentForm';
 import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentForm';
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
+import { WarlockTalentForm } from '../dnd5e/classSpecifics/warlock/WarlockTalentForm';
 import { theme } from '../../../../../style/theme';
 
 interface TalentClassFormProps {
@@ -65,12 +66,14 @@ const TalentClassForm = ({
                             'character.classes.bard.subclasses.lore.title'
                         ),
                         value: 'lore',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.bard.subclasses.valor.title'
                         ),
                         value: 'valor',
+                        selectable: true,
                     },
                 ];
             case 'barbarian':
@@ -80,12 +83,14 @@ const TalentClassForm = ({
                             'character.classes.barbarian.subclasses.berserker.title'
                         ),
                         value: 'berserker',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.barbarian.subclasses.totem.title'
                         ),
                         value: 'totem',
+                        selectable: true,
                     },
                 ];
             case 'ranger':
@@ -95,12 +100,14 @@ const TalentClassForm = ({
                             'character.classes.ranger.subclasses.hunter.title'
                         ),
                         value: 'hunter',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.ranger.subclasses.beastMaster.title'
                         ),
                         value: 'beastMaster',
+                        selectable: true,
                     },
                 ];
             case 'paladin':
@@ -110,18 +117,104 @@ const TalentClassForm = ({
                             'character.classes.paladin.subclasses.devotion.title'
                         ),
                         value: 'devotion',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.paladin.subclasses.ancients.title'
                         ),
                         value: 'ancients',
+                        selectable: true,
                     },
                     {
                         label: t(
                             'character.classes.paladin.subclasses.vengeance.title'
                         ),
                         value: 'vengeance',
+                        selectable: true,
+                    },
+                ];
+            case 'warlock':
+                return [
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.archfey.title'
+                        ),
+                        value: 'archfey',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.fiend.title'
+                        ),
+                        value: 'fiend',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.warlock.subclasses.greatOldOne.title'
+                        ),
+                        value: 'greatOldOne',
+                        selectable: true,
+                    },
+                ];
+            case 'cleric':
+                return [
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.life.title'
+                        ),
+                        value: 'life',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.knowledge.title'
+                        ),
+                        value: 'knowledge',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.light.title'
+                        ),
+                        value: 'light',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.nature.title'
+                        ),
+                        value: 'nature',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.tempest.title'
+                        ),
+                        value: 'tempest',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.trickery.title'
+                        ),
+                        value: 'trickery',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.war.title'
+                        ),
+                        value: 'war',
+                        selectable: true,
+                    },
+                    {
+                        label: t(
+                            'character.classes.cleric.subclasses.forge.title'
+                        ),
+                        value: 'forge',
+                        selectable: true,
                     },
                 ];
             default:
@@ -147,6 +240,7 @@ const TalentClassForm = ({
                 Array<{ index: string; bonus?: number }>
             >
         ) => {
+            console.log('should change', selectSubclassChoices);
             setSubclassChoices(selectSubclassChoices);
         },
         []
@@ -214,7 +308,16 @@ const TalentClassForm = ({
                     />
                 );
             case 'cleric':
-                return <ClericTalentForm level={level} abilities={abilities} />;
+                return (
+                    <ClericTalentForm
+                        level={level}
+                        abilities={abilities}
+                        subclass={subclass}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                        selectedClassElements={selectedClassElements}
+                    />
+                );
             case 'sorcerer':
                 return (
                     <SorcererTalentForm level={level} abilities={abilities} />
@@ -228,6 +331,17 @@ const TalentClassForm = ({
                         selectedClassElements={selectedClassElements}
                         isOnEdit={isOnEdit}
                         handleSubclassChoices={handleSubclassChoices}
+                    />
+                );
+            case 'warlock':
+                return (
+                    <WarlockTalentForm
+                        level={level}
+                        abilities={abilities}
+                        isOnEdit={isOnEdit}
+                        handleSubclassChoices={handleSubclassChoices}
+                        subclass={subclass}
+                        selectedClassElements={selectedClassElements}
                     />
                 );
             default:

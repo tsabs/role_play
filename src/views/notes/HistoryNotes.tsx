@@ -32,7 +32,6 @@ const HistoryNotes = ({
     ) => Promise<void>;
     collectionName: string;
 }) => {
-    const [notes, setNotes] = useState<Note[]>([]);
     const auth: AuthProps = useAuth();
     const isFocused = useIsFocused();
     const dispatch = useAppDispatch();
@@ -56,7 +55,9 @@ const HistoryNotes = ({
                 ...item,
                 description: editedNote,
             };
-            await onEditNote(entityId, newNote, dispatch);
+            await onEditNote(entityId, newNote, dispatch).finally(() => {
+                setEditedNote(undefined);
+            });
         },
         [editedNote, onEditNote, entityId, dispatch]
     );
@@ -67,10 +68,7 @@ const HistoryNotes = ({
         },
         [onRemoveNote, entityId, dispatch]
     );
-
-    useEffect(() => {
-        setNotes(notesFromSelector);
-    }, [notesFromSelector]);
+    console.log('notesFromSelector', notesFromSelector);
 
     const renderItem = useCallback(
         ({ item, index }: { item: Note; index: number }) => {
@@ -136,13 +134,16 @@ const HistoryNotes = ({
     return (
         <Animated.View style={styles.container} entering={FadeIn.duration(500)}>
             <List.AccordionGroup>
-                {!notes?.length ? (
+                {!notesFromSelector?.length ? (
                     <CustomText
                         text={'Pas encore de notes'}
                         style={styles.noNotes}
                     />
                 ) : (
-                    <FlatList data={notes} renderItem={renderItem} />
+                    <FlatList
+                        data={notesFromSelector}
+                        renderItem={renderItem}
+                    />
                 )}
             </List.AccordionGroup>
         </Animated.View>

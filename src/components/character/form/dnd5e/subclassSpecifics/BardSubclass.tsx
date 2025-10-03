@@ -4,10 +4,15 @@ import { View } from 'react-native';
 import { SelectedClassElementsProps } from 'types/games/d2d5e';
 
 import CustomText from '@components/atom/CustomText';
-import { ExtractedProficiencies, getAvailableProficiencies } from '@utils/d2d5';
+import {
+    ExtractedProficiencies,
+    getAvailableProficiencies,
+    getProficienciesToExpertise,
+} from '@utils/d2d5';
 
 import {
     bardSubclasses,
+    expertiseData,
     loreProficiencyData,
 } from '../classSpecifics/bard/bardSubclasses';
 import { genericClassFormStyles } from '../genericStyle';
@@ -47,9 +52,16 @@ const BardSubclass = ({
         [selectedClassElements?.classChoices]
     );
 
+    const expertise = useMemo(
+        () => selectedClassElements?.classChoices?.['expertise'],
+        [selectedClassElements?.classChoices]
+    );
+
     const [proficienciesSelected, setProficienciesSelected] = useState(
         loreProficienciesSelected
     );
+
+    const [expertiseSelected, setExpertiseSelected] = useState(expertise);
 
     const selectableProficiencies = useMemo(
         () =>
@@ -61,7 +73,17 @@ const BardSubclass = ({
         [proficienciesExtracted]
     );
 
-    const handleChange = useCallback(
+    const selectableExpertise = useMemo(
+        () =>
+            getProficienciesToExpertise(
+                expertiseData,
+                proficienciesExtracted,
+                []
+            ),
+        [proficienciesExtracted]
+    );
+
+    const handleChangeExtraProficiencies = useCallback(
         (
             groupId: string,
             selected: Array<{ index: string; bonus?: number }>
@@ -79,6 +101,24 @@ const BardSubclass = ({
         [handleSubclassChoices, selectedClassElements.classChoices]
     );
 
+    const handleChangeExpertise = useCallback(
+        (
+            groupId: string,
+            selected: Array<{ index: string; bonus?: number }>
+        ) => {
+            const result: Record<
+                string,
+                Array<{ index: string; bonus?: number }>
+            > = {
+                ...selectedClassElements.classChoices,
+                [groupId]: selected,
+            };
+            setExpertiseSelected(selected);
+            handleSubclassChoices(result);
+        },
+        [handleSubclassChoices, selectedClassElements.classChoices]
+    );
+
     const displaySubClassSpecifics = useCallback(() => {
         if (subclass === 'lore') {
             return isOnEdit ? (
@@ -87,7 +127,7 @@ const BardSubclass = ({
                         data={selectableProficiencies}
                         groupId={`lore-extra-proficiencies`}
                         defaultValue={proficienciesSelected}
-                        onChange={handleChange}
+                        onChange={handleChangeExtraProficiencies}
                     />
                 )
             ) : !!proficienciesSelected ? (
@@ -108,7 +148,7 @@ const BardSubclass = ({
             );
         }
     }, [
-        handleChange,
+        handleChangeExtraProficiencies,
         isOnEdit,
         level,
         proficienciesSelected,
@@ -121,6 +161,19 @@ const BardSubclass = ({
 
     return (
         <Fragment>
+            <CustomText
+                fontSize={16}
+                fontWeight="bold"
+                text={"Compétence d'expertise"}
+                style={genericClassFormStyles.sectionTitle}
+            />
+            <ProficiencySelector
+                data={selectableExpertise}
+                groupId={`expertise`}
+                defaultValue={expertiseSelected}
+                onChange={handleChangeExpertise}
+            />
+
             <CustomText
                 text={t(data.nameKey)}
                 fontSize={16}

@@ -49,7 +49,6 @@ import { styles } from './characterFormStyles';
 import { ABILITIES } from './constants';
 import LabeledList from './LabeledList';
 import ProficiencySelector from './proficiencies/ProficiencySelector';
-// import TalentClassForm from './TalentClassForm';
 
 interface Dnd5eCharacterFormProps {
     gameType: string;
@@ -67,8 +66,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
     const [history, setHistory] = useState('');
     const [classes, setClasses] = useState<DndClass[] | []>([]);
     const [races, setRaces] = useState<DndRace[] | []>([]);
-    const [selectedAbility, setSelectedAbility] =
-        useState<Record<DnDAbility, number>>(ABILITIES);
+    const [selectedAbilities, setSelectedAbilities] = useState<
+        Record<Ability, number>
+    >(ABILITIES as Record<Ability, number>);
     const [backgrounds, setBackgrounds] = useState<DndBackground[] | []>([]);
     const [selectedClass, setSelectedClass] = useState<string>(null);
     const [classSelectionOptions, setClassSelectionOptions] = useState<
@@ -264,8 +264,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
             !selectedClass ||
             !selectedRace ||
             !selectedBackground ||
-            remainingPoints(selectedAbility) < 0,
-        [selectedClass, selectedRace, selectedBackground, selectedAbility]
+            remainingPoints(selectedAbilities) < 0,
+        [selectedClass, selectedRace, selectedBackground, selectedAbilities]
     );
 
     if (!auth.user) return null;
@@ -283,7 +283,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                         placeHolder={'Choisissez un niveau'}
                         onSelect={(value) => setLevel(value)}
                         preSelectedValue={{
-                            label: level.toString(),
+                            label: `Niveau: ${level.toString()}`,
                             value: level,
                         }}
                     />
@@ -309,6 +309,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     })}
                     <LabeledList
                         name="Races"
+                        listLabel="characterForm.listSelectRaces"
+                        listLabelSelected={`character.races.${selectedRace}.name`}
                         values={races}
                         setSelectedValue={(newRace) => {
                             setSelectedRace(newRace);
@@ -348,6 +350,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
 
                     <LabeledList
                         name="Classes"
+                        listLabel="characterForm.listSelectClasses"
+                        listLabelSelected={`character.classes.${selectedClass}.name`}
                         values={classes}
                         setSelectedValue={(newClass) => {
                             setSelectedClass(newClass);
@@ -383,7 +387,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     {/* TODO: Need to be added properly later on */}
                     {/*{selectedObjectClass && (*/}
                     {/*    <TalentClassForm*/}
-                    {/*        abilities={selectedAbility}*/}
+                    {/*        abilities={selectedAbilities}*/}
                     {/*        level={level}*/}
                     {/*        characterClass={selectedObjectClass.index}*/}
                     {/*        selectedClassElements={selectedClassElements}*/}
@@ -392,6 +396,8 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     {/*)}*/}
                     <LabeledList
                         name="Backgrounds"
+                        listLabel="characterForm.listSelectBackgrounds"
+                        listLabelSelected={`character.backgrounds.${selectedBackground}.name`}
                         values={backgrounds}
                         setSelectedValue={(newBackground) => {
                             setSelectedBackground(newBackground);
@@ -424,15 +430,9 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                     {selectedObjectRace?.index &&
                         selectedObjectClass?.index && (
                             <AbilityForm
-                                abilities={
-                                    selectedAbility as Record<Ability, number>
-                                }
                                 abilityBonuses={mergeAbilities}
-                                isEditMode
-                                remainingPoints={remainingPoints(
-                                    selectedAbility
-                                )}
-                                onChange={setSelectedAbility}
+                                onChange={setSelectedAbilities}
+                                remainingPoints={remainingPoints}
                             />
                         )}
 
@@ -460,7 +460,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                                     ),
                                     selectedRaceElements: selectedRaceElements,
                                     level,
-                                    abilities: selectedAbility,
+                                    abilities: selectedAbilities,
                                     className: classes?.find(
                                         (dndClass: DndClass) =>
                                             dndClass.index === selectedClass
@@ -486,7 +486,7 @@ const Dnd5eCharacterForm = ({ gameType }: Dnd5eCharacterFormProps) => {
                             !selectedClass ||
                             !selectedRace ||
                             !selectedBackground ||
-                            remainingPoints(selectedAbility) < 0
+                            remainingPoints(selectedAbilities) < 0
                         }
                     />
                 </VirtualizedScrollView>

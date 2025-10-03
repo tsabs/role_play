@@ -1,8 +1,10 @@
 import { Context, createContext, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import {
     FirebaseAuthTypes,
     onAuthStateChanged,
 } from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { auth } from '../../../firebaseConfig';
 
@@ -19,32 +21,34 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        const initializeAuth = async () => {
+            try {
+                const storedToken = await AsyncStorage.getItem('token');
+                if (storedToken) {
+                    setToken(storedToken);
+                }
+            } catch (error) {
+                console.error('Failed to restore user session:', error);
+            }
+            // setIsLoading(false);
+        };
+
+        initializeAuth();
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                // Refresh token and keep user logged in
-                const t = await currentUser.getIdToken(true);
-                setUser(currentUser);
-                setToken(t);
-
-                // Refresh token periodically
-                const refreshTokenInterval = setInterval(
-                    async () => {
-                        try {
-                            const newToken = await currentUser.getIdToken(true); // Force refresh token
-                            setToken(newToken);
-                        } catch (error) {
-                            console.error('Token refresh error:', error);
-                        }
-                    },
-                    30 * 60 * 1000
-                ); // Refresh every 30 minutes
-                return () => {
-                    setIsLoading(false);
-                    return clearInterval(refreshTokenInterval);
-                }; // Cleanup on unmount
+                try {
+                    const t = await currentUser.getIdToken(true); // Get a fresh token
+                    setUser(currentUser);
+                    setToken(t);
+                    await AsyncStorage.setItem('token', t);
+                } catch (error) {
+                    console.error('Token refresh error:', error);
+                    Alert.alert('Error retrieving token', error.message);
+                }
             } else {
                 setUser(null);
                 setToken(null);
+                await AsyncStorage.removeItem('token');
             }
             setIsLoading(false);
         });

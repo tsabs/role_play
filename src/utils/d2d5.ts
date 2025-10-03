@@ -11,7 +11,7 @@ import { Ability } from '../types/generic';
 
 export const maxLevels = Array.from({ length: 20 }, (_, i) => {
     const label = i + 1;
-    return { label: label.toString(), value: i + 1 };
+    return { label: label.toString(), value: i + 1, selectable: true };
 });
 
 export const getPointBuyCost = (score: number): number => {
@@ -103,6 +103,7 @@ const subclassLevelByClass: Record<string, number> = {
     paladin: 3,
     ranger: 3,
     sorcerer: 1,
+    warlock: 1,
     // ...others
 };
 
@@ -160,12 +161,18 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
             `${character.selectedClassElements?.selected_subclass}-extra-proficiencies`
         ]?.map((prof) => prof.index) || [];
 
+    const fromSelectedSubClassExpertise =
+        character.selectedClassElements?.classChoices?.['expertise']?.map(
+            (expertise) => expertise.index
+        ) || [];
+
     return {
         fromBackground,
         fromRace,
         fromSelectedRace,
         fromSelectedClass,
         fromSelectedSubclass,
+        fromSelectedSubClassExpertise,
         all: [
             ...fromBackground,
             ...fromRace,
@@ -173,6 +180,48 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
             ...fromSelectedClass,
             ...fromSelectedSubclass,
         ],
+    };
+};
+
+const getProficienciesToExpertise = (
+    data: ProficiencyOption,
+    extractedProficiencies: ExtractedProficiencies,
+    excludeSources: (keyof ExtractedProficiencies)[] = []
+): ProficiencyOption => {
+    const combinedProficiencies = Object.entries(extractedProficiencies)
+        .filter(
+            ([key]) =>
+                key !== 'all' &&
+                key !== 'fromSelectedSubClassExpertise' &&
+                !excludeSources.includes(key as keyof ExtractedProficiencies)
+        )
+        .flatMap(([, profs]) => profs || []);
+
+    const ownedSkills = new Set(combinedProficiencies);
+
+    const filteredOptions = data.from.options.filter((option) => {
+        if (option.option_type === 'reference') {
+            const skillIndex = option.item.index.includes('skill-')
+                ? option.item.index.split('skill-')[1]
+                : option.item.index;
+
+            return ownedSkills.has(skillIndex);
+        }
+
+        if (option.option_type === 'string') {
+            const optionSelect = option as any;
+            return ownedSkills.has(optionSelect.index);
+        }
+
+        return false;
+    });
+
+    return {
+        ...data,
+        from: {
+            ...data.from,
+            options: filteredOptions,
+        },
     };
 };
 
@@ -200,7 +249,6 @@ const getAvailableProficiencies = (
         }
 
         if (option.option_type === 'string') {
-            console.log('string', option);
             const optionSelect = option as any;
             return !ownedSkills.has(optionSelect.index);
         }
@@ -261,4 +309,5 @@ export {
     shouldChooseSubclass,
     extractCharacterProficiencies,
     getAvailableProficiencies,
+    getProficienciesToExpertise,
 };

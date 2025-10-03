@@ -28,7 +28,6 @@ const SessionCard = ({
     }, []);
 
     const handleNavigation = useCallback(() => {
-        console.log('naviagate');
         if (auth.user.uid !== session.gmId) {
             navigation.navigate('SessionCharacters', {
                 sessionId: session.id,
@@ -36,11 +35,8 @@ const SessionCard = ({
             });
         } else {
             navigation.navigate('BottomSessionTabs', {
-                // screen: 'SessionCharacters',
-                // params: {
                 sessionId: session.id,
                 gmId: session.gmId,
-                // },
             });
         }
     }, [auth.user.uid, navigation, session.gmId, session.id]);
@@ -49,7 +45,6 @@ const SessionCard = ({
         <Card
             style={{
                 marginTop: theme.space.xl,
-                // backgroundColor: theme.colors.light50,
             }}
             onPress={handleNavigation}
             onLongPress={handleDisplayDialog}
@@ -65,7 +60,11 @@ const SessionCard = ({
             />
             <Card.Cover
                 style={{ backgroundColor: theme.colors.light25 }}
-                source={session?.gameImgPath || DAND_INTRO}
+                source={
+                    session?.gameImgPath
+                        ? { uri: session.gameImgPath }
+                        : DAND_INTRO
+                }
             />
             <Card.Title
                 title={session.name}
