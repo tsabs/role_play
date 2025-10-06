@@ -47,7 +47,7 @@ const BardLore = ({
             getAvailableProficiencies(
                 loreProficiencyData,
                 proficienciesExtracted,
-                ['fromSelectedSubclass']
+                ['fromSelectedSubclass', 'fromSelectedSubclassExpertise']
             ),
         [proficienciesExtracted]
     );

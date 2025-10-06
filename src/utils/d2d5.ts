@@ -123,6 +123,7 @@ export interface ExtractedProficiencies {
     fromSelectedRace?: string[];
     fromSelectedClass?: string[];
     fromSelectedSubclass?: string[];
+    fromSelectedSubclassExpertise?: string[];
     all: string[]; // flat list, unique
 }
 
@@ -161,7 +162,7 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
             `${character.selectedClassElements?.selected_subclass}-extra-proficiencies`
         ]?.map((prof) => prof.index) || [];
 
-    const fromSelectedSubClassExpertise =
+    const fromSelectedSubclassExpertise =
         character.selectedClassElements?.classChoices?.['expertise']?.map(
             (expertise) => expertise.index
         ) || [];
@@ -172,7 +173,7 @@ const extractCharacterProficiencies = (character: DnDCharacter) => {
         fromSelectedRace,
         fromSelectedClass,
         fromSelectedSubclass,
-        fromSelectedSubClassExpertise,
+        fromSelectedSubclassExpertise,
         all: [
             ...fromBackground,
             ...fromRace,
