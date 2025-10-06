@@ -5,12 +5,12 @@ import { DnDCharacter } from 'types/games/d2d5e';
 
 import BottomBar from '@components/library/BottomBar';
 import { callAddNote, callRemoveNote } from '@store/character/slice';
-import CharacterOverview from '@views/singleCharacter/characterOverview/CharacterOverview';
+import CharacterOverview from '@views/character/CharacterOverview';
 import ChatBot from '@views/chatBot/ChatBot';
 
 import { RootStackParamList } from '../RootNavigation';
 
-import NotesScreen from './NotesScreen.tsx';
+import NotesScreen from './NotesScreen';
 
 const BottomNavigator = createBottomTabNavigator();
 

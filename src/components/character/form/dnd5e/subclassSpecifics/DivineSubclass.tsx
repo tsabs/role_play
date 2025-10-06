@@ -98,9 +98,6 @@ const DivineSubclass = ({
                                 text={`Sorts niveau ${spellEntry.level}`}
                             />
                             {spellEntry.spells.map((spell, spellIdx) => {
-                                console.log(
-                                    `character.classes.${type}.subclasses.${subclass}.domainSpells.${idx}.${spell}`
-                                );
                                 return (
                                     <CustomText
                                         key={spellIdx}

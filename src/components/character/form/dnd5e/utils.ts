@@ -2,6 +2,8 @@ import { OPENAI_API_KEY } from '@env';
 import storage from '@react-native-firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
+import { theme } from '../../../../../style/theme';
+
 const generateImage = async (prompt: string): Promise<string | null> => {
     console.log('api key: ', OPENAI_API_KEY);
     try {
@@ -88,4 +90,27 @@ const combatsStyle = (className: string) => [
     },
 ];
 
-export { generateImage, combatsStyle };
+const getSpellColor = (spellSchool: string) => {
+    switch (spellSchool) {
+        case 'conjuration':
+            return '#4B0082';
+        case 'abjuration':
+            return '#556B2F';
+        case 'divination':
+            return '#9400D3';
+        case 'enchantment':
+            return '#DB7093';
+        case 'evocation':
+            return '#FF6347';
+        case 'illusion':
+            return '#1E90FF';
+        case 'necromancy':
+            return '#8B0000';
+        case 'transmutation':
+            return '#228B22';
+        default:
+            return theme.colors.primary;
+    }
+};
+
+export { generateImage, combatsStyle, getSpellColor };

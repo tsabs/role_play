@@ -23,10 +23,10 @@ const space = {
 };
 
 const colors = {
-    primary: '#007bff',
-    primary75: 'rgba(0, 123, 255, 0.75)',
-    primary50: 'rgba(0, 123, 255, 0.50)',
-    primary25: 'rgba(0, 123, 255, 0.25)',
+    primary: '#3A5F8B',
+    primary75: 'rgba(58, 95, 139, 0.75)',
+    primary50: 'rgba(58, 95, 139, 0.50)',
+    primary25: 'rgba(58, 95, 139, 0.25)',
     secondary: '#6c757d',
     secondary75: 'rgba(108, 117, 125, 0.75)',
     secondary50: 'rgba(108, 117, 125, 0.5)',

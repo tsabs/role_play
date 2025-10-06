@@ -20,6 +20,7 @@ import { calculateModifier } from '@utils/d2d5';
 import { theme } from '../../../../../style/theme';
 
 import { SpellDescription } from './components/SpellDescription';
+import { getSpellColor } from './utils';
 
 const SpellList = ({ characterId }: { characterId: string }) => {
     const dispatch = useAppDispatch();
@@ -206,13 +207,19 @@ const SpellList = ({ characterId }: { characterId: string }) => {
             const spells = isMinorSpell ? selectedCantrips : selectedSpells;
             const item = spells?.[index];
             return isOnEdit ? (
-                <Animated.View entering={FadeIn.duration(500)}>
+                <Animated.View
+                    entering={FadeIn.duration(500)}
+                    style={{
+                        flex: 1,
+                    }}
+                >
                     <CustomSelectionButton
                         items={groupedSpells.filter((spell) =>
                             isMinorSpell
                                 ? spell.value?.level === 0
                                 : spell.value?.level > 0
                         )}
+                        textColor={getSpellColor(item?.school?.index)}
                         preSelectedValue={
                             item
                                 ? {
@@ -221,34 +228,41 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                                   }
                                 : undefined
                         }
-                        onSelect={(value) =>
-                            handleSpellSelection(value, index, isMinorSpell)
+                        onSelect={(value) => {
+                            handleChangeSpellDescription(value, isMinorSpell);
+                            handleSpellSelection(value, index, isMinorSpell);
+                        }}
+                        sectionValue={(spell: Spell) =>
+                            getSpellColor(spell?.school?.index)
                         }
                         placeHolder="Sélectionner un sort"
                         customStyle={styles.spellButton}
-                        textColor="#000"
                     />
                 </Animated.View>
             ) : (
-                <View
-                    style={{
-                        paddingTop: theme.space.md,
-                        marginHorizontal: theme.space.md,
-                    }}
-                >
+                <View style={[styles.spellContainer]}>
                     <CustomButton
                         onPress={() =>
                             handleChangeSpellDescription(item, isMinorSpell)
                         }
+                        disabled={!item?.name}
                         style={{
-                            padding: theme.space.xs,
-                            borderWidth: 1,
-                            borderColor: theme.colors.primary,
+                            ...styles.spellButtonContainer,
+                            backgroundColor: item?.name
+                                ? theme.colors.transparent
+                                : theme.colors.light,
+                            borderColor: item?.name
+                                ? getSpellColor(item?.school?.index)
+                                : theme.colors.primary,
                         }}
                         textSize={theme.fontSize.large}
-                        textColor={theme.colors.primary}
-                        buttonColor={'transparent'}
-                        text={item?.name ? item.name : 'Sélectionner un sort'}
+                        textColor={
+                            item?.name
+                                ? getSpellColor(item?.school?.index)
+                                : theme.colors.secondary
+                        }
+                        buttonColor={theme.colors.transparent}
+                        text={item?.name ? item.name : 'Sort à sélectionner'}
                     />
                 </View>
             );
@@ -433,13 +447,27 @@ const styles = StyleSheet.create({
         paddingLeft: theme.space.md,
     },
     spellButton: {
-        marginBottom: theme.space.l,
+        borderWidth: 1,
+        borderRadius: theme.radius.xs,
+        margin: theme.space.xs,
+        padding: theme.space.xs,
     },
     bottomListContainer: {
         paddingTop: theme.space.md,
     },
+    spellContainer: {
+        flex: 1,
+        margin: theme.space.sm,
+        maxWidth: '48%', // Adjust for a 2-column layout with some space for margins
+    },
+    spellButtonContainer: {
+        padding: theme.space.xs,
+        borderWidth: 1,
+        borderRadius: theme.radius.xs,
+    },
     list: {
         gap: theme.space.md,
+        flexGrow: 0,
     },
 });
 

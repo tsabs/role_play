@@ -129,6 +129,8 @@
           "lore": {
             "title": "College of lore",
             "description": "A Bard of Lore enchants with ancient knowledge and forgotten tales.",
+            "masteryDescription": "Choose 3 additional mastery",
+            "expertiseDescription": "Choose 2 expert masteries",
             "cuttingWordsDescription": "Cutting words",
             "additionalMasteryDescription": "Additional mastery"
           },

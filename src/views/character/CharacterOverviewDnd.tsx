@@ -34,8 +34,8 @@ import {
 } from '@utils/d2d5';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@utils/utils';
 
-import { DND_CHARACTER_DEFAULT } from '../../../../assets';
-import { theme } from '../../../../style/theme';
+import { DND_CHARACTER_DEFAULT } from '../../../assets';
+import { theme } from '../../../style/theme';
 
 import ModalCharacterSettings from './ModalCharacterSettings';
 
@@ -46,6 +46,25 @@ interface CharacterOverviewDndProps {
 interface OnSaveAbilities<T extends Ability> {
     [key: string]: Record<T, number>;
 }
+
+const sectionStyles = (sectionId: number) => {
+    switch (sectionId) {
+        case 1:
+            return '#7A6B5E';
+        case 2:
+            return '#8B3A3A';
+        case 3:
+            return '#6B8E23';
+        case 4:
+            return '#3A5F8B';
+        case 5:
+            return '#8B3A8B';
+        case 6:
+            return '#2F8B8B';
+        default:
+            return theme.colors.primary;
+    }
+};
 
 const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
     const { t } = useTranslation();
@@ -453,10 +472,12 @@ const CharacterOverviewDnd = ({ character }: CharacterOverviewDndProps) => {
                                     style={{
                                         padding: theme.space.xs,
                                         borderWidth: 1,
-                                        borderColor: theme.colors.primary,
+                                        borderColor: sectionStyles(
+                                            accordion.id
+                                        ),
                                     }}
                                     textSize={theme.fontSize.large}
-                                    textColor={theme.colors.primary}
+                                    textColor={sectionStyles(accordion.id)}
                                     buttonColor={'transparent'}
                                     text={t(accordion.title)}
                                     onPress={() =>
