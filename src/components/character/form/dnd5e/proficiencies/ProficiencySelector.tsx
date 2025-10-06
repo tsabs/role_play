@@ -172,11 +172,9 @@ const ProficiencySelector: FC<ProficiencySelectorProps> = ({
                         fontSize={16}
                         fontWeight="bold"
                         text={
-                            data?.desc_fr
-                                ? data.desc_fr
-                                : data?.desc
-                                  ? data.desc
-                                  : t('characterForm.backgroundOptionTitle')
+                            data?.desc
+                                ? t(data.desc)
+                                : t('characterForm.backgroundOptionTitle')
                         }
                     />
                     <CustomText

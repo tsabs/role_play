@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { Fragment } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,7 +12,7 @@ import LoginScreen from '../views/login/Login';
 import SessionsScreen from '../views/sessions/Sessions';
 import CharactersScreen from '../views/characters/Characters';
 import { SessionCharactersScreen } from '../views/sessions/SessionCharacters';
-import { AccordionContentModal } from '../views/singleCharacter/characterOverview/AccordionModal';
+import { AccordionContentModal } from '../views/character/AccordionModal';
 
 import BottomCharacterTabs from './screen/BottomCharacterTabs';
 import { AuthProps, useAuth } from './hook/useAuth';

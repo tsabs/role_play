@@ -7,13 +7,13 @@ import CustomText from '@components/atom/CustomText';
 import { combatsStyle } from '@components/character/form/dnd5e/utils.ts';
 
 import {
-    // combatsStyle,
     favoredEnemyData,
     favoredTerrainData,
 } from '../classSpecifics/ranger/rangerClass';
 import { theme } from '../../../../../../style/theme';
-import { totemAnimalData } from '../../dnd5e/subclassSpecifics/barbarian/barbarianSubclasses.ts';
-import { huntersPrey } from '../../dnd5e/subclassSpecifics/ranger/rangerSubclasses.ts';
+import { totemAnimalData } from '../../dnd5e/subclassSpecifics/barbarian/barbarianSubclasses';
+import { huntersPrey } from '../../dnd5e/subclassSpecifics/ranger/rangerSubclasses';
+import { patronPacts } from '../../dnd5e/classSpecifics/warlock/warlockClass';
 
 interface DisplaySelectionProps {
     isOnEdit: boolean;
@@ -41,6 +41,7 @@ const DisplaySelection = ({
                 return totemAnimalData?.map((totem) => ({
                     label: t(totem.label),
                     value: totem.value,
+                    selectable: true,
                 }));
             // Barbarian end
 
@@ -49,23 +50,35 @@ const DisplaySelection = ({
                 return favoredEnemyData?.map((enemy) => ({
                     label: t(enemy.label),
                     value: enemy.value,
+                    selectable: true,
                 }));
             case 'favoredTerrains':
                 return favoredTerrainData?.map((enemy) => ({
                     label: t(enemy.label),
                     value: enemy.value,
+                    selectable: true,
                 }));
             case 'combatsStyle':
                 return combatsStyle(className).map((combat) => ({
                     label: t(combat.label),
                     value: combat.value,
+                    selectable: true,
                 }));
             case 'huntersPrey':
                 return huntersPrey.map((prey) => ({
                     label: t(prey.label),
                     value: prey.value,
+                    selectable: true,
                 }));
             // Ranger end
+            // Warlock start
+            case 'patronPacts':
+                return patronPacts.map((pact) => ({
+                    label: t(pact.label),
+                    value: pact.value,
+                    selectable: true,
+                }));
+            // Warlock end
             default:
                 return [];
         }

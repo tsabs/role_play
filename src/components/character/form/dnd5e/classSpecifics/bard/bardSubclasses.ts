@@ -187,8 +187,7 @@ const proficienciesOption: OptionChoice[] = [
 
 export const loreProficiencyData: ProficiencyOption = {
     choose: 3,
-    desc: 'Choose 3 additional mastery',
-    desc_fr: 'Choisir 3 maîtrises supplémentaires',
+    desc: 'character.classes.bard.subclasses.lore.masteryDescription',
     from: {
         option_set_type: 'options_array',
         options: proficienciesOption,

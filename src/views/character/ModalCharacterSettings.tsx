@@ -8,8 +8,8 @@ import {
 } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
-import { useTranslation } from 'react-i18next';
 import * as Clipboard from 'expo-clipboard';
+import { canGenerateImage, recordImageGeneration } from 'firestore/utils';
 
 import CustomText from '@components/atom/CustomText';
 import ImagePicker from '@components/atom/ImagePicker';
@@ -21,11 +21,7 @@ import CustomButton from '@components/atom/CustomButton';
 import { getUserInfo } from '@store/user/service';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
 
-import { theme } from '../../../../style/theme';
-import {
-    canGenerateImage,
-    recordImageGeneration,
-} from '../../../firestore/utils';
+import { theme } from '../../../style/theme';
 
 interface ModalCharacterSettingsProps {
     shouldShowModal: boolean;
@@ -42,7 +38,6 @@ const ModalCharacterSettings = ({
     setShouldShowModal,
     handleCharacterImgChange,
 }: ModalCharacterSettingsProps) => {
-    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [uri, setUri] = useState<string | undefined>(undefined);
     const [isEditingPrompt, setIsEditingPrompt] = useState<boolean>(false);

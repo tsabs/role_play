@@ -6,6 +6,7 @@ import {
     SelectedClassElementsProps,
     SelectedRaceElementsProps,
 } from 'types/games/d2d5e';
+import { GAME_TYPE } from 'types/generic';
 
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
@@ -240,14 +241,12 @@ const TalentClassForm = ({
                 Array<{ index: string; bonus?: number }>
             >
         ) => {
-            console.log('should change', selectSubclassChoices);
             setSubclassChoices(selectSubclassChoices);
         },
         []
     );
 
     const handleChangeEditMode = useCallback(() => {
-        console.log(isOnEdit);
         setIsOnEdit(!isOnEdit);
     }, [isOnEdit]);
 
@@ -337,6 +336,7 @@ const TalentClassForm = ({
                 return (
                     <WarlockTalentForm
                         level={level}
+                        gameType={GAME_TYPE.DND5E}
                         abilities={abilities}
                         isOnEdit={isOnEdit}
                         handleSubclassChoices={handleSubclassChoices}
@@ -371,6 +371,7 @@ const TalentClassForm = ({
                 <EditMode
                     isEditModeEnabled={isEditModeEnabled}
                     handleChange={handleChangeEditMode}
+                    isOnEdit={isOnEdit}
                     handleSave={handleSave}
                     style={{ flexDirection: 'row' }}
                 />

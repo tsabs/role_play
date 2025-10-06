@@ -5,11 +5,14 @@ import {
     SelectedClassElementsProps,
     SelectedRaceElementsProps,
 } from 'types/games/d2d5e';
+import { GAME_TYPE } from 'types/generic';
 
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
 import { getFeaturesByClass } from '@store/character/dnd5e/services';
 
+import DisplaySelection from '../../atom/DisplaySelection';
+import { WarlockChain } from '../../subclassSpecifics/warlock/WarlockChain';
 import { genericClassFormStyles } from '../../genericStyle';
 import { theme } from '../../../../../../../style/theme';
 
@@ -17,6 +20,7 @@ import { warlockClasses } from './warlockClass';
 
 interface WarlockTalentFormProps {
     level: number;
+    gameType: GAME_TYPE;
     abilities: Record<string, number>;
     isOnEdit: boolean;
     subclass?: string;
@@ -32,11 +36,9 @@ interface WarlockTalentFormProps {
 
 export const WarlockTalentForm = ({
     level,
-    abilities,
     isOnEdit,
     subclass,
     handleSubclassChoices,
-    selectedRaceElements,
     selectedClassElements,
 }: WarlockTalentFormProps) => {
     const { t } = useTranslation();
@@ -50,6 +52,15 @@ export const WarlockTalentForm = ({
         [selectedClassElements?.classChoices]
     );
 
+    const selectedPatronPact = useMemo(
+        () => selectedClassElements?.classChoices?.['patron-pact']?.[0]?.index,
+        [selectedClassElements?.classChoices]
+    );
+
+    const [localChoices, setLocalChoices] = useState<Record<string, string>>({
+        patronPacts: selectedPatronPact || '',
+    });
+
     const [selectedInvocations, setSelectedInvocations] = useState<
         Array<string>
     >([]);
@@ -62,6 +73,30 @@ export const WarlockTalentForm = ({
             .pop(); // Get the highest applicable level
         return available ? available.count : 0; // Default to 0 if no levels are met
     }, [level, data.eldritchInvocations]);
+
+    const handleChange = useCallback((value: string, type: string) => {
+        setLocalChoices((prev) => ({
+            ...prev,
+            [type]: value,
+        }));
+    }, []);
+
+    useEffect(() => {
+        const formattedChoices = {
+            'patron-pact': localChoices.patronPacts
+                ? [{ index: localChoices.patronPacts }]
+                : [],
+        };
+
+        handleSubclassChoices({
+            ...selectedClassElements?.classChoices,
+            ...formattedChoices,
+        });
+    }, [
+        handleSubclassChoices,
+        localChoices,
+        selectedClassElements?.classChoices,
+    ]);
 
     const callGetFeaturesByClass = useCallback(() => {
         getFeaturesByClass('warlock').then((features) => {
@@ -80,7 +115,7 @@ export const WarlockTalentForm = ({
             // );
             setEldritchInvocations(
                 features
-                    .filter((feature) => feature.level <= '2')
+                    .filter((feature) => feature.level <= level)
                     .filter(
                         (feature) =>
                             feature.index.includes('eldritch-invocation') &&
@@ -88,7 +123,7 @@ export const WarlockTalentForm = ({
                     )
             );
         });
-    }, []);
+    }, [level]);
 
     const handleInvocationSelection = useCallback(
         (index: number, invocation: string) => {
@@ -101,7 +136,6 @@ export const WarlockTalentForm = ({
                 })
             );
 
-            // console.log('formattedChoices:', formattedChoices);
             console.log('selections: ', selections);
             setSelectedInvocations(updatedSelections);
             handleSubclassChoices({
@@ -115,6 +149,13 @@ export const WarlockTalentForm = ({
             selectedInvocations,
         ]
     );
+
+    const displaySubClasses = (patronPactName: string) => {
+        switch (patronPactName) {
+            case 'chain':
+                return <WarlockChain />;
+        }
+    };
 
     useEffect(() => {
         callGetFeaturesByClass();
@@ -136,12 +177,7 @@ export const WarlockTalentForm = ({
 
     return (
         <View style={genericClassFormStyles.container}>
-            <CustomText
-                // style={genericClassFormStyles.sectionTitle}
-                fontSize={14}
-                // fontWeight="bold"
-                text={t(`${data.descriptionKey}`)}
-            />
+            <CustomText fontSize={14} text={t(`${data.descriptionKey}`)} />
 
             <CustomText
                 style={genericClassFormStyles.sectionTitle}
@@ -175,14 +211,20 @@ export const WarlockTalentForm = ({
                                         key={idx}
                                         customStyle={styles.invocationButton}
                                         items={eldritchInvocations.map(
-                                            (inv) => ({
-                                                label: inv.name.replace(
-                                                    'Eldritch Invocation: ',
-                                                    ''
-                                                ),
-                                                value: inv.index,
-                                                selectable: true,
-                                            })
+                                            (inv) => {
+                                                return {
+                                                    label: t(
+                                                        `character.classes.warlock.eldritchInvocations.${inv.index}.name`
+                                                    ).replace(
+                                                        'Invocation Étrange : ',
+                                                        ''
+                                                    ),
+                                                    value: t(
+                                                        `character.classes.warlock.eldritchInvocations.${inv.index}.index`
+                                                    ),
+                                                    selectable: true,
+                                                };
+                                            }
                                         )}
                                         displayValue={label}
                                         preSelectedValue={{
@@ -217,6 +259,19 @@ export const WarlockTalentForm = ({
                     );
                 })}
             </View>
+
+            {level >= 3 && (
+                <View>
+                    <DisplaySelection
+                        isOnEdit={isOnEdit}
+                        className={'warlock'}
+                        handleChange={handleChange}
+                        type={'patronPacts'}
+                        selectedValue={localChoices.patronPacts}
+                    />
+                    {displaySubClasses(localChoices.patronPacts)}
+                </View>
+            )}
         </View>
     );
 };

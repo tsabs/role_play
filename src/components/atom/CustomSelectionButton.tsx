@@ -14,6 +14,7 @@ type SelectionButtonProps<T = number> = {
     displayValue?: string;
     placeHolder?: string;
     textColor?: string;
+    sectionValue?: (test: T) => string;
     customStyle?: ViewStyle;
 };
 
@@ -24,6 +25,7 @@ const CustomSelectionButton = <T = number,>({
     displayValue,
     onSelect,
     textColor,
+    sectionValue,
     customStyle,
 }: SelectionButtonProps<T>) => {
     const [visible, setVisible] = useState(false);
@@ -61,7 +63,7 @@ const CustomSelectionButton = <T = number,>({
                     <Button onPress={openMenu}>
                         {selectedItem ? (
                             <CustomText
-                                fontWeight={'bold'}
+                                fontWeight="200"
                                 color={textColor || theme.colors.textSecondary}
                                 text={
                                     displayValue
@@ -70,7 +72,10 @@ const CustomSelectionButton = <T = number,>({
                                 }
                             />
                         ) : (
-                            <CustomText fontWeight="200" text={placeHolder} />
+                            <CustomText
+                                fontWeight={'bold'}
+                                text={placeHolder}
+                            />
                         )}
                     </Button>
                 }
@@ -84,7 +89,12 @@ const CustomSelectionButton = <T = number,>({
                             // Render selectable items (spells)
                             <Menu.Item
                                 onPress={() => handleSelect(item)}
-                                title={item.label}
+                                title={
+                                    <CustomText
+                                        text={item.label}
+                                        color={sectionValue?.(item?.value)}
+                                    />
+                                }
                             />
                         ) : (
                             // Render non-selectable separators
