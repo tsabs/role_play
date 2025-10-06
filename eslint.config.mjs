@@ -1,15 +1,18 @@
-import js from '@eslint/js';
+// import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactNative from 'eslint-plugin-react-native';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginImport from 'eslint-plugin-import';
-import pluginUnusedImports from 'eslint-plugin-unused-imports';
+// import pluginUnusedImports from 'eslint-plugin-unused-imports';
 import prettier from 'eslint-config-prettier';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
+    {
+        ignores: ['eslint.config.mjs'], // ignore the config file (this file)
+    },
     {
         files: ['**/*.{mjs,cjs,ts,mts,cts,jsx,tsx}'],
         languageOptions: {

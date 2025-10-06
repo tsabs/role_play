@@ -1,5 +1,6 @@
 import {
     collection,
+    FirestoreError,
     getDocs,
     query,
     where,
@@ -122,6 +123,40 @@ const getEquipmentsFromQueries = async (indexes: string[]) => {
     return results;
 };
 
+/**
+ * Fetch features based on class and optionally filter by level and name.
+ * @param {string} classIndex - The class index to filter by (required).
+ * @param {number} [level] - Optional level to filter features with a level equal or less.
+ * @param {string} [name] - Optional name to filter features matching the name.
+ * @returns {Promise<any[]>} Array of matching features.
+ */
+const getFeaturesByClass = async (
+    classIndex: string,
+    level?: number,
+    name?: string
+): Promise<any[]> => {
+    try {
+        const featuresRef = collection(db, 'games', 'dnd5e', 'features');
+        let constraints = [where('class.index', '==', classIndex)];
+
+        if (level !== undefined) {
+            constraints.push(where('level', '<=', level));
+        }
+        if (name) {
+            constraints.push(where('index', '==', name));
+        }
+
+        const featuresQuery = query(featuresRef, ...constraints);
+        const snapshot = await getDocs(featuresQuery);
+
+        return snapshot.docs.map((doc) => doc.data());
+    } catch (error) {
+        const err = error as FirestoreError;
+        console.error('Error fetching features:', err.message);
+        return [];
+    }
+};
+
 export {
     getBackgrounds,
     getClasses,
@@ -129,4 +164,5 @@ export {
     getSkills,
     getEquipments,
     getEquipmentsFromQueries,
+    getFeaturesByClass,
 };

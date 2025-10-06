@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react';
-import { Button, Image, View, StyleSheet } from 'react-native';
+import { useCallback } from 'react';
+import { IconButton } from 'react-native-paper';
+import { Image, View, StyleSheet } from 'react-native';
 import * as CustomImagePicker from 'expo-image-picker';
 
 import CustomButton from '@components/atom/CustomButton';
@@ -14,8 +15,6 @@ interface ImagePickerProps {
 }
 
 const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
-    const [image, setImage] = useState<string | undefined>(uri);
-
     const pickImage = useCallback(async () => {
         // No permissions request is necessary for launching the image library
         let result = await CustomImagePicker.launchImageLibraryAsync({
@@ -27,7 +26,6 @@ const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
 
         if (!result.canceled) {
             setUri(result.assets[0].uri);
-            setImage(result.assets[0].uri);
         }
     }, [setUri]);
 
@@ -40,8 +38,17 @@ const ImagePicker = ({ label, uri, setUri }: ImagePickerProps) => {
                 text={label}
                 onPress={pickImage}
             />
-            {image && (
-                <Image source={{ uri: image }} style={styles.imagePreview} />
+            {uri && (
+                <View style={styles.imageContainer}>
+                    <IconButton
+                        icon={'trash-can'}
+                        size={40}
+                        iconColor={theme.colors.danger}
+                        onPress={() => setUri?.('')}
+                        style={styles.deleteButton}
+                    />
+                    <Image source={{ uri }} style={styles.imagePreview} />
+                </View>
             )}
         </View>
     );
@@ -53,11 +60,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    imagePreview: {
+    imageContainer: {
+        position: 'relative',
         width: SCREEN_WIDTH * 0.9,
         height: SCREEN_HEIGHT * 0.4,
+    },
+    imagePreview: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
         borderRadius: theme.radius.md,
-        // marginBottom: theme.space.l,
+    },
+    deleteButton: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
     },
 });
 

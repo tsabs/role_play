@@ -1,28 +1,43 @@
 import { Dispatch } from 'react';
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+    Action,
+    createAsyncThunk,
+    createSlice,
+    PayloadAction,
+} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { getAuth } from '@react-native-firebase/auth';
 import {
     collection,
+    collectionGroup,
     deleteDoc,
     doc,
     getDoc,
     getDocs,
+    query,
     setDoc,
-    updateDoc,
+    where,
+    writeBatch,
 } from '@react-native-firebase/firestore';
 import { Note } from 'types/note';
 import { Character, GAME_TYPE } from 'types/generic';
+import { Spell } from 'types/games/d2d5e';
+
+import { capitalizeFirstLetter } from '@utils/utils';
 
 import { CHARACTER_MODULE_KEY } from '../constants';
 import { db } from '../../../firebaseConfig';
+import { addNote, removeNote } from '../../firestore/firestoreNotes';
 
 interface CharactersState {
     characters: Character[];
+    error: any;
 }
 
 const initialState: CharactersState = {
     characters: [],
+    error: undefined,
 };
 
 declare global {
@@ -31,24 +46,18 @@ declare global {
     }
 }
 
-export const loadCharactersFromFirebase = async (
-    clientEmail: string,
-    dispatch: Dispatch<any>
-) => {
-    const docRef = collection(db, 'characters', clientEmail, 'character');
+export const loadCharactersFromFirebase = async (dispatch: Dispatch<any>) => {
+    const docRef = collection(db, 'characters');
     const docSnapshot = await getDocs(docRef);
 
     // Extract data from each document
     const characters: Character[] = docSnapshot.docs.map((d) => ({
-        ...(d.data() as any),
+        ...(d.data() as Character),
     }));
 
     if (characters && characters.length > 0) {
         // Save to AsyncStorage
-        await AsyncStorage.setItem(
-            `characters_${clientEmail}`,
-            JSON.stringify(characters)
-        );
+        await AsyncStorage.setItem(`characters`, JSON.stringify(characters));
         dispatch(characterSlice.actions.setCharacters(characters));
         // console.log('Fetched and saved characters:', characters);
     } else {
@@ -61,6 +70,63 @@ export const loadClassData = async (gameType: GAME_TYPE, gameClass) => {
     const docSnapshot = await getDoc(docRef);
 
     return docSnapshot.data();
+};
+
+/**
+ * Fetch spells from the Firestore database based on class and level.
+ *
+ * @param characterClass - The class to filter spells on (e.g., "Wizard").
+ * @param operator - Optional operator filter (e.g, ==, <=, etc.
+ * @param level - Optional level filter (e.g., 1, 2, etc.).
+ * @returns Promise<Spell[]> - Array of spells matching the filters.
+ */
+export const fetchSpells = async (
+    characterClass: string,
+    operator: '==' | '<=' = '==',
+    level?: number
+): Promise<Spell[]> => {
+    try {
+        const spellsRef = collection(db, 'games', 'dnd5e', 'spells');
+        let spellsQuery;
+
+        // Build the query depending on the filters
+        if (characterClass && level !== undefined) {
+            spellsQuery = query(
+                spellsRef,
+                where('classes', 'array-contains', {
+                    index: characterClass,
+                    name: capitalizeFirstLetter(characterClass),
+                    url: `/api/2014/classes/${characterClass}`,
+                }),
+                where('level', operator, level)
+            );
+        } else if (characterClass) {
+            spellsQuery = query(
+                spellsRef,
+                where('classes', 'array-contains', {
+                    index: characterClass,
+                    name: capitalizeFirstLetter(characterClass),
+                    url: `/api/2014/classes/${characterClass}`,
+                })
+            );
+        } else if (level !== undefined) {
+            spellsQuery = query(spellsRef, where('level', '==', level));
+        } else {
+            spellsQuery = spellsRef; // No filters applied, so get all spells
+        }
+
+        const spellSnapshot = await getDocs(spellsQuery);
+
+        // console.log('spells: ', spellSnapshot);
+
+        // Transform Firestore documents into array of spells
+        return spellSnapshot.docs.map((d) => ({
+            ...(d.data() as Spell),
+        }));
+    } catch (error) {
+        console.error('Error fetching spells: ', error);
+        throw error;
+    }
 };
 
 export const loadSpecificTalentClassPerLevel = async (
@@ -84,11 +150,9 @@ export const loadSpecificTalentClassPerLevel = async (
 };
 
 // Async function to load from AsyncStorage
-export const loadCharacters = async (userEmail: string, dispatch: any) => {
+export const loadCharacters = async (dispatch: any) => {
     try {
-        const storedCharacters = await AsyncStorage.getItem(
-            `characters_${userEmail}`
-        );
+        // const storedCharacters = await AsyncStorage.getItem(`characters`);
 
         // if (storedCharacters) {
         //     console.log('Using cached characters');
@@ -99,21 +163,86 @@ export const loadCharacters = async (userEmail: string, dispatch: any) => {
         //     );
         //     return JSON.parse(storedCharacters); // Use cached data
         // }
-
-        await loadCharactersFromFirebase(userEmail, dispatch); // Fetch from Firebase only if local storage is empty
+        await loadCharactersFromFirebase(dispatch); // Fetch from Firebase only if local storage is empty
     } catch (error) {
         console.error('Failed to load characters from AsyncStorage:', error);
     }
 };
 
+export const migrateCharacters = async () => {
+    try {
+        const charsSnap = await getDocs(collectionGroup(db, 'character'));
+        console.log('found characters:', charsSnap.size);
+        if (charsSnap.empty) return;
+
+        let batch = writeBatch(db);
+        let ops = 0;
+        const BATCH_LIMIT = 400; // keep under 500
+
+        for (const charDoc of charsSnap.docs) {
+            const charData = charDoc.data() as any;
+            const charId = charData.id ?? charDoc.id;
+
+            // parent is the collection 'character', parent.parent is the user document (id = userEmail)
+            const parentDoc = charDoc.ref.parent.parent;
+            const userEmail = parentDoc?.id ?? null;
+
+            // best-effort ownerId: prefer existing field, else try to find user by email (costly)
+            let ownerId = charData.ownerId ?? null;
+            if (!ownerId && userEmail) {
+                try {
+                    const usersQuery = query(
+                        collection(db, 'users'),
+                        where('email', '==', userEmail)
+                    );
+                    const usersSnap = await getDocs(usersQuery);
+                    if (!usersSnap.empty) {
+                        const u = usersSnap.docs[0];
+                        ownerId = (u.data() as any).id ?? u.id;
+                    }
+                } catch (e) {
+                    console.warn('lookup user by email failed', e);
+                }
+            }
+
+            const payload = {
+                ...charData,
+                id: charId,
+                userEmail,
+                ownerId: ownerId ?? null,
+                migratedAt: Date.now(),
+            };
+
+            batch.set(doc(db, 'characters', charId), payload, { merge: true });
+            ops++;
+
+            if (ops >= BATCH_LIMIT) {
+                await batch.commit();
+                batch = writeBatch(db);
+                ops = 0;
+            }
+        }
+
+        if (ops > 0) await batch.commit();
+        console.log('Migration complete ✅');
+    } catch (err) {
+        console.error('Migration failed', err);
+    }
+};
+
 export const callAddCharacter = async (
     character: Character,
-    dispatch: Dispatch<AnyAction>
+    dispatch: Dispatch<Action>
 ) => {
-    await setDoc(
-        doc(db, 'characters', character.userEmail, 'character', character.id),
-        character
-    )
+    const user = getAuth().currentUser;
+
+    if (!user?.uid) {
+        throw new Error('User not authenticated');
+    }
+
+    character.ownerId = user.uid; // Add ownerId during creation time
+
+    await setDoc(doc(db, 'characters', character.id), character)
         .then(async () => {
             const storedCharacters = await AsyncStorage.getItem(
                 `characters_${character.userEmail}`
@@ -140,55 +269,31 @@ export const callAddCharacter = async (
         .catch((error) => console.error('Error adding character:', error));
 };
 
-export const callUpdateCharacter = async (
-    character: Character,
-    dispatch: Dispatch<AnyAction>
-) => {
-    await setDoc(
-        doc(db, 'characters', character.userEmail, 'character', character.id),
-        character,
-        { merge: true }
-    )
-        .then(async () => {
-            const storedCharacters = await AsyncStorage.getItem(
-                `characters_${character.userEmail}`
-            );
-
-            const parsedCharacters: Character[] = storedCharacters
-                ? JSON.parse(storedCharacters)
-                : [];
-
-            const updatedCharacters = parsedCharacters.map(
-                (storedChar: Character) =>
-                    storedChar.id === character.id ? character : storedChar
-            );
-
-            await AsyncStorage.setItem(
-                `characters_${character.userEmail}`,
-                JSON.stringify(updatedCharacters)
-            );
-
-            dispatch(characterSlice.actions.updateCharacter(character));
+export const callUpdateCharacter = createAsyncThunk(
+    'characters/updateCharacter',
+    async (character: Character, { rejectWithValue }) => {
+        try {
+            const characterRef = doc(db, 'characters', character.id);
+            await setDoc(characterRef, character, { merge: true });
             Toast.show({
                 type: 'success',
                 text1: 'Character added successfully!',
             });
-
-            console.log('updatedCharacter : ', character);
-        })
-        .catch((error) => console.error('Error updating character:', error));
-};
+            return character;
+        } catch (error) {
+            console.error('Error updating character in Firestore:', error);
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 export const callRemoveCharacter = async (
-    userEmail: string,
     characterId: string,
     dispatch: Dispatch<any>
 ) => {
-    await deleteDoc(
-        doc(db, 'characters', userEmail, 'character', characterId)
-    ).then(async () => {
+    await deleteDoc(doc(db, 'characters', characterId)).then(async () => {
         const storedCharacters = await AsyncStorage.getItem(
-            `characters_${userEmail}`
+            `characters_${characterId}`
         );
         let currentCharacters: Character[] = storedCharacters
             ? JSON.parse(storedCharacters)
@@ -197,7 +302,7 @@ export const callRemoveCharacter = async (
             (char) => char.id !== characterId
         );
         await AsyncStorage.setItem(
-            `characters_${userEmail}`,
+            `characters_${characterId}`,
             JSON.stringify(currentCharacters)
         );
         dispatch(characterSlice.actions.removeCharacter({ id: characterId }));
@@ -206,115 +311,37 @@ export const callRemoveCharacter = async (
 };
 
 export const callAddNote = async (
-    userEmail: string,
     characterId: string,
     note: Note,
     dispatch: Dispatch<any>
 ) => {
-    const storedCharacters = await AsyncStorage.getItem(
-        `characters_${userEmail}`
-    );
-    let currentCharacters: Character[] = storedCharacters
-        ? JSON.parse(storedCharacters)
-        : [];
-
-    const characterIndex = currentCharacters.findIndex(
-        (char) => char.id === characterId
-    );
-
-    const character = currentCharacters[characterIndex];
-    const noteIndex = character.notes.findIndex((n) => n.id === note.id);
-    const noteRef = doc(db, 'characters', userEmail, 'character', characterId);
-    if (characterIndex !== -1) {
-        if (!character.notes) {
-            character.notes = [];
-        }
-        if (noteIndex !== -1) {
-            character.notes[noteIndex] = note;
-        } else {
-            character.notes.unshift(note);
-        }
-        await updateDoc(noteRef, { notes: character.notes })
-            .then(async () => {
-                // Save to local storage
-                await AsyncStorage.setItem(
-                    `characters_${userEmail}`,
-                    JSON.stringify(currentCharacters)
-                );
-
-                dispatch(characterSlice.actions.setNote({ characterId, note }));
-                Toast.show({
-                    type: 'success',
-                    text1: 'Note saved successfully!',
-                });
-
-                console.log(
-                    'Note added successfully to character:',
-                    character.name
-                );
-            })
-            .catch((err) => console.log(err));
-    }
+    await addNote(characterId, note, 'characters')
+        .then(() => {
+            Toast.show({
+                type: 'success',
+                text1: 'Note saved successfully!',
+            });
+            dispatch(characterSlice.actions.setNote({ characterId, note }));
+        })
+        .catch((err) => console.error('Error adding note', err));
 };
 
 export const callRemoveNote = async (
-    userEmail: string,
     characterId: string,
     noteId: string,
     dispatch: Dispatch<any>
 ) => {
-    const storedCharacters = await AsyncStorage.getItem(
-        `characters_${userEmail}`
-    );
-    let currentCharacters: Character[] = storedCharacters
-        ? JSON.parse(storedCharacters)
-        : [];
-
-    const characterIndex = currentCharacters.findIndex(
-        (char) => char.id === characterId
-    );
-
-    if (characterIndex !== -1) {
-        const character = currentCharacters[characterIndex];
-
-        if (!character.notes) {
-            character.notes = [];
-        }
-
-        const noteRef = doc(
-            db,
-            'characters',
-            userEmail,
-            'character',
-            characterId
-        );
-
-        const resultNotes = character.notes.filter(
-            (note) => note.id !== noteId
-        );
-
-        dispatch(characterSlice.actions.removeNote({ characterId, noteId }));
-        await updateDoc(noteRef, { notes: resultNotes }).then(async () => {
-            await AsyncStorage.setItem(
-                `characters_${userEmail}`,
-                JSON.stringify(currentCharacters)
-            );
-
+    await removeNote(characterId, noteId, 'characters')
+        .then(() => {
             dispatch(
                 characterSlice.actions.removeNote({ characterId, noteId })
             );
-
             Toast.show({
                 type: 'success',
                 text1: 'Note deleted successfully!',
             });
-
-            console.log(
-                'Note deleted successfully from character:',
-                character.name
-            );
-        });
-    }
+        })
+        .catch((err) => console.error('Error removing note', err));
 };
 
 export const characterSlice = createSlice({
@@ -325,7 +352,7 @@ export const characterSlice = createSlice({
             state.characters.push(action.payload);
         },
         updateCharacter: (state, action: PayloadAction<Character>) => {
-            const index = state.characters.findIndex(
+            const index = state.characters?.findIndex(
                 (char) => char.id === action.payload.id
             );
             if (index !== -1) {
@@ -344,31 +371,52 @@ export const characterSlice = createSlice({
             state,
             action: PayloadAction<{ characterId: string; note: Note }>
         ) => {
-            const characterIndex = state.characters.findIndex(
+            const characterIndex = state.characters?.findIndex(
                 (char) => char.id === action.payload.characterId
-            );
-            const character = state.characters[characterIndex];
-            const noteIndex = character.notes.findIndex(
-                (n) => n.id === action.payload.note.id
             );
 
             if (characterIndex !== -1) {
-                if (!character.notes) {
-                    character.notes = [];
+                const character = state.characters[characterIndex];
+
+                const updatedNotes =
+                    character.notes?.map((existingNote) =>
+                        existingNote.id === action.payload.note.id
+                            ? { ...existingNote, ...action.payload.note }
+                            : existingNote
+                    ) ?? [];
+
+                // If note does not exist, add it
+                const noteExists = updatedNotes.some(
+                    (existingNote) => existingNote.id === action.payload.note.id
+                );
+
+                if (!noteExists) {
+                    updatedNotes.unshift(action.payload.note);
                 }
 
-                if (noteIndex !== -1) {
-                    character.notes[noteIndex] = action.payload.note;
-                } else {
-                    character.notes.unshift(action.payload.note); // add newest note at top
-                }
+                // Update the character with the new notes array
+                const updatedCharacter = {
+                    ...character,
+                    notes: updatedNotes,
+                };
+
+                // Update the state immutably
+                state.characters = [
+                    ...state.characters.slice(0, characterIndex),
+                    updatedCharacter,
+                    ...state.characters.slice(characterIndex + 1),
+                ];
+            } else {
+                console.error(
+                    `Character with ID ${action.payload.characterId} not found.`
+                );
             }
         },
         removeNote: (
             state,
             action: PayloadAction<{ characterId: string; noteId: string }>
         ) => {
-            const characterIndex = state.characters.findIndex(
+            const characterIndex = state.characters?.findIndex(
                 (char) => char.id === action.payload.characterId
             );
             if (characterIndex !== -1) {
@@ -383,5 +431,21 @@ export const characterSlice = createSlice({
                 );
             }
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(callUpdateCharacter.fulfilled, (state, action) => {
+                // Update the character in Redux state
+                const updatedCharacter = action.payload;
+                const index = state.characters.findIndex(
+                    (character) => character.id === updatedCharacter.id
+                );
+                if (index !== -1) {
+                    state.characters[index] = updatedCharacter; // Update state
+                }
+            })
+            .addCase(callUpdateCharacter.rejected, (state, action) => {
+                state.error = action.payload; // Handle errors
+            });
     },
 });

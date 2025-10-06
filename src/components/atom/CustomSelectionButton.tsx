@@ -1,14 +1,15 @@
-import { FC, Fragment, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { Button, Menu, Divider } from 'react-native-paper';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { theme } from '../../../style/theme';
 
 import CustomText from './CustomText';
 
 type SelectionButtonProps<T = number> = {
-    items: Array<{ label: string; value: T }>;
     onSelect: (value: T) => void;
+    items: Array<{ label: string; value: T; selectable?: boolean }>;
     preSelectedValue?: { label: string; value: T };
     displayValue?: string;
     placeHolder?: string;
@@ -38,13 +39,18 @@ const CustomSelectionButton = <T = number,>({
     const closeMenu = useCallback(() => setVisible(false), []);
 
     const handleSelect = useCallback(
-        (item: { label: string; value: T }) => {
+        (item: { label: string; value: T; selectable?: boolean }) => {
+            if (!item.selectable) return;
             setSelectedItem(item);
             onSelect(item.value);
             closeMenu();
         },
         [onSelect, closeMenu]
     );
+
+    if (!items && items?.length === 0) {
+        return;
+    }
 
     return (
         <View style={customStyle ? customStyle : styles.container}>
@@ -60,23 +66,39 @@ const CustomSelectionButton = <T = number,>({
                                 text={
                                     displayValue
                                         ? displayValue
-                                        : `Niveau ${selectedItem.label}`
+                                        : `${selectedItem.label}`
                                 }
                             />
                         ) : (
-                            <CustomText text={placeHolder} />
+                            <CustomText fontWeight="200" text={placeHolder} />
                         )}
                     </Button>
                 }
             >
-                {items.map((item, index) => (
-                    <Fragment key={index}>
-                        <Menu.Item
-                            onPress={() => handleSelect(item)}
-                            title={item.label}
-                        />
+                {items?.map((item, index) => (
+                    <Animated.View
+                        key={index}
+                        entering={FadeIn.delay(index * 50)}
+                    >
+                        {item.selectable ? (
+                            // Render selectable items (spells)
+                            <Menu.Item
+                                onPress={() => handleSelect(item)}
+                                title={item.label}
+                            />
+                        ) : (
+                            // Render non-selectable separators
+                            <View style={styles.labelContainer}>
+                                <CustomText
+                                    fontWeight="bold"
+                                    color={theme.colors.light}
+                                    style={styles.sectionLabel}
+                                    text={item.label}
+                                />
+                            </View>
+                        )}
                         {index < items.length - 1 && <Divider />}
-                    </Fragment>
+                    </Animated.View>
                 ))}
             </Menu>
         </View>
@@ -88,6 +110,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: theme.colors.primary,
         flexDirection: 'row',
+    },
+    labelContainer: {
+        backgroundColor: theme.colors.primary,
+    },
+    sectionLabel: {
+        marginVertical: theme.space.xxxl,
+        marginHorizontal: theme.space.xxxl,
     },
 });
 

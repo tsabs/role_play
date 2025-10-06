@@ -19,10 +19,16 @@ const removeDuplicate = (arr: any[], fieldToCheck?: string) => {
     });
 };
 
+const capitalizeFirstLetter = (word: string): string => {
+    if (!word) return word; // Handle empty string
+    return word.charAt(0).toUpperCase() + word.slice(1);
+};
+
 export {
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
+    capitalizeFirstLetter,
     removeDuplicate,
 };

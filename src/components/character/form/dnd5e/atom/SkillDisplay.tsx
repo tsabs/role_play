@@ -1,9 +1,10 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { ElementIdentification } from 'types/games/d2d5e';
 
-import CustomText from '../../../../atom/CustomText';
+import CustomText from '@components/atom/CustomText';
+
 import { theme } from '../../../../../../style/theme';
-import { ElementIdentification } from '../../../../../types/games/d2d5e';
 
 interface SkillsDisplayProps {
     proficiencies?: ElementIdentification[];

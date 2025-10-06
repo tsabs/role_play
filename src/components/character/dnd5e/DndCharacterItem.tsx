@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,13 +7,17 @@ import { Card, Text } from 'react-native-paper';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { DnDCharacter } from 'types/games/d2d5e';
+import Toast from 'react-native-toast-message';
 
 import CustomText from '@components/atom/CustomText';
 import Separator from '@components/library/Separator';
 import CustomDialog from '@components/library/CustomDialog';
+import { useAuth } from '@navigation/hook/useAuth';
+import { removeCharacterFromSession } from '@store/session/sessionServices';
 import { callRemoveCharacter } from '@store/character/slice';
 import { useAppDispatch } from '@store/index';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@utils/utils';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@utils/utils';
+import { isOwnerOrGm } from '@views/sessions/utils';
 
 import { DND_CHARACTER_DEFAULT } from '../../../../assets';
 import { theme } from '../../../../style/theme';
@@ -21,12 +25,15 @@ import { theme } from '../../../../style/theme';
 interface DndCharacterItemProps {
     character: DnDCharacter;
     index: number;
+    mode: string;
+    sessionId?: string;
+    gmId?: string;
 }
 
 const HEADER_HEIGHT = 100;
 const BOTTOM_NAV_HEIGHT = 50;
-const FLATLIST_HEIGHT = SCREEN_HEIGHT - HEADER_HEIGHT - BOTTOM_NAV_HEIGHT - 120;
-const FLATLIST_WIDTH = SCREEN_WIDTH - 32 - 24;
+const FLATLIST_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT - BOTTOM_NAV_HEIGHT - 60;
+const FLATLIST_WIDTH = WINDOW_WIDTH - 32 - 24;
 
 const LabeledElement = ({ label, val }: { label: string; val: string }) => {
     return (
@@ -46,16 +53,50 @@ const LabeledElement = ({ label, val }: { label: string; val: string }) => {
     );
 };
 
-const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
+const DndCharacterItem = ({
+    character,
+    index,
+    mode,
+    sessionId,
+    gmId,
+}: DndCharacterItemProps) => {
     const dispatch = useAppDispatch();
+    const auth = useAuth();
     const navigation = useNavigation();
     const { t } = useTranslation();
 
     const [isVisible, setIsVisible] = useState(false);
+    const isOwnerOrGameMaster = useMemo(
+        () => isOwnerOrGm(auth.user.uid, character.ownerId, mode, gmId),
+        [auth.user.uid, character.ownerId, gmId, mode]
+    );
 
-    const handleRemoveCharacter = useCallback(() => {
-        callRemoveCharacter(character.userEmail, character.id, dispatch);
-    }, [character.userEmail, character.id, dispatch]);
+    const handleRemoveCharacter = useCallback(async () => {
+        if (isOwnerOrGameMaster) {
+            if (mode === 'session') {
+                await removeCharacterFromSession(
+                    sessionId,
+                    character.id,
+                    character.ownerId,
+                    dispatch
+                );
+            } else {
+                await callRemoveCharacter(character.id, dispatch);
+            }
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: 'Seul un GM ou le propriétaire peut supprimer ce personnage',
+            });
+        }
+    }, [
+        character.id,
+        character.ownerId,
+        dispatch,
+        isOwnerOrGameMaster,
+        mode,
+        sessionId,
+    ]);
 
     return (
         <Animated.View
@@ -64,10 +105,13 @@ const DndCharacterItem = ({ character, index }: DndCharacterItemProps) => {
         >
             <TouchableOpacity
                 delayPressIn={50}
+                disabled={!isOwnerOrGameMaster}
                 onLongPress={() => setIsVisible(true)}
                 onPress={() => {
                     navigation.navigate('BottomCharacterTabs', {
                         character: character,
+                        gmId,
+                        sessionId,
                     });
                 }}
             >
@@ -162,7 +206,7 @@ const styles = StyleSheet.create({
     image: {
         backgroundColor: theme.colors.light,
         alignSelf: 'stretch',
-        height: SCREEN_HEIGHT / 2.5,
+        height: WINDOW_HEIGHT / 2.5,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },

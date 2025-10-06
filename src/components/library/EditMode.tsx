@@ -7,6 +7,7 @@ interface EditModeProps {
     isEditModeEnabled: boolean;
     handleChange: () => void;
     handleSave: () => void;
+    isOnEdit?: boolean;
     saveDisabled?: boolean;
     style?: ViewStyle;
 }
@@ -14,6 +15,7 @@ interface EditModeProps {
 const EditMode = ({
     isEditModeEnabled,
     handleChange,
+    isOnEdit,
     handleSave,
     saveDisabled,
     style,
@@ -28,7 +30,7 @@ const EditMode = ({
                     style={{
                         backgroundColor: theme.colors.primary,
                     }}
-                    icon={'pen'}
+                    icon={isOnEdit ? 'close' : 'pen'}
                 />
                 <IconButton
                     size={18}

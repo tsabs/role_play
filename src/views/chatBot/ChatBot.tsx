@@ -161,7 +161,7 @@ const ChatBot = ({ race, className, subClassName, level }: ChatBotProps) => {
                             style={{
                                 color:
                                     item.sender === 'user'
-                                        ? 'white'
+                                        ? customtheme.colors.white
                                         : theme.colors.onSurface,
                             }}
                         >
@@ -171,7 +171,7 @@ const ChatBot = ({ race, className, subClassName, level }: ChatBotProps) => {
                 </Card>
             </View>
         ),
-        []
+        [theme.colors.onSurface, theme.colors.primary, theme.colors.surface]
     );
 
     return (

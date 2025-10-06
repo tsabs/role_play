@@ -1,10 +1,13 @@
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { IconButton, TextInput } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { Ability } from 'types/generic';
 
 import CustomText from '@components/atom/CustomText';
+import EditMode from '@components/library/EditMode';
+import { selectCharacterById } from '@store/character/selectors';
+import { useAppSelector } from '@store/index';
 
 import { theme } from '../../../../../style/theme';
 import { ABILITIES } from '../dnd5e/constants';
@@ -14,45 +17,52 @@ interface OnSaveAbilities<T extends Ability> {
 }
 
 interface AbilityFormProps<T extends Ability> {
-    onChange: (updated: Record<T, number>) => void;
+    characterId?: string;
+    onChange?: (updated: Record<T, number>) => void;
     abilityBonuses?: Array<{ index: string; bonus?: number }>;
-    onEditMode?: () => void;
     onSaveEdit?: (abilities: OnSaveAbilities<T>) => void;
-    abilities?: Record<T, number>;
-    isEditMode?: boolean;
     isEditModeEnabled?: boolean;
-    remainingPoints?: number;
-    level?: number;
+    remainingPoints?: (abilities: Record<Ability, number>) => number;
 }
 
 const AbilityForm = <T extends Ability>({
-    abilities,
+    characterId,
     abilityBonuses,
     onChange,
-    onEditMode,
     onSaveEdit,
     isEditModeEnabled,
-    isEditMode,
     remainingPoints,
-    level = 1,
 }: AbilityFormProps<T>) => {
     const { t } = useTranslation();
-    const [selectedAbility, setSelectedAbility] =
-        useState<Record<T, number>>(abilities);
+    const abilities = useAppSelector(selectCharacterById(characterId))
+        ?.abilities;
+    const [isLocalEditMode, setIsLocalEditMode] = useState(!isEditModeEnabled);
+    const [selectedAbilities, setSelectedAbilities] = useState<
+        Record<T, number>
+    >((abilities || ABILITIES) as Record<Ability, number>);
     const handleChange = useCallback(
         (key: Ability, value: number) => {
-            const updated = { ...abilities, [key]: value };
-            setSelectedAbility(updated);
-            onChange(updated);
+            const updated = { ...selectedAbilities, [key]: value };
+            onChange?.(updated);
+            setSelectedAbilities(updated);
         },
-        [abilities, onChange]
+        [onChange, selectedAbilities]
     );
 
+    const handleLocalEditMode = useCallback(() => {
+        setIsLocalEditMode(!isLocalEditMode);
+    }, [isLocalEditMode]);
+
     const handleChangeWithEditModeEnabled = useCallback(() => {
-        if (isEditModeEnabled) {
-            onSaveEdit({ abilities: selectedAbility });
+        if (isLocalEditMode) {
+            onSaveEdit({ abilities: selectedAbilities });
         }
-    }, [isEditModeEnabled, selectedAbility, onSaveEdit]);
+        setIsLocalEditMode(false);
+    }, [isLocalEditMode, selectedAbilities, onSaveEdit]);
+
+    const getRemainingPoints = useMemo(() => {
+        return remainingPoints(selectedAbilities as Record<Ability, number>);
+    }, [remainingPoints, selectedAbilities]);
 
     return (
         <View
@@ -61,23 +71,16 @@ const AbilityForm = <T extends Ability>({
             }}
         >
             {isEditModeEnabled && (
-                <View>
-                    <IconButton
-                        size={14}
-                        onPress={onEditMode}
-                        style={{ backgroundColor: theme.colors.secondary25 }}
-                        icon={'pen'}
-                    />
-                    <IconButton
-                        size={14}
-                        onPress={handleChangeWithEditModeEnabled}
-                        style={{ backgroundColor: theme.colors.secondary25 }}
-                        icon={'check'}
-                    />
-                </View>
+                <EditMode
+                    isEditModeEnabled
+                    isOnEdit={isLocalEditMode}
+                    handleChange={handleLocalEditMode}
+                    handleSave={handleChangeWithEditModeEnabled}
+                />
             )}
+
             <View style={styles.container}>
-                {Object.entries(abilities || ABILITIES)?.map(
+                {Object.entries(selectedAbilities || ABILITIES)?.map(
                     ([abilityKey, abilityValue]) => {
                         const ability = abilityBonuses?.find(
                             (abilityBonus) =>
@@ -85,7 +88,7 @@ const AbilityForm = <T extends Ability>({
                         );
                         return (
                             <View key={abilityKey} style={styles.ability}>
-                                {isEditMode ? (
+                                {isLocalEditMode ? (
                                     <View style={{ flexDirection: 'row' }}>
                                         <View>
                                             <IconButton
@@ -169,12 +172,12 @@ const AbilityForm = <T extends Ability>({
                         );
                     }
                 )}
-                {isEditMode && remainingPoints >= 0 && (
+                {isLocalEditMode && getRemainingPoints >= 0 && (
                     <CustomText
                         style={{
                             marginBottom: theme.space.sm,
                         }}
-                        text={`Points restants: ${remainingPoints}`}
+                        text={`Points restants: ${getRemainingPoints}`}
                     />
                 )}
             </View>
