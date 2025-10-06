@@ -9,8 +9,10 @@ import {
 import CustomText from '@components/atom/CustomText';
 
 import { genericClassFormStyles } from '../../genericStyle';
-import RangerSubclass from '../../subclassSpecifics/ranger/RangerSubclass';
-import DisplaySelection from '../../atom/DisplaySelection.tsx';
+import RangerHunter from '../../subclassSpecifics/ranger/RangerHunter';
+import DisplaySelection from '../../atom/DisplaySelection';
+
+import { rangerSubclasses } from './rangerClass';
 
 interface RangerTalentFormProps {
     level: number;
@@ -47,6 +49,7 @@ const RangerTalentForm = ({
     selectedRaceElements,
 }: RangerTalentFormProps) => {
     const { t } = useTranslation();
+    const data = rangerSubclasses[subclass as keyof typeof rangerSubclasses];
     const favoredEnemies = useMemo(
         () =>
             selectedClassElements?.classChoices?.['favored-enemies']?.[0]
@@ -99,6 +102,26 @@ const RangerTalentForm = ({
         handleSubclassChoices,
         localChoices,
         selectedClassElements?.classChoices,
+    ]);
+
+    const displaySubClassSpecifics = useCallback(() => {
+        if (subclass === 'hunter') {
+            return (
+                <RangerHunter
+                    subclass={subclass}
+                    selectedClassElements={selectedClassElements}
+                    isOnEdit={isOnEdit}
+                    handleSubclassChoices={handleSubclassChoices}
+                    level={level}
+                />
+            );
+        }
+    }, [
+        handleSubclassChoices,
+        isOnEdit,
+        level,
+        selectedClassElements,
+        subclass,
     ]);
 
     return (
@@ -191,13 +214,31 @@ const RangerTalentForm = ({
             )}
 
             {level >= 3 && (
-                <RangerSubclass
-                    subclass={subclass}
-                    level={level}
-                    selectedClassElements={selectedClassElements}
-                    isOnEdit={isOnEdit}
-                    handleSubclassChoices={handleSubclassChoices}
-                />
+                <View>
+                    <CustomText
+                        fontSize={16}
+                        fontWeight="bold"
+                        text={t(data.nameKey)}
+                        style={genericClassFormStyles.sectionTitle}
+                    />
+                    <CustomText text={t(data.descriptionKey)} />
+                    {data.features
+                        .filter((f) => level >= f.level)
+                        .map((f, idx) => (
+                            <CustomText
+                                key={idx}
+                                text={`• ${t(f.descriptionKey)}`}
+                            />
+                        ))}
+                    {displaySubClassSpecifics()}
+                </View>
+                // <RangerSubclass
+                //     subclass={subclass}
+                //     level={level}
+                //     selectedClassElements={selectedClassElements}
+                //     isOnEdit={isOnEdit}
+                //     handleSubclassChoices={handleSubclassChoices}
+                // />
             )}
         </View>
     );
