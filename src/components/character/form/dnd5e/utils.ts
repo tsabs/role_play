@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { theme } from '../../../../../style/theme';
 
 const generateImage = async (prompt: string): Promise<string | null> => {
-    console.log('api key: ', OPENAI_API_KEY);
     try {
         const res = await fetch(
             'https://api.openai.com/v1/images/generations',

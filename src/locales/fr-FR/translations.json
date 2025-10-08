@@ -74,6 +74,7 @@
     "classes": {
       "barbarian": {
         "name": "Barbare",
+        "index": "barbare",
         "talents": {
           "rageTitle": "🪓 Rage",
           "ragesPerLongRest": "Rages par repos long : {{rageUses}}",
@@ -115,6 +116,7 @@
       },
       "bard": {
         "name": "Barde",
+        "index": "barde",
         "talents":  {
           "bardicInspirationTitle": "🎵 Inspiration Bardique",
           "bardicInspirationDescription": "Vous pouvez utiliser l'Inspiration Bardique {{uses}} fois par repos long.",
@@ -145,6 +147,7 @@
       },
       "cleric": {
         "name": "Clerc",
+        "index": "clerc",
         "talents":  {
           "spellcastingTitle": "🛐 Incantation",
           "preparedSpellsDescription": "Vous pouvez préparer {{preparedSpells}} sorts de clerc (mod SAG + niveau).",
@@ -220,12 +223,14 @@
       },
       "druid": {
         "name":"Druide",
+        "index":"druide",
         "talents":  {
 
         }
       },
       "fighter": {
         "name":  "Guerrier",
+        "index":  "guerrier",
         "talents":  {
           "secondWindTitle": "💪 Second Souffle",
           "secondWindDescription": "En tant qu'action bonus, soignez {{healAmount}} une fois par repos court.",
@@ -271,12 +276,14 @@
       },
       "monk": {
         "name": "Moine",
+        "index": "moine",
         "talents":  {
 
         }
       },
       "paladin": {
         "name": "Paladin",
+        "index": "paladin",
         "channelDivinityTitle": "Canalisation d'énergie divine",
         "oathSpellsAtLevel": "Sorts du serment – Niveau {{level}}",
         "talents":  {
@@ -359,6 +366,7 @@
       },
       "ranger": {
         "name": "Rôdeur",
+        "index": "rodeur",
         "talents":  {
           "favoredEnemyTitle": "🏹 Ennemi Privilégié",
           "favoredEnemyDescription": "Choisissez {{count}} type(s) d'ennemi privilégié. Obtenez des bonus pour le pistage, la langue et les dégâts.",
@@ -526,12 +534,14 @@
       },
       "rogue": {
         "name": "Voleur",
+        "index": "voleur",
         "talents":  {
 
         }
       },
       "sorcerer": {
         "name": "Ensorceleur",
+        "index": "ensorceleur",
         "talents":  {
           "spellcastingTitle": "✨ Incantation",
           "spellsKnownDescription": "Vous connaissez jusqu'à {{maxSpellsKnown}} sorts de ensorceleur (niveau + mod CHA).",
@@ -545,6 +555,7 @@
       },
       "warlock": {
         "name": "Occultiste",
+        "index": "occultiste",
         "talents":  {
 
         },
@@ -756,6 +767,7 @@
       },
       "wizard": {
         "name":"Magicien",
+        "index":"magicien",
         "talents":  {
 
         }

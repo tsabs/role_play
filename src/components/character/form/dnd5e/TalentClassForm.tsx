@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { Portal } from 'react-native-paper';
 import {
     DnDAbility,
     SelectedClassElementsProps,
@@ -8,6 +9,7 @@ import {
 } from 'types/games/d2d5e';
 import { GAME_TYPE } from 'types/generic';
 
+import CustomButton from '@components/atom/CustomButton';
 import CustomText from '@components/atom/CustomText';
 import CustomSelectionButton from '@components/atom/CustomSelectionButton';
 import EditMode from '@components/library/EditMode';
@@ -22,6 +24,7 @@ import PaladinTalentForm from '../dnd5e/classSpecifics//paladin/PaladinTalentFor
 import SorcererTalentForm from '../dnd5e/classSpecifics/SorcererTalentForm';
 import { WarlockTalentForm } from '../dnd5e/classSpecifics/warlock/WarlockTalentForm';
 import { theme } from '../../../../../style/theme';
+import { AidedDndModal } from '../../dnd5e/AidedDndModal';
 
 interface TalentClassFormProps {
     characterClass: string;
@@ -58,6 +61,7 @@ const TalentClassForm = ({
         selectedClassElements?.classChoices
     );
     const [isOnEdit, setIsOnEdit] = useState(false);
+    const [shouldShowClassDetails, setShouldShowClassDetails] = useState(false);
     const availableSubclasses = useMemo(() => {
         switch (characterClass) {
             case 'bard':
@@ -360,7 +364,30 @@ const TalentClassForm = ({
     ]);
 
     return (
-        <View>
+        <Fragment>
+            <Fragment>
+                <View style={{ paddingHorizontal: theme.space.l }}>
+                    <CustomText text="Pour avoir plus de détail sur votre classe voici un lien: " />
+                    <CustomButton
+                        text={`Détail de ${t(
+                            `character.classes.${characterClass}.name`
+                        )}`}
+                        textColor={theme.colors.primary}
+                        buttonColor={theme.colors.transparent}
+                        onPress={() => setShouldShowClassDetails(true)}
+                    />
+                </View>
+                <Portal>
+                    <AidedDndModal
+                        shouldShowModal={shouldShowClassDetails}
+                        setShouldShowModal={setShouldShowClassDetails}
+                        type="classes"
+                        name={t(
+                            `character.classes.${characterClass.toLowerCase()}.index`
+                        )}
+                    />
+                </Portal>
+            </Fragment>
             <View
                 style={{
                     flexDirection: 'row',
@@ -422,7 +449,7 @@ const TalentClassForm = ({
                     ))}
             </View>
             {renderClassSpecific()}
-        </View>
+        </Fragment>
     );
 };
 
