@@ -104,7 +104,27 @@ interface Spell {
     ritual: boolean;
     school: ElementIdentification;
     subclasses: Array<ElementIdentification>;
+    invokableCreatures?: string[];
     updated_at: string;
+}
+
+interface Monster {
+    index: string;
+    name: string;
+    actions?: Array<any>;
+    armor_class?: Array<{ value: number; type: string }>;
+    challenge_rating?: number;
+    charisma: number;
+    constitution: number;
+    condition_immunities?: Array<ElementIdentification>;
+    dexterity: number;
+    intelligence: number;
+    strength: number;
+    wisdom: number;
+    damage_immunities?: Array<string>;
+    damage_resistances?: Array<string>;
+    hit_dice: string;
+    hit_points: number;
 }
 
 // ----------------------------
@@ -252,6 +272,7 @@ export {
     SkillProficiency,
     Spell,
     SpellData,
+    Monster,
     StartingEquipmentOption,
     SelectedClassElementsProps,
     SelectedRaceElementsProps,

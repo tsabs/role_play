@@ -5,6 +5,7 @@ import {
     query,
     where,
 } from '@react-native-firebase/firestore';
+import { Monster } from 'types/games/d2d5e';
 
 import { removeDuplicate } from '@utils/utils';
 
@@ -157,6 +158,31 @@ const getFeaturesByClass = async (
     }
 };
 
+const getInvokableMonsters = async (invokableCreatures: string[]) => {
+    if (!invokableCreatures?.length) return;
+    try {
+        const chunks = [];
+        for (let i = 0; i < invokableCreatures.length; i += 10) {
+            const slice = invokableCreatures.slice(i, i + 10);
+            chunks.push(
+                getDocs(
+                    query(
+                        collection(db, 'games', 'dnd5e', 'monsters'),
+                        where('index', 'in', slice),
+                        where('isInvokable', '==', true)
+                    )
+                )
+            );
+        }
+        const results = await Promise.all(chunks);
+        return results.flatMap((r) =>
+            r.docs.map((d) => ({ id: d.id, ...d.data() }) as Monster)
+        );
+    } catch (err) {
+        console.error('Error fetching invokable monsters:', err);
+    }
+};
+
 export {
     getBackgrounds,
     getClasses,
@@ -165,4 +191,5 @@ export {
     getEquipments,
     getEquipmentsFromQueries,
     getFeaturesByClass,
+    getInvokableMonsters,
 };
