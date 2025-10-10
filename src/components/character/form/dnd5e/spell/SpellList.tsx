@@ -1,6 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    Fragment,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { DnDCharacter, Spell, SpellData } from 'types/games/d2d5e';
+import { DnDCharacter, DndClass, Spell, SpellData } from 'types/games/d2d5e';
 import { GAME_TYPE } from 'types/generic';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
@@ -17,10 +23,14 @@ import {
 import { selectCharacterById } from '@store/character/selectors';
 import { calculateModifier } from '@utils/d2d5';
 
-import { theme } from '../../../../../style/theme';
+import { clericSubclasses } from '../classSpecifics/clerc/clericSubclasses';
+import { warlockClasses } from '../classSpecifics/warlock/warlockClass';
+import { paladinSubclasses } from '../classSpecifics/paladin/paladinClass';
+import { AdditionalSpells } from '../spell/AdditionalSpells';
+import { theme } from '../../../../../../style/theme';
+import { getSpellColor } from '../utils';
 
-import { SpellDescription } from './components/SpellDescription';
-import { getSpellColor } from './utils';
+import { SpellDescription } from './SpellDescription';
 
 const SpellList = ({ characterId }: { characterId: string }) => {
     const dispatch = useAppDispatch();
@@ -308,7 +318,7 @@ const SpellList = ({ characterId }: { characterId: string }) => {
             case 'paladin':
                 return character.level >= 2
                     ? Math.ceil(character.level / 2) +
-                          calculateModifier(character.abilities['DEX'])
+                          calculateModifier(character.abilities['CHA'])
                     : 0;
             default:
                 return 0;
@@ -319,6 +329,39 @@ const SpellList = ({ characterId }: { characterId: string }) => {
         character.gameType,
         character.level,
         spellData?.spells_known,
+    ]);
+
+    const spellDataClass: Array<{
+        level: number;
+        spells: Array<{ index: string; schoolType: string }>;
+    }> = useMemo(() => {
+        switch ((character.className as DndClass).index) {
+            case 'paladin':
+                return (
+                    paladinSubclasses(
+                        character.selectedClassElements?.selected_subclass
+                    )[character.selectedClassElements?.selected_subclass]
+                        ?.spells || []
+                );
+            case 'cleric':
+                return (
+                    clericSubclasses(
+                        character.selectedClassElements?.selected_subclass
+                    )[character.selectedClassElements?.selected_subclass]
+                        ?.spells || []
+                );
+            case 'warlock':
+                return (
+                    warlockClasses(
+                        character.selectedClassElements?.selected_subclass
+                    )?.spells || []
+                );
+            default:
+                return [];
+        }
+    }, [
+        character.className,
+        character.selectedClassElements?.selected_subclass,
     ]);
 
     if (isLoading) {
@@ -371,14 +414,14 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                 )}
             </View>
 
-            <View>
+            <Fragment>
                 <CustomText
                     fontWeight="bold"
                     fontSize={theme.fontSize.large}
                     text="Sorts mineurs: "
                 />
                 {parseInt(spellData?.cantrips_known, 10) > 0 ? (
-                    <View>
+                    <Fragment>
                         <FlatList
                             data={[
                                 ...Array(
@@ -398,7 +441,7 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                             }
                             spell={selectedSpell?.spell}
                         />
-                    </View>
+                    </Fragment>
                 ) : (
                     <View style={styles.noSpellSection}>
                         <CustomText
@@ -407,7 +450,7 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                         />
                     </View>
                 )}
-            </View>
+            </Fragment>
             <View style={styles.bottomListContainer}>
                 <CustomText
                     fontWeight="bold"
@@ -430,6 +473,23 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                     spell={selectedSpell?.spell}
                 />
             </View>
+            {spellDataClass?.length ? (
+                <View style={styles.additionalSpells}>
+                    <CustomText
+                        fontWeight="bold"
+                        fontSize={theme.fontSize.large}
+                        text="Sorts connus additionels: "
+                    />
+                    <AdditionalSpells
+                        spellDataClass={spellDataClass}
+                        className={(character.className as DndClass).index}
+                        subClassName={
+                            character.selectedClassElements.selected_subclass
+                        }
+                        level={character.level}
+                    />
+                </View>
+            ) : undefined}
         </View>
     );
 };
@@ -468,6 +528,10 @@ const styles = StyleSheet.create({
     list: {
         gap: theme.space.md,
         flexGrow: 0,
+    },
+    additionalSpells: {
+        flex: 1,
+        paddingVertical: theme.space.md,
     },
 });
 

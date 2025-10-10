@@ -8,7 +8,9 @@ import { calculateModifier } from '@utils/d2d5';
 
 import { genericClassFormStyles } from '../../genericStyle';
 import DisplaySelection from '../../atom/DisplaySelection';
-import PaladinSubclass from '../../subclassSpecifics/paladin/PaladinSubclass.tsx';
+import DivineClassData from '../DivineClassData';
+
+import { paladinSubclasses } from './paladinClass';
 
 interface PaladinTalentFormProps {
     level: number;
@@ -173,26 +175,11 @@ const PaladinTalentForm = ({
                         )}
                     />
 
-                    <CustomText
-                        style={genericClassFormStyles.sectionTitle}
-                        fontSize={titleSize}
-                        fontWeight="bold"
-                        text={t(
-                            'character.classes.paladin.talents.sacredOathTitle'
-                        )}
-                    />
-                    <CustomText
-                        text={t(
-                            'character.classes.paladin.talents.sacredOathDescription'
-                        )}
-                    />
-
-                    <PaladinSubclass
-                        subclass={subclass}
-                        selectedClassElements={selectedClassElements}
-                        isOnEdit={isOnEdit}
-                        handleSubclassChoices={handleSubclassChoices}
+                    <DivineClassData
+                        subclassData={paladinSubclasses(subclass)[subclass]}
                         level={level}
+                        type={'paladin'}
+                        subclass={subclass}
                     />
                 </Fragment>
             )}

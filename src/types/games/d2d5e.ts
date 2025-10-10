@@ -104,6 +104,15 @@ interface Spell {
     ritual: boolean;
     school: ElementIdentification;
     subclasses: Array<ElementIdentification>;
+    damage?: {
+        damage_at_character_level: {
+            1: string;
+        };
+        damage_at_slot_level: {
+            1: string;
+        };
+        damage_type: { index: string; name: string };
+    };
     invokableCreatures?: string[];
     updated_at: string;
 }

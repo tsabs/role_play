@@ -16,7 +16,7 @@ import TalentClassForm from '@components/character/form/dnd5e/TalentClassForm';
 import SkillsList from '@components/character/form/dnd5e/SkillsList';
 import VirtualizedScrollView from '@components/library/VirtualizedScrollView';
 import EquipmentList from '@components/character/form/dnd5e/EquipmentList';
-import SpellList from '@components/character/form/dnd5e/SpellList.tsx';
+import SpellList from '@components/character/form/dnd5e/spell/SpellList';
 import SafeView from '@components/library/SafeView';
 import {
     callUpdateCharacter,

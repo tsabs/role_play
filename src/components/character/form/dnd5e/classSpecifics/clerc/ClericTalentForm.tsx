@@ -7,7 +7,7 @@ import CustomText from '@components/atom/CustomText';
 import { calculateModifier } from '@utils/d2d5';
 
 import { genericClassFormStyles } from '../../genericStyle';
-import DivineSubclass from '../../subclassSpecifics/DivineSubclass';
+import DivineClassData from '../DivineClassData';
 
 import { clericSubclasses } from './clericSubclasses';
 
@@ -71,7 +71,7 @@ const ClericTalentForm = ({
             />
 
             {level >= 1 && (
-                <DivineSubclass
+                <DivineClassData
                     subclassData={clericSubclasses(subclass)[subclass]}
                     level={level}
                     type={'cleric'}

@@ -1,17 +1,19 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import CustomText from '@components/atom/CustomText';
+import CustomText from '@components/atom/CustomText.tsx';
 
 import { genericClassFormStyles } from '../genericStyle';
-import { theme } from '../../../../../../style/theme.ts';
 
 interface DivineSubclassProps {
     subclassData: {
         nameKey: string;
         descriptionKey: string;
         features: Array<{ level: number; descriptionKey: string }>;
-        spells?: Array<{ level: number; spells: string[] }>;
+        spells?: Array<{
+            level: number;
+            spells: Array<{ index: string; schoolType: string }>;
+        }>;
         specialAbilities?: {
             level: number;
             abilities: string[];
@@ -24,7 +26,7 @@ interface DivineSubclassProps {
 
 const titleSize = 16;
 
-const DivineSubclass = ({
+const DivineClassData = ({
     subclassData,
     level,
     type,
@@ -77,40 +79,8 @@ const DivineSubclass = ({
                         )}
                     </View>
                 )}
-
-            <View style={{ marginTop: theme.space.md }}>
-                <CustomText
-                    fontSize={titleSize}
-                    fontWeight="bold"
-                    text={t(
-                        `character.classes.${type}.subclasses.${subclass}.divineSpellTitle`
-                    )}
-                />
-            </View>
-            {/* Spells Unlocked by Level */}
-            {subclassData.spells &&
-                subclassData.spells
-                    .filter((spellEntry) => level >= spellEntry.level)
-                    .map((spellEntry, idx) => (
-                        <View key={idx} style={{ marginTop: theme.space.xs }}>
-                            <CustomText
-                                fontWeight="bold"
-                                text={`Sorts niveau ${spellEntry.level}`}
-                            />
-                            {spellEntry.spells.map((spell, spellIdx) => {
-                                return (
-                                    <CustomText
-                                        key={spellIdx}
-                                        text={`• ${t(
-                                            `character.classes.${type}.subclasses.${subclass}.domainSpells.${idx}.${spell}`
-                                        )}`}
-                                    />
-                                );
-                            })}
-                        </View>
-                    ))}
         </View>
     );
 };
 
-export default DivineSubclass;
+export default DivineClassData;
