@@ -9,7 +9,6 @@ import CustomText from '@components/atom/CustomText';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectNotes } from '@store/character/selectors';
 import { selectNotes as selectSessionNotes } from '@store/session/selectors';
-import { AuthProps, useAuth } from '@navigation/hook/useAuth';
 
 import { theme } from '../../../style/theme';
 
@@ -32,7 +31,6 @@ const HistoryNotes = ({
     ) => Promise<void>;
     collectionName: string;
 }) => {
-    const auth: AuthProps = useAuth();
     const isFocused = useIsFocused();
     const dispatch = useAppDispatch();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -68,7 +66,6 @@ const HistoryNotes = ({
         },
         [onRemoveNote, entityId, dispatch]
     );
-    console.log('notesFromSelector', notesFromSelector);
 
     const renderItem = useCallback(
         ({ item, index }: { item: Note; index: number }) => {

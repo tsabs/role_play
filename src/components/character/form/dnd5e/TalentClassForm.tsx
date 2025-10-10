@@ -382,6 +382,7 @@ const TalentClassForm = ({
                         shouldShowModal={shouldShowClassDetails}
                         setShouldShowModal={setShouldShowClassDetails}
                         type="classes"
+                        hasSearch
                         name={t(
                             `character.classes.${characterClass.toLowerCase()}.index`
                         )}

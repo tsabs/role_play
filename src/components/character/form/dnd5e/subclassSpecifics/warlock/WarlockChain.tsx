@@ -4,9 +4,10 @@ import { View } from 'react-native';
 import CustomButton from '@components/atom/CustomButton';
 import { getSpellColor } from '@components/character/form/dnd5e/utils';
 
-import { chainSpell } from '../../classSpecifics/warlock/warlockClass';
-import { SpellDescription } from '../../components/SpellDescription';
+import { SpellDescription } from '../../spell/SpellDescription';
 import { theme } from '../../../../../../../style/theme';
+
+import { chainSpell } from './warlockSubClasses';
 
 export const WarlockChain = () => {
     const [shouldDisplayDescription, setShouldDisplayDescription] =
