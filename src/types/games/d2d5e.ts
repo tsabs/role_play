@@ -104,6 +104,7 @@ interface Spell {
     ritual: boolean;
     school: ElementIdentification;
     subclasses: Array<ElementIdentification>;
+    is2024?: boolean;
     damage?: {
         damage_at_character_level: {
             1: string;

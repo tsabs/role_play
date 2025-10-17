@@ -24,43 +24,7 @@ export const warlockClasses = (subclass: string) => ({
         { level: 15, count: 7 },
         { level: 18, count: 8 },
     ],
-    spells: [
-        {
-            level: 1,
-            spells: [
-                { index: '0', schoolType: 'enchantement' },
-                { index: '1', schoolType: 'enchantement' },
-            ],
-        },
-        {
-            level: 3,
-            spells: [
-                { index: '0', schoolType: 'divination' },
-                { index: '1', schoolType: 'illusion' },
-            ],
-        },
-        {
-            level: 5,
-            spells: [
-                { index: '0', schoolType: 'divination' },
-                { index: '1', schoolType: 'evocation' },
-            ],
-        },
-        {
-            level: 7,
-            spells: [
-                { index: '0', schoolType: 'enchantement' },
-                { index: '1', schoolType: 'invocation' },
-            ],
-        },
-        {
-            level: 9,
-            spells: [
-                { index: '0', schoolType: 'enchantement' },
-                { index: '1', schoolType: 'transmutation' },
-            ],
-        },
-    ],
+    spells: [],
 });
 
 export const patronPacts = [

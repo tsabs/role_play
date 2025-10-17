@@ -22,6 +22,7 @@ interface AidedDndModalProps {
     shouldShowModal: boolean;
     setShouldShowModal: (val: boolean) => void;
     type: 'monsters' | 'classes' | 'spells';
+    is2024?: boolean;
     name?: string;
     language?: 'vo' | 'vf';
     hasSearch?: boolean;
@@ -31,6 +32,7 @@ export const AidedDndModal = ({
     shouldShowModal,
     setShouldShowModal,
     type,
+    is2024,
     name,
     language = 'vo',
     hasSearch = false,
@@ -140,9 +142,17 @@ export const AidedDndModal = ({
             case 'classes':
                 return `https://www.aidedd.org/regles/classes/${name}/`;
             case 'spells':
+                if (is2024) {
+                    switch (language) {
+                        case 'vo':
+                            return `https://www.aidedd.org/spell/${name}`;
+                        case 'vf':
+                            return `https://www.aidedd.org/spell/fr/${name}`;
+                    }
+                }
                 return `https://www.aidedd.org/dnd/sorts.php?${language}=${name}`;
         }
-    }, [language, name, type]);
+    }, [is2024, language, name, type]);
 
     if (!name) return;
 

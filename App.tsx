@@ -24,7 +24,6 @@ const paperTheme = {
 
 export default function App() {
     const onHideToaster = useCallback(() => {
-        //
         Toast.hide();
     }, []);
 

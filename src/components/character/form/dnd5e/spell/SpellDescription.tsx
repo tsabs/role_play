@@ -134,20 +134,11 @@ export const SpellDescription = ({
                         shouldShowModal={isSpellModalVisible}
                         setShouldShowModal={setIsSpellModalVisible}
                         type="spells"
+                        is2024={spell?.is2024}
                         name={spell.index}
                     />
                 </Portal>
 
-                {/*<Separator margin={theme.space.md} horizontal />*/}
-                {/*{spell?.desc?.map((d, i) => {*/}
-                {/*    return (*/}
-                {/*        <CustomText*/}
-                {/*            key={i}*/}
-                {/*            style={styles.descriptionSpellText}*/}
-                {/*            text={d}*/}
-                {/*        />*/}
-                {/*    );*/}
-                {/*})}*/}
                 <Portal>
                     <AidedDndModal
                         shouldShowModal={isMonsterModalVisible}
@@ -170,7 +161,10 @@ export const SpellDescription = ({
                                     style={styles.monsterRow}
                                 >
                                     <CustomButton
+                                        style={styles.monsterButton}
                                         radius={theme.radius.sm}
+                                        textColor={theme.colors.primary}
+                                        buttonColor={theme.colors.transparent}
                                         text={monster.name}
                                         onPress={() => {
                                             setMonsterName(monster.index);
@@ -198,9 +192,6 @@ const styles = StyleSheet.create({
     },
     descriptionSpellText: { lineHeight: 20 },
     monsterContainer: {
-        // flex: 1,
-        // backgroundColor: 'red',
-        justifyContent: 'space-between',
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: theme.space.md,
@@ -208,12 +199,11 @@ const styles = StyleSheet.create({
     monsterRow: {
         flex: 0,
         marginHorizontal: theme.space.l,
-        // backgroundColor: 'red',
-        // flexWrap: 'wrap',
-        // alignItems: 'center',
         marginBottom: theme.space.sm,
     },
     monsterButton: {
-        // bor
+        flex: 1,
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
     },
 });

@@ -24,7 +24,6 @@ import { selectCharacterById } from '@store/character/selectors';
 import { calculateModifier } from '@utils/d2d5';
 
 import { clericSubclasses } from '../classSpecifics/clerc/clericSubclasses';
-import { warlockClasses } from '../classSpecifics/warlock/warlockClass';
 import { paladinSubclasses } from '../classSpecifics/paladin/paladinClass';
 import { AdditionalSpells } from '../spell/AdditionalSpells';
 import { theme } from '../../../../../../style/theme';
@@ -69,19 +68,45 @@ const SpellList = ({ characterId }: { characterId: string }) => {
         [shouldShowSpellDescription]
     );
 
+    const getHighestAvailableSpellSlot = useCallback(
+        (data?: SpellData): number => {
+            if (!data) return 1;
+            for (let level = 9; level >= 1; level--) {
+                const key = `spell_slots_level_${level}` as keyof SpellData;
+                if (data[key] && (data?.[key] as number) > 0) {
+                    return level;
+                }
+            }
+
+            return 1;
+        },
+        []
+    );
+
+    const highestSlot = useMemo(
+        () => getHighestAvailableSpellSlot(spellData),
+        [getHighestAvailableSpellSlot, spellData]
+    );
+
     const fetchAvailableSpells = useCallback(async () => {
         if (character.gameType !== GAME_TYPE.DND5E) return;
         try {
             const spells = await fetchSpells(
                 character.className.index,
                 '<=',
-                character.level
+                highestSlot,
+                character.selectedClassElements?.selected_subclass
             );
             setAvailableSpells(spells);
         } catch (error) {
             console.error('Error fetching spells:', error);
         }
-    }, [character.gameType, character.className, character.level]);
+    }, [
+        character.gameType,
+        character.className,
+        character.selectedClassElements?.selected_subclass,
+        highestSlot,
+    ]);
 
     const handleChangeEditMode = useCallback(() => {
         setIsOnEdit(!isOnEdit);
@@ -148,7 +173,7 @@ const SpellList = ({ characterId }: { characterId: string }) => {
             try {
                 // Fetch spell data based on level & class
                 const classData = await loadSpecificTalentClassPerLevel(
-                    GAME_TYPE.DND5E, // Game type
+                    GAME_TYPE.DND5E,
                     character.className.index,
                     character.level.toString()
                 );
@@ -349,12 +374,6 @@ const SpellList = ({ characterId }: { characterId: string }) => {
                         character.selectedClassElements?.selected_subclass
                     )[character.selectedClassElements?.selected_subclass]
                         ?.spells || []
-                );
-            case 'warlock':
-                return (
-                    warlockClasses(
-                        character.selectedClassElements?.selected_subclass
-                    )?.spells || []
                 );
             default:
                 return [];
