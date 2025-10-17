@@ -1,5 +1,3 @@
-import { Spell } from 'types/games/d2d5e';
-
 export const warlockClasses = (subclass: string) => ({
     nameKey: `character.classes.warlock.subclasses.${subclass}.title`,
     descriptionKey: `character.classes.warlock.subclasses.${subclass}.description`,
@@ -26,13 +24,7 @@ export const warlockClasses = (subclass: string) => ({
         { level: 15, count: 7 },
         { level: 18, count: 8 },
     ],
-    spells: [
-        { level: 1, spells: ['0', '1'] },
-        { level: 3, spells: ['0', '1'] },
-        { level: 5, spells: ['0', '1'] },
-        { level: 7, spells: ['0', '1'] },
-        { level: 9, spells: ['0', '1'] },
-    ],
+    spells: [],
 });
 
 export const patronPacts = [
@@ -49,48 +41,3 @@ export const patronPacts = [
         label: 'character.classes.warlock.patronPacts.tome.index',
     },
 ];
-
-export const chainSpell: Spell = {
-    casting_time: '1 hour',
-    classes: [{ index: 'wizard', name: 'Wizard' }],
-    components: ['V', 'S', 'M'],
-    concentration: false,
-    desc: [
-        '- Vous obtenez le service d’un familier, un esprit qui prend une forme animale que vous choisissez : chauve-souris, chat, crabe, grenouille (crapaud), faucon, lézard, pieuvre, hibou, serpent venimeux, poisson (quipper), rat, corbeau, hippocampe, araignée ou belette.\n',
-        '- Votre familier agit indépendamment de vous, mais il obéit toujours à vos commandes. En combat, il lance sa propre initiative et agit à son propre tour. Un familier ne peut pas attaquer, mais il peut effectuer d’autres actions normalement.',
-        '- Quand le familier tombe à 0 points de vie, il disparaît, sans laisser de forme physique. Il réapparaît après que vous ayez relancé ce sort.\n',
-        '- Tant que votre familier est à moins de 30 mètres de vous, vous pouvez communiquer avec lui par télépathie. De plus, en tant qu’action, vous pouvez voir à travers les yeux de votre familier et entendre ce qu’il entend jusqu’au début de votre prochain tour, bénéficiant de tous ses sens spéciaux. Pendant ce temps, vous êtes sourd et aveugle par rapport à vos propres sens.',
-        '- En tant qu’action, vous pouvez renvoyer temporairement votre familier. Il disparaît dans une dimension de poche où il attend votre appel. Sinon, vous pouvez le renvoyer pour toujours. En tant qu’action pendant qu’il est temporairement renvoyé, vous pouvez le faire réapparaître dans n’importe quel espace inoccupé à moins de 9 mètres de vous\n',
-        '- Vous ne pouvez pas avoir plus d’un familier à la fois. Si vous lancez ce sort alors que vous avez déjà un familier, vous lui faites adopter une nouvelle forme à la place. Choisissez une des formes de la liste ci-dessus. Votre familier se transforme en la créature choisie.',
-        '- Enfin, quand vous lancez un sort avec une portée de "contact", votre familier peut livrer le sort comme s’il l’avait lancé lui-même. Votre familier doit être à moins de 30 mètres de vous, et il doit utiliser sa réaction pour livrer le sort quand vous le lancez. Si le sort nécessite un jet d’attaque, vous utilisez votre modificateur d’attaque pour le jet.',
-    ],
-    duration: 'instantaneous',
-    higher_level: '',
-    index: 'find-familiar',
-    level: 1,
-    name: 'Appel de familier',
-    ranger: '10 feet',
-    ritual: true,
-    school: {
-        index: 'conjuration',
-        name: 'Conjuration',
-    },
-    invokableCreatures: [
-        'imp',
-        'pseudodragon',
-        'quasit',
-        'sprite',
-        'owl',
-        'poisonous-snake',
-        'lezard',
-        'rat',
-        'cat',
-        'crabe',
-        'octopus',
-        'hawk',
-        'raven',
-        'spider',
-    ],
-    subclasses: [],
-    updated_at: '2025-03-24T22:45:52.272Z',
-};

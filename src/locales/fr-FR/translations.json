@@ -208,15 +208,15 @@
             "divineSpells": [
               ["Renvoyer les morts vivant", "Bénédiction de l'artisan"]
             ],
-            "domainSpells": [
+            "spells": [
               [
-                "châtiment calcinant",
+                "chatiment-calcinant",
                 "identification"
               ],
-              ["arme magique", "métal brûlant"],
-              ["arme élémentaire", "protection contre une énergie"],
-              ["fabrication", "mur de feu"],
-              ["animation d'objets", "création"]
+              ["arme-magique", "metal-brulant"],
+              ["arme-elementaire", "protection-contre-une-energie"],
+              ["fabrication", "mur-de-feu"],
+              ["animation-d-objets", "creation"]
             ]
           }
         }
@@ -296,8 +296,6 @@
           "fightingStyleDescription": "Choisissez un style : Tir à l'arc, Défense, Duel, etc.",
           "divineHealthTitle": "🏰 Santé Divine",
           "divineHealthDescription": "Vous êtes immunisé contre les maladies.",
-          "sacredOathTitle": "🕊 Serment Sacré",
-          "sacredOathDescription": "Choisissez une sous-classe de Serment au niveau 3.",
           "spellcastingTitle": "✨ Incantation",
           "spellcastingDescription": "Vous pouvez préparer mod CHA ({{chaMod}}) + la moitié de votre niveau en sorts de Paladin."
         },
@@ -335,32 +333,52 @@
           "devotion": {
             "title": "Dévotion",
             "description": "Vous avez juré de défendre l'honneur, la compassion, la justice et la vertu. Vous êtes un bouclier contre les ténèbres.",
-            "channelDivinity": {
-              "sacredWeapon": "Arme sacrée",
-              "turnUnholy": "Repousser les profanes"
-            },
-            "feature1": "Canalisation d’énergie divine : Repousser le mal.",
-            "feature2": "Aura de protection contre la magie noire."
+            "spells": [
+              ["protection-contre-le-mal-et-le-bien", "sanctuaire"],
+              ["restauration-partielle", "zone-de-verite"]
+            ],
+            "divineConduit": [
+              "Arme sacrée",
+              "Repousser les profanes"
+            ],
+            "features": [
+              "Canalisation d’énergie divine : Repousser le mal.",
+              "Aura de protection contre la magie noire."
+            ]
           },
           "ancients": {
             "title": "Anciens",
             "description": "Vous êtes lié aux forces de la nature et à la lumière primordiale, protégeant la vie contre la corruption.",
-            "channelDivinity": {
-              "natureWrath": "Courroux de la nature",
-              "turnFey": "Repousser les fées"
-            },
-            "feature1": "Énergie féerique : Immobiliser les ennemis.",
-            "feature2": "Aura de réconfort : Régénération naturelle."
+            "divineConduit": [
+              "Courroux de la nature",
+              "Repousser les fées"
+            ],
+            "spells": [
+              ["communication-avec-les-animaux", "frappe-piegeuse"],
+              ["foulee-brumeuse", "rayon-de-lune"],
+              ["croissance-vegetale", "protection-contre-une-energie"]
+            ],
+            "features": [
+              "Énergie féerique : Immobiliser les ennemis.",
+              "Aura de réconfort : Régénération naturelle."
+            ]
           },
           "vengeance": {
             "title": "Vengeance",
             "description": "Votre serment est une croisade impitoyable contre le mal. Vous êtes la punition incarnée.",
-            "channelDivinity": {
-              "abjureEnemy": "Éloigner l'ennemi",
-              "vowOfEnmity": "Vœu d’inimitié"
-            },
-            "feature1": "Marque de vengeance : Traque infaillible.",
-            "feature2": "Relâche de la colère divine."
+            "divineConduit": [
+              "Éloigner l'ennemi",
+              "Vœu d’inimitié"
+            ],
+            "spells": [
+              ["fleau", "marque-du-chasseur"],
+              ["foulee-brumeuse", "immobilisation-de-personne"],
+              ["hate", "protection-contre-une-energie"]
+            ],
+            "features": [
+              "Marque de vengeance : Traque infaillible.",
+              "Relâche de la colère divine."
+            ]
           }
         }
       },
@@ -594,6 +612,16 @@
             "features": [
               "Esprit Eveillé: Communication télépathique à 9m. Pas besoin de partager une langue. 1h entre deux lancés",
               "Manifestation Occulte: Vous pouvez en choisir 2 puis une autre aux levels 5, 7, 9, 12, 15, 18"
+            ],
+            "spells": [
+              [
+                "fou-rire-de-tasha",
+                "murmures-dissonants"
+              ],
+              ["detection-des-pensees", "force-fantasmagorique"],
+              ["clairvoyance", "communication-a-distance"],
+              ["domination-de-bete", "tentacules-noirs-d-evard"],
+              ["domination-de-personne", "telekinesie"]
             ]
           }
         },

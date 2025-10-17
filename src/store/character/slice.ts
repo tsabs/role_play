@@ -17,6 +17,7 @@ import {
     getDocs,
     query,
     setDoc,
+    updateDoc,
     where,
     writeBatch,
 } from '@react-native-firebase/firestore';
@@ -76,57 +77,135 @@ export const loadClassData = async (gameType: GAME_TYPE, gameClass) => {
  * Fetch spells from the Firestore database based on class and level.
  *
  * @param characterClass - The class to filter spells on (e.g., "Wizard").
- * @param operator - Optional operator filter (e.g, ==, <=, etc.
+ * @param operator - Optional operator filter (e.g, ==, <=, etc.)
  * @param level - Optional level filter (e.g., 1, 2, etc.).
+ * @param subClass - Optional subclass filter (e.g., "Lore").
  * @returns Promise<Spell[]> - Array of spells matching the filters.
  */
 export const fetchSpells = async (
     characterClass: string,
     operator: '==' | '<=' = '==',
-    level?: number
+    level?: number,
+    subClass?: string
 ): Promise<Spell[]> => {
     try {
         const spellsRef = collection(db, 'games', 'dnd5e', 'spells');
-        let spellsQuery;
-
-        // Build the query depending on the filters
-        if (characterClass && level !== undefined) {
-            spellsQuery = query(
-                spellsRef,
-                where('classes', 'array-contains', {
-                    index: characterClass,
-                    name: capitalizeFirstLetter(characterClass),
-                    url: `/api/2014/classes/${characterClass}`,
-                }),
-                where('level', operator, level)
+        const queries = [];
+        // Build Firestore-compatible objects for filtering
+        const buildEntry = (index: string, name: string) => ({
+            index,
+            name: capitalizeFirstLetter(index),
+            url: `/api/2014/${name}/${index}`,
+        });
+        const classObj = characterClass
+            ? buildEntry(characterClass, 'classes')
+            : undefined;
+        const subClassObj = subClass
+            ? buildEntry(subClass, 'subclasses')
+            : undefined;
+        // --- Build queries dynamically ---
+        if (classObj && level !== undefined) {
+            queries.push(
+                query(
+                    spellsRef,
+                    where('classes', 'array-contains', classObj),
+                    where('level', operator, level)
+                )
             );
-        } else if (characterClass) {
-            spellsQuery = query(
-                spellsRef,
-                where('classes', 'array-contains', {
-                    index: characterClass,
-                    name: capitalizeFirstLetter(characterClass),
-                    url: `/api/2014/classes/${characterClass}`,
-                })
+        } else if (classObj) {
+            queries.push(
+                query(spellsRef, where('classes', 'array-contains', classObj))
             );
-        } else if (level !== undefined) {
-            spellsQuery = query(spellsRef, where('level', '==', level));
-        } else {
-            spellsQuery = spellsRef; // No filters applied, so get all spells
+        }
+        if (subClassObj && level !== undefined) {
+            queries.push(
+                query(
+                    spellsRef,
+                    where('subclasses', 'array-contains', subClassObj),
+                    where('level', operator, level)
+                )
+            );
+        } else if (subClassObj) {
+            queries.push(
+                query(
+                    spellsRef,
+                    where('subclasses', 'array-contains', subClassObj)
+                )
+            );
+        }
+        if (!classObj && !subClassObj && level !== undefined) {
+            queries.push(query(spellsRef, where('level', '==', level)));
         }
 
-        const spellSnapshot = await getDocs(spellsQuery);
-
-        // console.log('spells: ', spellSnapshot);
-
-        // Transform Firestore documents into array of spells
-        return spellSnapshot.docs.map((d) => ({
-            ...(d.data() as Spell),
-        }));
+        if (queries.length === 0) {
+            // no filters applied → fetch all spells
+            queries.push(spellsRef);
+        }
+        // --- Execute queries in parallel ---
+        const snapshots = await Promise.all(queries.map((q) => getDocs(q)));
+        // --- Merge & deduplicate ---
+        const spellsMap = new Map<string, Spell>();
+        for (const snap of snapshots) {
+            snap.docs.forEach((d) => {
+                spellsMap.set(d.id, d.data() as Spell);
+            });
+        }
+        return Array.from(spellsMap.values());
     } catch (error) {
         console.error('Error fetching spells: ', error);
         throw error;
     }
+};
+
+const bardLoreExclusiveSpells = [
+    'arcane-eye',
+    'aura-of-vitality',
+    'aura-of-purity',
+    'banishment',
+    'conjure-fey',
+    'etherealness',
+    'planar-ally',
+    'magic-circle',
+    'counterspell',
+    'dispel-magic',
+    'fireball',
+    'lightning-bolt',
+    'mass-cure-wounds',
+    'raise-dead',
+    'bestow-curse',
+    'fear',
+    'glyph-of-warding',
+    'dimension-door',
+    'legend-lore',
+    'teleport',
+];
+
+export const cleanLoreSubclasses = async () => {
+    const spellsRef = collection(db, 'games', 'dnd5e', 'spells');
+    const snap = await getDocs(spellsRef);
+
+    const updates = snap.docs.map(async (spellDoc) => {
+        const data = spellDoc.data();
+        const subclasses = data.subclasses || [];
+        const index = data.index; // Assuming each spell has an index like "planar-ally"
+
+        // Keep lore only if this spell is in the Lore Bard list
+        const filteredSubclasses = subclasses.filter((sc: any) => {
+            if (sc.index !== 'lore') return true;
+            return bardLoreExclusiveSpells.includes(index);
+        });
+
+        // Only update if something actually changed
+        if (filteredSubclasses.length !== subclasses.length) {
+            await updateDoc(doc(db, 'games', 'dnd5e', 'spells', spellDoc.id), {
+                subclasses: filteredSubclasses,
+            });
+            console.log(`Updated ${index}: removed lore subclass`);
+        }
+    });
+
+    await Promise.all(updates);
+    console.log('✅ Finished cleaning lore subclasses');
 };
 
 export const loadSpecificTalentClassPerLevel = async (

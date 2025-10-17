@@ -1,0 +1,28 @@
+diff --git a/node_modules/llama.rn/llama-rn.podspec b/node_modules/llama.rn/llama-rn.podspec
+index e96c942..30bda66 100644
+--- a/node_modules/llama.rn/llama-rn.podspec
++++ b/node_modules/llama.rn/llama-rn.podspec
+@@ -24,12 +24,21 @@ Pod::Spec.new do |s|
+   s.source       = { :git => "https://github.com/mybigday/llama.rn.git", :tag => "#{s.version}" }
+ 
+   if ENV["RNLLAMA_BUILD_FROM_SOURCE"] == "1"
+-    s.source_files = "ios/**/*.{h,m,mm}", "cpp/**/*.{h,cpp,hpp,c,m,mm}"
++    # Only include source files, but avoid double-counting headers
++    s.source_files = [
++      "ios/**/*.{m,mm}",
++      "cpp/**/*.{cpp,hpp}"
++    ]
++    # Include only public headers from ios/, not cpp/ (to avoid duplicates)
++    s.public_header_files = "ios/**/*.h"
++
+     s.exclude_files = "cpp/ggml-opencl/*.cpp"
+     s.resources = "cpp/**/*.{metallib}"
++
+     base_compiler_flags += " -DRNLLAMA_BUILD_FROM_SOURCE"
+   else
+-    s.source_files = "ios/**/*.{h,m,mm}"
++    s.source_files = "ios/**/*.{m,mm}"
++    s.public_header_files = "ios/**/*.h"
+     s.vendored_frameworks = "ios/rnllama.xcframework"
+   end
+ 
